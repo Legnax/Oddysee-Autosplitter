@@ -1,5 +1,5 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 02-05-2020
+//	Created by LegnaX. 14-05-2020
 
 state("AbeWin", "Any")
 {
@@ -68,6 +68,8 @@ state("AbeWin", "Any")
 
 startup
 {
+	settings.Add("Version", true, "Official Version 1.0. LegnaX#7777 (Discord). 14th May 2020");
+	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
 	
