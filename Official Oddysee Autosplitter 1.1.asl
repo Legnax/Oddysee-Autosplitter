@@ -1,7 +1,7 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 14-05-2020
+//	Created by LegnaX. 15-06-2020
 
-state("AbeWin", "Any")
+state("AbeWin", "1.2")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -68,16 +68,23 @@ state("AbeWin", "Any")
 
 startup
 {
-	settings.Add("Version", true, "Official Version 1.0. LegnaX#7777 (Discord). 14th May 2020");
+	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 15th June 2020");
+	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
 	
 	settings.Add("RealGameTime", true, "Time displayed on the variable 'Log' is LOADLESS_TIME.");
-	settings.SetToolTip("RealGameTime", "This game is the difference between frames since Abe starts on RuptureFarms and until the last split happens (or when the livesplit splits the last split). This will be used on Any% for getting the actual REAL ingame time.");	
+	settings.SetToolTip("RealGameTime", "This game is the difference between frames since Abe starts on RuptureFarms and until the last split happens (or when the livesplit splits the last split).\nThis will be used on Any% for getting the actual REAL ingame time.");	
 	
 	settings.Add("nag", true, "REFRESH RATE OF THE AUTOSPLITTER");
-	settings.SetToolTip("nag", "Sets the autosplitter to refresh 40 times per second. Leaving all options unckeched will set refresh rate to 40 by default anyway.");
+	settings.SetToolTip("nag", "Select one for using that one. By default it will use 40.");
+	
+	settings.Add("10Rate", false, "10 refreshes per second", "nag");
+	settings.SetToolTip("10Rate", "Sets the autosplitter to refresh 10 times per second. Should reduce the CPU impact a lot.\nSome times may get innacurate splits, so be warned.");
+	
+	settings.Add("30Rate", false, "30 refreshes per second", "nag");
+	settings.SetToolTip("30Rate", "Sets the autosplitter to refresh 30 times per second. Should reduce the CPU impact a bit.");
 	
 	settings.Add("40Rate", true, "40 refreshes per second (DEFAULT)", "nag");
 	settings.SetToolTip("40Rate", "Sets the autosplitter to refresh 40 times per second. Leaving all options unckeched will set refresh rate to 40 by default anyway.");
@@ -92,16 +99,16 @@ startup
 	settings.SetToolTip("UsingAutosplit", "Leave all the following options unchecked for no autosplitter feature (just loadless time feature). \nYou need the splits file for the splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !");
 	
 	settings.Add("SplitsAny%", false, "Any%", "UsingAutosplit");
-	settings.SetToolTip("SplitsAny%", "Use the Any% splits file! Autosplitter will split accordingly those splits.");
+	settings.SetToolTip("SplitsAny%", "Use the Any% splits file!\nAutosplitter will split accordingly those splits.");
 	
 	settings.Add("SplitsAny%NMS", false, "Any% NMS", "UsingAutosplit");
-	settings.SetToolTip("SplitsAny%NMS", "Use the Any% NMS splits file! Autosplitter will split accordingly those splits. Both variants are supported: Scrabania first, or Paramonia first.");
+	settings.SetToolTip("SplitsAny%NMS", "Use the Any% NMS splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
 	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas", "UsingAutosplit");
-	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas splits file! Autosplitter will split accordingly those splits. Both variants are supported: Scrabania first, or Paramonia first.");
+	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
 	settings.Add("SplitsGoodEnding", false, "Good Ending", "UsingAutosplit");
-	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file! Autosplitter will split accordingly those splits. Both variants are supported: Scrabania first, or Paramonia first.");
+	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 }
 
 init
@@ -109,12 +116,14 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "Any" ;
+	version = "1.2" ;
 	
 	vars.LoadTexts = false;
-	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game.
-	if (settings["40Rate"]){
-		refreshRate = 40;
+	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
+	if (settings["10Rate"]){
+		refreshRate = 10;
+	} else if (settings["30Rate"]){
+		refreshRate = 30;
 	} else if (settings["50Rate"]){
 		refreshRate = 50;
 	} else if (settings["100Rate"]){
@@ -125,6 +134,8 @@ init
 	vars.PrimeraVez = true; // If true, loads the level names on memory and sets itself to False.
 	string[] splitt = new string[70]; // Creates the array for the split names.
 	vars.split = splitt; // Split names.
+	bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
+	vars.trialCheck = trialCheckk; // Used to check the trials in order to verify if the screen with the lever that flags the level as completed was visited.
 	vars.ResetStatus = 0; // If 1, the autosplit will reset.
 	vars.StartgnFrame = 0;
 	vars.gnFrameCurrent = 0;
@@ -200,9 +211,12 @@ start
 	
 	if (vars.StartgnFrame > 10){
 		vars.n = 0; // First split if you press on start game
+		vars.PauseStartTime = -1;
 		vars.MillisecondsPaused = 0;
 		vars.PreviousTime = 0;
 		vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;		
+		bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
+		vars.trialCheck = trialCheckk;
 		File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
 		File.Delete(@"C:\Autosplit Backup Files\lang"); // Important!! 
 		File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 		
@@ -239,6 +253,7 @@ reset
 	if (vars.ResetStatus == 2){ // Start on main menu
 		vars.ResetStatus = 0;
 		vars.StartgnFrame = 0;
+		vars.PauseStartTime = -1;
 		return true;		
 	} else {
 		return false;
@@ -248,8 +263,10 @@ reset
 
 isLoading
 {		
-	if (settings["40Rate"]){
-		refreshRate = 40;
+	if (settings["10Rate"]){
+		refreshRate = 10;
+	} else if (settings["30Rate"]){
+		refreshRate = 30;
 	} else if (settings["50Rate"]){
 		refreshRate = 50;
 	} else if (settings["100Rate"]){
@@ -696,32 +713,32 @@ split
 							return true;
 						}
 						
-					// Trial 3
+					// Trial 3 (now it's 5)
 						if (C_PATH_ID == 8 && O_PATH_ID == 6 && O_CAM_ID == 7) { // https://i.imgur.com/A8IVuGp.jpg
 							++vars.n;
 							return true;
 						}
 						
-					// Trial 4
+					// Trial 4 (now it's 6)
 						if (C_PATH_ID == 8 && O_PATH_ID == 7 && O_CAM_ID == 5) { // https://i.imgur.com/lPrWDD2.jpg
 							++vars.n;
 							return true;
 						}
 						
-					// Trial 5
+					// Trial 5  (now it's 3)
 						if (C_PATH_ID == 8 && O_PATH_ID == 5 && O_CAM_ID == 2) { // https://i.imgur.com/ku9rf3g.jpg
 							++vars.n;
 							return true;
 						}
 						
-					// Trial 6
+					// Trial 6 (now it's 4)
 						if (C_PATH_ID == 8 && O_PATH_ID == 3 && O_CAM_ID == 1) { // https://i.imgur.com/LtYPFNm.jpg
 							++vars.n;
 							return true;
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 21) {
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 15 && vars.n <= 21) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
 							vars.n = 22;
 							return true;
 						}	
@@ -799,12 +816,12 @@ split
 							++vars.n;
 							return true;
 						}
-					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
+					// Scrabanian Nests
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 27 && vars.n <= 35) {
 							vars.n = 36; // Security measure.
 							return true;
 						}
-					// Scrabania Temple
+					// Scrabania Temple to FFZ
 						if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 36) { // Entry Free Fire Zone - Change
 							vars.n = 37; // Security measure.
 							return true;
@@ -893,8 +910,8 @@ split
 							return true;
 						}
 						
-					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n < 22) {
+					// Scrabanian Nests
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 13 && vars.n <= 21) {
 							vars.n = 22;
 							return true;
 						}
@@ -982,8 +999,8 @@ split
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
-							++vars.n;
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 29 && vars.n <= 35) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
+							vars.n = 36;
 							return true;
 						}	
 						
@@ -1017,19 +1034,31 @@ split
 					}	
 					
 				// Door 1
-					if (O_PATH_ID == 2 && C_PATH_ID == 1) {
+					if (C_PATH_ID == 2 && C_CAM_ID == 4 && vars.trialCheck[0] != true){ // Door 1 check
+						vars.trialCheck[0] = true;
+					}
+					
+					if (O_PATH_ID == 2 && C_PATH_ID == 1 && vars.trialCheck[0] == true) {
 						++vars.n;
 						return true;
 					}	
 					
-				// Door 2
-					if (O_PATH_ID == 10 && C_PATH_ID == 1) {
+				// Door 2				
+					if (C_PATH_ID == 10 && C_CAM_ID == 5 && vars.trialCheck[1] != true){ // Door 2 check
+						vars.trialCheck[1] = true;
+					}
+					
+					if (O_PATH_ID == 10 && C_PATH_ID == 1 && vars.trialCheck[1] == true) {
 						++vars.n;
 						return true;
 					}
 					
-				// Door 3
-					if (O_PATH_ID == 3 && C_PATH_ID == 1) {
+				// Door 3			
+					if (C_PATH_ID == 3 && C_CAM_ID == 5 && vars.trialCheck[2] != true){ // Door 3 check
+						vars.trialCheck[2] = true;
+					}
+					
+					if (O_PATH_ID == 3 && C_PATH_ID == 1 && vars.trialCheck[2] == true) {
 						++vars.n;
 						return true;
 					}	
@@ -1049,19 +1078,31 @@ split
 					}	
 					
 				// Door 1
-					if (O_PATH_ID == 7 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 1 check
+						vars.trialCheck[3] = true;
+					}
+					
+					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
 						++vars.n;
 						return true;
 					}	
 					
 				// Door 2
-					if (O_PATH_ID == 12 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 7 && C_CAM_ID == 9 && vars.trialCheck[4] != true){ // Door 2 check
+						vars.trialCheck[4] = true;
+					}
+					
+					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
 						++vars.n;
 						return true;
 					}
 					
 				// Door 3
-					if (O_PATH_ID == 5 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 5 && C_CAM_ID == 4 && vars.trialCheck[5] != true){ // Door 3 check
+						vars.trialCheck[5] = true;
+					}
+					
+					if (O_PATH_ID == 5 && C_PATH_ID == 13 && vars.trialCheck[5] == true) {
 						++vars.n;
 						return true;
 					}	
@@ -1081,10 +1122,14 @@ split
 					}	
 					
 				// Leave Slog Kennels
-					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 50) {
+					if (C_PATH_ID == 8 && C_CAM_ID == 5 && vars.trialCheck[6] != true){ // Slog Kennels check
+						vars.trialCheck[6] = true;
+					}
+					
+					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 50 && vars.trialCheck[6] == true) {
 						++vars.n;
 						return true;
-					}	
+					}
 					
 				// Enter Second Part
 					if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 11 && vars.n == 51) {
@@ -1265,7 +1310,7 @@ split
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 21) {
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 15 && vars.n <= 21) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
 							vars.n = 22;
 							return true;
 						}	
@@ -1343,8 +1388,8 @@ split
 							++vars.n;
 							return true;
 						}
-					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
+					// Scrabanian Nests
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 27 && vars.n <= 35) {
 							vars.n = 36; // Security measure.
 							return true;
 						}
@@ -1436,9 +1481,9 @@ split
 							return true;
 						}
 					
-					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 21) {
-							++vars.n;
+					// Scrabanian Nests
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 13 && vars.n <= 21) {
+							vars.n = 22;
 							return true;
 						}
 					
@@ -1526,8 +1571,8 @@ split
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
-							++vars.n;
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 29 && vars.n <= 35) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
+							vars.n = 36;
 							return true;
 						}	
 						
@@ -1580,19 +1625,31 @@ split
 					}	
 					
 				// Door 1
-					if (O_PATH_ID == 2 && C_PATH_ID == 1) {
+					if (C_PATH_ID == 2 && C_CAM_ID == 4 && vars.trialCheck[0] != true){ // Door 1 check
+						vars.trialCheck[0] = true;
+					}
+					
+					if (O_PATH_ID == 2 && C_PATH_ID == 1 && vars.trialCheck[0] == true) {
 						++vars.n;
 						return true;
 					}	
 					
-				// Door 2
-					if (O_PATH_ID == 10 && C_PATH_ID == 1) {
+				// Door 2				
+					if (C_PATH_ID == 10 && C_CAM_ID == 5 && vars.trialCheck[1] != true){ // Door 2 check
+						vars.trialCheck[1] = true;
+					}
+					
+					if (O_PATH_ID == 10 && C_PATH_ID == 1 && vars.trialCheck[1] == true) {
 						++vars.n;
 						return true;
 					}
 					
-				// Door 3
-					if (O_PATH_ID == 3 && C_PATH_ID == 1) {
+				// Door 3			
+					if (C_PATH_ID == 3 && C_CAM_ID == 5 && vars.trialCheck[2] != true){ // Door 3 check
+						vars.trialCheck[2] = true;
+					}
+					
+					if (O_PATH_ID == 3 && C_PATH_ID == 1 && vars.trialCheck[2] == true) {
 						++vars.n;
 						return true;
 					}	
@@ -1612,19 +1669,31 @@ split
 					}	
 					
 				// Door 1
-					if (O_PATH_ID == 7 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 1 check
+						vars.trialCheck[3] = true;
+					}
+					
+					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
 						++vars.n;
 						return true;
 					}	
 					
 				// Door 2
-					if (O_PATH_ID == 12 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 7 && C_CAM_ID == 9 && vars.trialCheck[4] != true){ // Door 2 check
+						vars.trialCheck[4] = true;
+					}
+					
+					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
 						++vars.n;
 						return true;
 					}
 					
 				// Door 3
-					if (O_PATH_ID == 5 && C_PATH_ID == 13) {
+					if (C_PATH_ID == 5 && C_CAM_ID == 4 && vars.trialCheck[5] != true){ // Door 3 check
+						vars.trialCheck[5] = true;
+					}
+					
+					if (O_PATH_ID == 5 && C_PATH_ID == 13 && vars.trialCheck[5] == true) {
 						++vars.n;
 						return true;
 					}	
@@ -1644,10 +1713,14 @@ split
 					}	
 					
 				// Leave Slog Kennels
-					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 53) {
+					if (C_PATH_ID == 8 && C_CAM_ID == 5 && vars.trialCheck[6] != true){ // Slog Kennels check
+						vars.trialCheck[6] = true;
+					}
+					
+					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 53 && vars.trialCheck[6] == true) {
 						++vars.n;
 						return true;
-					}	
+					}
 					
 				// Enter Second Part
 					if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 11 && vars.n == 54) {
@@ -1827,7 +1900,7 @@ split
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 21) {
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 15 && vars.n <= 21) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
 							vars.n = 22;
 							return true;
 						}	
@@ -1906,8 +1979,8 @@ split
 							++vars.n;
 							return true;
 						}
-					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
+					// Scrabanian Nests
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 27 && vars.n <= 35) {
 							vars.n = 36; // Security measure.
 							return true;
 						}
@@ -1993,8 +2066,8 @@ split
 							return true;
 						}
 					// Nests
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 21) {
-							++vars.n;
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 13 && vars.n <= 21) {
+							vars.n = 22;
 							return true;
 						}
 					// Scrabania Temple
@@ -2082,8 +2155,8 @@ split
 						}
 						
 					// Paramonian Nests 
-						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n == 35) {
-							++vars.n;
+						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 29 && vars.n <= 35) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
+							vars.n = 36;
 							return true;
 						}	
 						
@@ -2127,10 +2200,14 @@ split
 					}	
 					
 				// Leave Slog Kennels
-					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 42) {
+					if (C_PATH_ID == 8 && C_CAM_ID == 5 && vars.trialCheck[6] != true){ // Slog Kennels check
+						vars.trialCheck[6] = true;
+					}
+					
+					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 42 && vars.trialCheck[6] == true) {
 						++vars.n;
 						return true;
-					}	
+					}
 					
 				// Enter Second Part
 					if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 11 && vars.n == 43) {
@@ -2304,29 +2381,29 @@ split
 				vars.split[11] = "Scrabania - End\nI want scrabs, not bombs!";
 				
 				vars.split[12] = "Scrabania Temple - Entry\nNow mines?! WHERE ARE THE SCRABS?!";
-				vars.split[13] = "Temple - Trial 1\nI'm faster than those scrabs!";
+				vars.split[13] = "Temple - Trial 1\nHow to tame your Scrab 1.0";
 				vars.split[14] = "Temple - Trial 2\nVery normal level.";
 				vars.split[15] = "Temple - Trial 3\nMeet the floating bomb of death.";
 				vars.split[16] = "Temple - Trial 4\nThe attack of the angry bats of the DDG.";
 				vars.split[17] = "Temple - Trial 5\nGoing through scrabs is fun.";
 				vars.split[18] = "Temple - Trial 6\nThrowing scrabs is fun.";
-				vars.split[19] = "Temple - Trial 7\nScrabs everywhere.";
+				vars.split[19] = "Temple - Trial 7\nHow to tame your Scrab 2.0.";
 				vars.split[20] = "Temple - Trial 8\nScrabs doesn't use elevators...";
 				vars.split[21] = "Temple - Nests\nRun and use platforms.";
 				vars.split[22] = "Temple - End\nNice tatoo. Only 15€.";
 				
 				vars.split[23] = "Get the Elum (Paramonia)\nThe Elum is back!";
-				vars.split[24] = "Honey and Sligs\nRocks are the true power.";
+				vars.split[24] = "Honey and Sligs\nFearless Elum! Annoying bees!";
 				vars.split[25] = "Platforms and Bees\nLet's run!";
 				vars.split[26] = "Passwords and Sligs\nI cheated! I remember the password.";
 				vars.split[27] = "Paramonia\nWelp. Here we go again.";
 				
 				vars.split[28] = "Paramonian Temple - Entry\nBad sloggies doesn't get bones.";
-				vars.split[29] = "Temple - Trial 1\nMeet the rolling stone of death!";
+				vars.split[29] = "Temple - Trial 1\nSkip the rolling stone of death!";
 				vars.split[30] = "Temple - Trial 2\nFood is power, too.";
-				vars.split[31] = "Temple - Trial 3\nPasswords gives OP power.";
-				vars.split[32] = "Temple - Trial 4\nNo paramites here...";
-				vars.split[33] = "Temple - Trial 5\nNo rolling is the key!";
+				vars.split[31] = "Temple - Trial 3\nFoodTimizer in action!";
+				vars.split[32] = "Temple - Trial 4\nNeverstopping bouncing rocks.";
+				vars.split[33] = "Temple - Trial 5\nMaster Baiter in action!";
 				vars.split[34] = "Temple - Trial 6\nEvade the bouncing rocks of suffering!";
 				vars.split[35] = "Temple - Nests\nLet's run through it very fast.";
 				vars.split[36] = "Temple - End\nI got the power of god and anime on my side!";
