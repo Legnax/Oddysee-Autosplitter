@@ -1,5 +1,5 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 20-06-2020
+//	Created by LegnaX. 21-06-2020
 
 state("AbeWin", "1.2")
 {
@@ -68,7 +68,7 @@ state("AbeWin", "1.2")
 
 startup
 {
-	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 20th June 2020");
+	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 21th June 2020");
 	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
@@ -1070,7 +1070,7 @@ split
 					}	
 				}
 				
-				if (vars.n >= 0 && vars.n <= 48){ // Zulag 3
+				if (vars.n >= 44 && vars.n <= 48){ // Zulag 3
 				// Entry
 					if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 13 && vars.n == 44) {
 						++vars.n;
