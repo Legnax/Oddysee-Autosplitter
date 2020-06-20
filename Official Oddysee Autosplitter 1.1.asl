@@ -1,5 +1,5 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 15-06-2020
+//	Created by LegnaX. 20-06-2020
 
 state("AbeWin", "1.2")
 {
@@ -68,8 +68,8 @@ state("AbeWin", "1.2")
 
 startup
 {
-	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 15th June 2020");
-	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.");
+	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 20th June 2020");
+	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Faulty check on Zulag 3 door 1, has been removed.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -1078,11 +1078,8 @@ split
 					}	
 					
 				// Door 1
-					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 1 check
-						vars.trialCheck[3] = true;
-					}
 					
-					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
+					if (O_PATH_ID == 7 && C_PATH_ID == 13) {
 						++vars.n;
 						return true;
 					}	
