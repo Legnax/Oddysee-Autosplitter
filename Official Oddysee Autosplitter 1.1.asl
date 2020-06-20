@@ -69,7 +69,7 @@ state("AbeWin", "1.2")
 startup
 {
 	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 20th June 2020");
-	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Faulty check on Zulag 3 door 1, has been removed.");
+	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -1070,7 +1070,7 @@ split
 					}	
 				}
 				
-				if (vars.n >= 44 && vars.n <= 48){ // Zulag 3
+				if (vars.n >= 0 && vars.n <= 48){ // Zulag 3
 				// Entry
 					if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 13 && vars.n == 44) {
 						++vars.n;
@@ -1078,21 +1078,26 @@ split
 					}	
 					
 				// Door 1
+					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 2 check
+						vars.trialCheck[3] = true;
+					}
 					
-					if (O_PATH_ID == 7 && C_PATH_ID == 13) {
+					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
+						++vars.n;
+						return true;
+					}
+					
+					
+				// Door 2	
+				
+					if (C_PATH_ID == 7 && C_CAM_ID == 9 && vars.trialCheck[4] != true){ // Door 2 check
+						vars.trialCheck[4] = true;
+					}			
+					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
 						++vars.n;
 						return true;
 					}	
 					
-				// Door 2
-					if (C_PATH_ID == 7 && C_CAM_ID == 9 && vars.trialCheck[4] != true){ // Door 2 check
-						vars.trialCheck[4] = true;
-					}
-					
-					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
-						++vars.n;
-						return true;
-					}
 					
 				// Door 3
 					if (C_PATH_ID == 5 && C_CAM_ID == 4 && vars.trialCheck[5] != true){ // Door 3 check
@@ -1104,9 +1109,9 @@ split
 						return true;
 					}	
 					
-				// Zulag 2
-					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 14 && vars.n == 48) {
-						++vars.n;
+				// Zulag 3
+					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 14) {
+						vars.n = 49;
 						return true;
 					}	
 				}
@@ -1670,7 +1675,7 @@ split
 						vars.trialCheck[3] = true;
 					}
 					
-					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
+					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
 						++vars.n;
 						return true;
 					}	
@@ -1680,7 +1685,7 @@ split
 						vars.trialCheck[4] = true;
 					}
 					
-					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
+					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
 						++vars.n;
 						return true;
 					}
