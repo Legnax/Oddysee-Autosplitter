@@ -1,7 +1,7 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 21-06-2020
+//	Created by LegnaX. 25-06-2020
 
-state("AbeWin", "1.2")
+state("AbeWin", "1.3")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -67,15 +67,20 @@ state("AbeWin", "1.2")
 
 
 startup
-{
-	settings.Add("Version", true, "Official Version 1.2. LegnaX#7777 (Discord). 21th June 2020");
-	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.");
+{	
+	// ++++++++++ GENERAL SETTINGS ++++++++++
+	
+	settings.Add("Version", true, "Official Version 1.3. LegnaX#7777 (Discord). 25th June 2020");
+	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels! There may be issues, so use with discretion.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
 	
 	settings.Add("RealGameTime", true, "Time displayed on the variable 'Log' is LOADLESS_TIME.");
 	settings.SetToolTip("RealGameTime", "This game is the difference between frames since Abe starts on RuptureFarms and until the last split happens (or when the livesplit splits the last split).\nThis will be used on Any% for getting the actual REAL ingame time.");	
+	
+	
+	// ++++++++++ FREQUENCY SETTINGS ++++++++++
 	
 	settings.Add("nag", true, "REFRESH RATE OF THE AUTOSPLITTER");
 	settings.SetToolTip("nag", "Select one for using that one. By default it will use 40.");
@@ -95,6 +100,8 @@ startup
 	settings.Add("100Rate", false, "100 refreshes per second", "nag");
 	settings.SetToolTip("100Rate", "Sets the autosplitter to refresh 100 times per second. R U crazy or wut m8?");	
 	
+	// ++++++++++ AUTOSPLITTER SETTINGS ++++++++++
+	
 	settings.Add("UsingAutosplit", false, "AUTOSPLIT GAME CATEGORY - Select ONE or NONE");
 	settings.SetToolTip("UsingAutosplit", "Leave all the following options unchecked for no autosplitter feature (just loadless time feature). \nYou need the splits file for the splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !");
 	
@@ -109,6 +116,52 @@ startup
 	
 	settings.Add("SplitsGoodEnding", false, "Good Ending", "UsingAutosplit");
 	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
+	
+	
+	// ++++++++++ INDIVIDUAL LEVEL SETTINGS ++++++++++
+	
+	settings.Add("UsingIL", false, "INDIVIDUAL LEVELS - Check this to activate");
+	settings.SetToolTip("UsingIL", "Leave this option unchecked to not use.\nAutosplit will priorize autosplit category over Individual Levels, so make sure you disable AUTOSPLIT GAME CATEGORY if you want to use ILs!\nYou need the splits file for the IL splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !\nExcept for RuptureFarms, you need to use the Cheat Code in order for the autosplit to start.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> INDIVIDUAL LEVEL LIST <-\n- RuptureFarms (start a new game)\n- Stockyards\n- Paramonia\n- Scrabania\n- Zulag 1\n- Zulag 2\n- Zulag 3\n- Zulag 4");
+		
+	// settings.Add("ILRupturefarms", false, "RuptureFarms", "UsingIL");
+	// settings.SetToolTip("ILRupturefarms", "Use the RuptureFarms IL splits file!\nAutosplitter will split according to the Rupturefarms subsplits.\nTimer should start during the loading time after you press on Start on the main menu.\n-> SPLIT LIST <-\n- Tutorials\n- Meat Grinders\n- Sligs\n- Rupture Farms");
+		
+	// settings.Add("ILStockyards", false, "Stockyards", "UsingIL");
+	// settings.SetToolTip("ILStockyards", "Use the Stockyards IL splits file!\nAutosplitter will split according to the Stockyards subsplits.\nTimer should start as soon as the loading screen appears after selecting Stockyards on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> SPLIT LIST <-\n- Scrab Part\n- Slig part\n- Stockyards");
+	
+	// settings.Add("ILMonsaic", false, "Monsaic Lines", "UsingIL");
+	// settings.SetToolTip("ILMonsaic", "Use the Monsaic Lines IL splits file!\nAutosplitter will split according to the Monsaic Lines subsplits.\nTimer should start as soon as the loading screen appears after selecting Monsaic Lines on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Natives\n- Monsaic Lines");
+	
+	// settings.Add("ILParamonia", false, "Paramonia", "UsingIL");
+	// settings.SetToolTip("ILParamonia", "Use the Paramonia IL splits file!\nAutosplitter will split according to the Paramonia subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum P\n- Honey and Sligs\n- Platforms and Bees\n- Passwords and Sligs\n- Paramonia");
+	
+	// settings.Add("ILPTemple", false, "Paramonian Temple", "UsingIL");
+	// settings.SetToolTip("ILPTemple", "Use the Paramonian Temple IL splits file!\nAutosplitter will split according to the Paramonian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia Temple on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Paramonian Nests\n- Paramonian Temple");
+	
+	
+	// settings.Add("ILParamonia", false, "Paramonia", "UsingIL");
+	// settings.SetToolTip("ILParamonia", "Use the Paramonia IL splits file!\nAutosplitter will split according to the Paramonia - Paramonian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum P\n- Honey and Sligs\n- Platforms and Bees\n- Passwords and Sligs\n- Paramonia\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Paramonian Nests\n- Paramonian Temple");
+	
+	// settings.Add("ILScrabania", false, "Scrabania", "UsingIL");
+	// settings.SetToolTip("ILScrabania", "Use the Scrabania IL splits file!\nAutosplitter will split according to the Scrabania subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabania on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum S\n- Play with Mines\n- Scrabania");
+		
+	// settings.Add("ILSTemple", false, "Scrabanian Temple", "UsingIL");
+	// settings.SetToolTip("ILSTemple", "Use the Scrabanian Temple IL splits file!\nAutosplitter will split according to the Scrabanian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabanian Temple on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Trial 7\n- Trial 8\n- Scrabanian Nests\n- Scrabanian Temple");
+	
+	// settings.Add("ILScrabania", false, "Scrabania", "UsingIL");
+	// settings.SetToolTip("ILScrabania", "Use the Scrabania IL splits file!\nAutosplitter will split according to the Scrabania - Scrabanian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabania on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum S\n- Play with Mines\n- Scrabania\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Trial 7\n- Trial 8\n- Scrabanian Nests\n- Scrabanian Temple");
+		
+	// settings.Add("ILZulag1", false, "Zulag 1", "UsingIL");
+	// settings.SetToolTip("ILZulag1", "Use the Zulag 1 IL splits file!\nAutosplitter will split according to the Zulag 1 subsplits.\nWhen using Any% categories, you can decide not to do the other splits so the mudokon splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 1 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- FreeFire Zone\n- Mudokon Ring (only 100% / Max Cas)\n- Sligs Meat Grinder (only 100% / Max Cas)\n- Tutorials 2 (only 100% / Max Cas)\n- Zulag 1");
+		
+	// settings.Add("ILZulag2", false, "Zulag 2", "UsingIL");
+	// settings.SetToolTip("ILZulag2", "Use the Zulag 2 IL splits file!\nAutosplitter will split according to the Zulag 2 subsplits.\nWhen doing Any%, you can decide not to do the other splits so the NMS splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 2 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- First Door\n- Second Door\n- Third door\n- Zulag 2");
+		
+	// settings.Add("ILZulag3", false, "Zulag 3", "UsingIL");
+	// settings.SetToolTip("ILZulag3", "Use the Zulag 3 IL splits file!\nAutosplitter will split according to the Zulag 3 subsplits.\nWhen doing Any%, you can decide not to do the other splits so the NMS splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 3 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- First Door\n- Second Door\n- Third door\n- Zulag 3");
+		
+	// settings.Add("ILZulag4", false, "Zulag 4", "UsingIL");
+	// settings.SetToolTip("ILZulag4", "Use the Zulag 4 IL splits file!\nAutosplitter will split according to the Zulag 4 subsplits.\nTimer should start as soon as the loading screen appears after selecting Zulag 4 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Enter Slog Kennels\n- Leave Slog Kennels\n- Enter Second Part\n- Zulag 4\n- Boardroom");
 }
 
 init
@@ -116,7 +169,7 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "1.2" ;
+	version = "1.3" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -145,6 +198,7 @@ init
 	vars.PauseStartTime = -1;
 	vars.ParamoniaFirst = true;
 	vars.fps = 30.3; // FPS of the game. proven to be 30.3 doing performance checks.
+	vars.ILtype = -1; // 0 = RuptureFarms | 1 = Stockyards | 2 = Paramonia | 3 = Scrabania | 4 = Zulag 1 | 5 = Zulag 2 | 6 = Zulag 3 | 7 = Zulag 4
 	// vars.gnFrameTest = "gnFrame = " + gnFrame + " | Skipped frames = " + vars.SkippedFrames;
 	// vars.variables = "LEVEL " + LEVEL_ID + " | CAM " + C_CAM_ID + " | PATH " + C_PATH_ID + " | AbeY " + abeY; // For programming purposes c:
 	
@@ -171,42 +225,412 @@ init
 
 start
 {	
-	// ENGLISH
-	if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
-		vars.StartgnFrame = current.EN_gnFrame;
-		vars.LangDetected = "English";		
-	} else 
-	
-	// SPANISH
-	if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
-		vars.StartgnFrame = current.ES_gnFrame;
-		vars.LangDetected = "Spanish";
-	} else
-	
-	// FRENCH
-	if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
-		vars.StartgnFrame = current.FR_gnFrame;
-		vars.LangDetected = "French";
-	} else
-	
-	// JAPANESE
-	if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
-		vars.StartgnFrame = current.JP_gnFrame;
-		vars.LangDetected = "Japanese";
-	} else
-	
-	// GERMAN
-	if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
-		vars.StartgnFrame = current.DE_gnFrame;
-		vars.LangDetected = "German";
-	} else
-	
-	// ITALIAN
-	if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
-		vars.StartgnFrame = current.IT_gnFrame;
-		vars.LangDetected = "Italian";
+	if (settings["UsingIL"]){ 		
+			vars.StartgnFrame = 0;
+	// We start on RuptureFarms, normal. 0
+		// if (settings["ILRupturefarms"]){ 
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 0;	
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 0;	
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 0;	
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 0;	
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 0;	
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 0;	
+			}
+			
+	// We start on Stockyards, cheat code.
+		// } else if (settings["ILStockyards"]){ 
+			int l = 5;
+			int p = 6;
+			int c = 6;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 1;		
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 1;	
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 1;	
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 1;	
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 1;	
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 1;	
+			}
+			
+	// We start on Paramonia, cheat code.
+		// } else if (settings["ILParamonia"]){ 
+			l = 3;
+			p = 1;
+			c = 1;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 2;		
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 2;	
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 2;	
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 2;	
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 2;	
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 2;	
+			}
+			
+	// We start on Scrabania, cheat code.
+		// } else if (settings["ILScrabania"]){ 
+			l = 8;
+			p = 1;
+			c = 1;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 3;		
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 3;
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 3;
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 3;
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 3;
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 3;
+			}
+			
+	// We start on Zulag 1, cheat code.
+		// } else if (settings["ILZulag1"]){ 
+			l = 6;
+			p = 4;
+			c = 7;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";
+				vars.ILtype = 4;		
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 4;		
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 4;		
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 4;		
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 4;		
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 4;		
+			}
+			
+	// We start on Zulag 2, cheat code.
+		// } else if (settings["ILZulag2"]){ 
+			l = 13;
+			p = 1;
+			c = 1;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 5;			
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 5;	
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 5;	
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 5;	
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 5;	
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 5;	
+			}
+			
+	// We start on Zulag 3, cheat code.
+		// } else if (settings["ILZulag3"]){ 
+			l = 13;
+			p = 13;
+			c = 1;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 6;		
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 6;		
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 6;		
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 6;		
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 6;		
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 6;		
+			}
+			
+	// We start on Zulag 4, cheat code.
+		// } else if (settings["ILZulag4"]){ 
+			l = 13;
+			p = 14;
+			c = 1;
+			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
+				vars.StartgnFrame = current.EN_gnFrame;
+				vars.LangDetected = "English";	
+				vars.ILtype = 7;			
+			} else 
+			
+			// SPANISH
+			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
+				vars.StartgnFrame = current.ES_gnFrame;
+				vars.LangDetected = "Spanish";
+				vars.ILtype = 7;			
+			} else
+			
+			// FRENCH
+			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
+				vars.StartgnFrame = current.FR_gnFrame;
+				vars.LangDetected = "French";
+				vars.ILtype = 7;			
+			} else
+			
+			// JAPANESE
+			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
+				vars.StartgnFrame = current.JP_gnFrame;
+				vars.LangDetected = "Japanese";
+				vars.ILtype = 7;			
+			} else
+			
+			// GERMAN
+			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
+				vars.StartgnFrame = current.DE_gnFrame;
+				vars.LangDetected = "German";
+				vars.ILtype = 7;			
+			} else
+			
+			// ITALIAN
+			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
+				vars.StartgnFrame = current.IT_gnFrame;
+				vars.LangDetected = "Italian";
+				vars.ILtype = 7;			
+			}
+		// }
 	} else {
-		vars.StartgnFrame = 0;
+		
+		// ENGLISH		
+		if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
+			vars.StartgnFrame = current.EN_gnFrame;
+			vars.LangDetected = "English";		
+		} else 
+		
+		// SPANISH
+		if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
+			vars.StartgnFrame = current.ES_gnFrame;
+			vars.LangDetected = "Spanish";
+		} else
+		
+		// FRENCH
+		if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
+			vars.StartgnFrame = current.FR_gnFrame;
+			vars.LangDetected = "French";
+		} else
+		
+		// JAPANESE
+		if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
+			vars.StartgnFrame = current.JP_gnFrame;
+			vars.LangDetected = "Japanese";
+		} else
+		
+		// GERMAN
+		if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
+			vars.StartgnFrame = current.DE_gnFrame;
+			vars.LangDetected = "German";
+		} else
+		
+		// ITALIAN
+		if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
+			vars.StartgnFrame = current.IT_gnFrame;
+			vars.LangDetected = "Italian";
+		} else {
+			vars.StartgnFrame = 0;
+		}
 	}
 	
 	if (vars.StartgnFrame > 10){
@@ -217,13 +641,17 @@ start
 		vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;		
 		bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 		vars.trialCheck = trialCheckk;
-		File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
-		File.Delete(@"C:\Autosplit Backup Files\lang"); // Important!! 
-		File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 		
 		var dir = @"C:\Autosplit Backup Files\";  // folder location
-		if (!Directory.Exists(dir)){  // if it doesn't exist, create
-			Directory.CreateDirectory(dir);
-		}	
+		if (vars.ILtype > -1) {			
+			vars.LoadTexts = true;
+		} else {
+			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
+			File.Delete(@"C:\Autosplit Backup Files\lang"); // Important!! 
+			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 		
+			if (!Directory.Exists(dir)){  // if it doesn't exist, create
+				Directory.CreateDirectory(dir);
+			}	
+		}
 		File.WriteAllText(dir + "lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
 		File.WriteAllText(dir + "lang", "" + 0); // Backup for keeping the Lang in Oddysee incase of a game crash.	
 		return true;		
@@ -357,22 +785,22 @@ split
 	long gnFrame = -1;
 	int IsGameBeaten = -1;	
 	
-	if (current.EN_LEVEL_ID == 0 && old.EN_CAM_ID == 1 && current.EN_CAM_ID == 21){ // Reset? On English?
+	if (current.EN_LEVEL_ID == 0 && old.EN_CAM_ID == 1 && (current.EN_CAM_ID == 21 || current.EN_CAM_ID == 31)){ // Reset? On English?
 		vars.ResetStatus = 2;
 	}
-	if (current.ES_LEVEL_ID == 0 && old.ES_CAM_ID == 1 && current.ES_CAM_ID == 21){ // Reset? On Spanish?
+	if (current.ES_LEVEL_ID == 0 && old.ES_CAM_ID == 1 && (current.ES_CAM_ID == 21 || current.ES_CAM_ID == 31)){ // Reset? On Spanish?
 		vars.ResetStatus = 2;
 	}
-	if (current.FR_LEVEL_ID == 0 && old.FR_CAM_ID == 1 && current.FR_CAM_ID == 21){ // Reset? On French?
+	if (current.FR_LEVEL_ID == 0 && old.FR_CAM_ID == 1 && (current.FR_CAM_ID == 21 || current.FR_CAM_ID == 31)){ // Reset? On French?
 		vars.ResetStatus = 2;
 	}
-	if (current.JP_LEVEL_ID == 0 && old.JP_CAM_ID == 1 && current.JP_CAM_ID == 21){ // Reset? On Japanese?
+	if (current.JP_LEVEL_ID == 0 && old.JP_CAM_ID == 1 && (current.JP_CAM_ID == 21 || current.JP_CAM_ID == 31)){ // Reset? On Japanese?
 		vars.ResetStatus = 2;
 	}
-	if (current.DE_LEVEL_ID == 0 && old.DE_CAM_ID == 1 && current.DE_CAM_ID == 21){ // Reset? On German?
+	if (current.DE_LEVEL_ID == 0 && old.DE_CAM_ID == 1 && (current.DE_CAM_ID == 21 || current.DE_CAM_ID == 31)){ // Reset? On German?
 		vars.ResetStatus = 2;
 	}
-	if (current.IT_LEVEL_ID == 0 && old.IT_CAM_ID == 1 && current.IT_CAM_ID == 21){ // Reset? On Italian?
+	if (current.IT_LEVEL_ID == 0 && old.IT_CAM_ID == 1 && (current.IT_CAM_ID == 21 || current.IT_CAM_ID == 31)){ // Reset? On Italian?
 		vars.ResetStatus = 2;
 	}
 	
@@ -438,7 +866,7 @@ split
 		IsGameBeaten = current.IT_IsGameBeaten;
 	}
 	
-	if (gnFrame > -1){		
+	if (gnFrame >= 0){		
 	
 		vars.gnFrameCurrent = gnFrame;
 		
@@ -1700,7 +2128,7 @@ split
 						return true;
 					}	
 					
-				// Zulag 2
+				// Zulag 3
 					if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5 && vars.n == 51) {
 						++vars.n;
 						return true;
@@ -2225,9 +2653,382 @@ split
 				}
 			} 		
 		
-		} else { // NO CATEGORY WHATSOEVER!!
+		} else if (settings["UsingIL"]){ // Individual levels?
+		
+			if (vars.ILtype == 0){ // RuptureFarms
+			
+			// Tutorials
+				if (LEVEL_ID == 1 && C_CAM_ID == 1 && C_PATH_ID == 16 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}
+			
+			// Meat grinder
+				if (LEVEL_ID == 1 && C_CAM_ID == 10 && C_PATH_ID == 18 && vars.n == 1) {
+					++vars.n;
+					return true;
+				}
+			
+			// Sligs
+				if (LEVEL_ID == 1 && C_CAM_ID == 1 && C_PATH_ID == 19 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}
+			
+			// RuptureFarms
+				if (LEVEL_ID == 5 && C_CAM_ID == 6 && C_PATH_ID == 6 && vars.n == 3) {
+					++vars.n;
+					return true;
+				}
+				
+				
+			} else if (vars.ILtype == 1){ // Stockyards	
+			
+			// Scrab part
+				if (LEVEL_ID == 5 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}
+			
+			// Slig Part
+				if (LEVEL_ID == 5 && C_CAM_ID == 1 && C_PATH_ID == 4 && vars.n == 1) {
+					++vars.n;
+					return true;
+				}
+			
+			// Stockyards
+				if (LEVEL_ID == 2 && C_CAM_ID == 14 && C_PATH_ID == 1 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}				
+				
+			} else if (vars.ILtype == 2){ // Paramonia + Temple
+			
+			// Get the Elum
+				if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}				
+			
+			// Honey and Sligs
+				if (LEVEL_ID == 3 && C_CAM_ID == 9 && C_PATH_ID == 5 && vars.n == 1) {
+					++vars.n;
+					return true;
+				}
+				
+			// Platforms and Bees
+				if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 6 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}
+				
+			// Passwords and Sligs
+				if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 9 && vars.n == 3) {
+					++vars.n;
+					return true;
+				}
+				
+			// Paramonia
+				if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 4) {
+					++vars.n;
+					return true;
+				}	
+			
+			// Entry
+				if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 8 && vars.n == 5) {
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 1
+				if (C_PATH_ID == 8 && O_PATH_ID == 4 && O_CAM_ID == 6) { // https://i.imgur.com/CThhUM5.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 2
+				if (C_PATH_ID == 8 && O_PATH_ID == 2 && O_CAM_ID == 8) { // https://i.imgur.com/C1CPF36.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 3
+				if (C_PATH_ID == 8 && O_PATH_ID == 6 && O_CAM_ID == 7) { // https://i.imgur.com/A8IVuGp.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 4
+				if (C_PATH_ID == 8 && O_PATH_ID == 7 && O_CAM_ID == 5) { // https://i.imgur.com/lPrWDD2.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 5
+				if (C_PATH_ID == 8 && O_PATH_ID == 5 && O_CAM_ID == 2) { // https://i.imgur.com/ku9rf3g.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 6
+				if (C_PATH_ID == 8 && O_PATH_ID == 3 && O_CAM_ID == 1) { // https://i.imgur.com/LtYPFNm.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Paramonian Nests 
+				if (LEVEL_ID == 2 && O_PATH_ID == 9 && C_CAM_ID == 4 && C_PATH_ID == 5) { // 25 / 06 / 2020 - Last split for Paramonia Temple.
+					// vars.n = 13;
+					return true;
+				}
+				
+			// Paramonian Temple 
+				// if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 13) {
+					// ++vars.n;
+					// return true;
+				// }	
+				
+			} else if (vars.ILtype == 3){ // Scrabania + Temple
+			
+			// Get Elum
+				if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}
+				
+			// Play with Mines
+				if (LEVEL_ID == 8 && C_CAM_ID == 5 && C_PATH_ID == 8 && vars.n == 1) {
+					++vars.n;
+					return true;
+				}
+				
+			// Scrabania
+				if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}
+			
+			
+			// Entry
+				if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 10 && vars.n == 3) {
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 1
+				if (O_PATH_ID == 9 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/VUTQJ5R.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 2
+				if (O_PATH_ID == 2 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/mtbUcdr.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 3
+				if (O_PATH_ID == 3 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/09DtCCn.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 4
+				if (O_PATH_ID == 5 && C_PATH_ID == 10 && O_CAM_ID == 8) { // https://i.imgur.com/qjAxMzI.jpg
+					++vars.n;
+					return true;
+				}
+				
+			// Trial 5
+				if (O_PATH_ID == 4 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/8BxoUsw.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 6
+				if (O_PATH_ID == 7 && C_PATH_ID == 10 && O_CAM_ID == 1) { // https://i.imgur.com/WHeaT7j.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 7
+				if (O_PATH_ID == 6 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/NkzyNWh.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Trial 8
+				if (O_PATH_ID == 8 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/lX7IQg3.jpg
+					++vars.n;
+					return true;
+				}
+			
+			// Scrabanian Nests
+				if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && O_PATH_ID == 11) { // 25 / 06 / 2020 - Last split for Scrabanian Temple.
+					return true;
+				}
+				
+			// Scrabania Temple
+				// if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 22) { // Entry Free Fire Zone - Change
+					// ++vars.n;
+					// return true;
+				// }
+				
+			} else if (vars.ILtype == 4){ // RTR + Zulag 1
+			
+			// FFZ
+				if (LEVEL_ID == 13 && C_CAM_ID == 3 && C_PATH_ID == 19 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Mudokon Ring
+				if (LEVEL_ID == 13 && C_CAM_ID == 7 && C_PATH_ID == 16 && vars.n == 1) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Sligs Meat Grinder
+				if (LEVEL_ID == 13 && C_CAM_ID == 8 && C_PATH_ID == 15 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Tutorials 2
+				if (O_PATH_ID == 15 && C_PATH_ID == 18 && vars.n == 3) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Zulag 1
+				if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1 && vars.n == 4) {
+					++vars.n;
+					return true;
+				}	
+			
+			} else if (vars.ILtype == 5){ // Zulag 2
+				// Entry
+					if (LEVEL_ID == 13 && C_CAM_ID == 3 && C_PATH_ID == 1 && vars.n == 0) {
+						++vars.n;
+						return true;
+					}	
+					
+				// Door 1
+					if (C_PATH_ID == 2 && C_CAM_ID == 4 && vars.trialCheck[0] != true){ // Door 1 check
+						vars.trialCheck[0] = true;
+					}
+					
+					if (O_PATH_ID == 2 && C_PATH_ID == 1 && vars.trialCheck[0] == true) {
+						++vars.n;
+						return true;
+					}	
+					
+				// Door 2				
+					if (C_PATH_ID == 10 && C_CAM_ID == 5 && vars.trialCheck[1] != true){ // Door 2 check
+						vars.trialCheck[1] = true;
+					}
+					
+					if (O_PATH_ID == 10 && C_PATH_ID == 1 && vars.trialCheck[1] == true) {
+						++vars.n;
+						return true;
+					}
+					
+				// Door 3			
+					if (C_PATH_ID == 3 && C_CAM_ID == 5 && vars.trialCheck[2] != true){ // Door 3 check
+						vars.trialCheck[2] = true;
+					}
+					
+					if (O_PATH_ID == 3 && C_PATH_ID == 1 && vars.trialCheck[2] == true) {
+						++vars.n;
+						return true;
+					}	
+					
+				// Zulag 2
+					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13 && vars.n == 4) {
+						return true;
+					}	
+					
+			} else if (vars.ILtype == 6){ // Zulag 3
+			// Entry
+				if (LEVEL_ID == 13 && C_PATH_ID == 13 && C_CAM_ID == 4 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Door 1
+				if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 1 check
+					vars.trialCheck[3] = true;
+				}
+				
+				if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Door 2
+				if (C_PATH_ID == 7 && C_CAM_ID == 9 && vars.trialCheck[4] != true){ // Door 2 check
+					vars.trialCheck[4] = true;
+				}
+				
+				if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
+					++vars.n;
+					return true;
+				}
+				
+			// Door 3
+				if (C_PATH_ID == 5 && C_CAM_ID == 4 && vars.trialCheck[5] != true){ // Door 3 check
+					vars.trialCheck[5] = true;
+				}
+				
+				if (O_PATH_ID == 5 && C_PATH_ID == 13 && vars.trialCheck[5] == true) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Zulag 3
+				if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5 && vars.n == 4) {
+					return true;
+				}	
+			
+			} else if (vars.ILtype == 7){ // Zulag 4 + Boardroom
+			// Enter Slog Kennels
+				if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 8 && vars.n == 0) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Leave Slog Kennels
+				if (C_PATH_ID == 8 && C_CAM_ID == 5 && vars.trialCheck[6] != true){ // Slog Kennels check
+					vars.trialCheck[6] = true;
+				}
+				
+				if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 1 && vars.trialCheck[6] == true) {
+					++vars.n;
+					return true;
+				}
+				
+			// Enter Second Part
+				if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 11 && vars.n == 2) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Zulag 4
+				if (LEVEL_ID == 12 && C_CAM_ID == 2 && C_PATH_ID == 6 && abeY > 235 && vars.n == 3) {
+					++vars.n;
+					return true;
+				}	
+				
+			// Boardroom
+				if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
+					++vars.n;
+					vars.Log = "The run is over!\nTime: " + timer.CurrentTime.RealTime;	
+					return true;
+				}	
+			}
+		} else {
 			// :shrug:
-		}		
+		}
 		// Boardroom
 		if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
 			++vars.n;
@@ -2643,6 +3444,77 @@ split
 			vars.split[49] = "Game finished\nI hope this was World Record :)";
 			vars.split[50] = "Game finished\nI hope this was World Record :)";
 			
+		} else if (vars.ILtype == 0){ // RuptureFarms
+			vars.split[0] = "IL - RuptureFarms - Tutorials\nCan I cry now, please?";
+			vars.split[1] = "IL - RuptureFarms - Meat Grinder\nMeat doesn't kill... I HOPE.";
+			vars.split[2] = "IL - RuptureFarms - Sligs\nI hate Sligs.";
+			vars.split[3] = "IL - RuptureFarms - End\nI'm so outta here!";
+			vars.split[4] = "IL - RuptureFarms\nOversplit. Wrong splits file?";
+		} else if (vars.ILtype == 1){ // Stockyards
+			vars.split[0] = "IL - Stockyards - Scrab Part\nMeet the nature! And... the scrabs.";
+			vars.split[1] = "IL - Stockyards - Slig Part\nI hate sligs even more. SO I kill mudokons.";
+			vars.split[2] = "IL - Stockyards - End\nEnough playing with slogs.";	
+			vars.split[3] = "IL - Stockyards\nOversplit. Wrong splits file?";			
+		} else if (vars.ILtype == 2){ // Paramonia + Temple + Nests
+			vars.split[0] = "IL - Paramonia - Get the Elum P\nThe Elum is here!";
+			vars.split[1] = "IL - Paramonia - Honey and Sligs\nFearless Elum and Annoying Bees!";
+			vars.split[2] = "IL - Paramonia - Platforms and Bees\nLet's run very fast!";
+			vars.split[3] = "IL - Paramonia - Passwords and Sligs\nPass the word and run!";
+			vars.split[4] = "IL - Paramonia\nBye Elum. Never see you again!";
+			
+			vars.split[5] = "IL - P. Temple - Entry\nBad sloggies doesn't get bones.";
+			vars.split[6] = "IL - P. Temple - Trial 1\nMeet the rolling stone of death!";
+			vars.split[7] = "IL - P. Temple - Trial 2\nFood is power, too.";
+			vars.split[8] = "IL - P. Temple - Trial 3\nFoodTimizer changes level order.";
+			vars.split[9] = "IL - P. Temple - Trial 4\nSlogs, bats and rocks. Paramites? Nope!";
+			vars.split[10] = "IL - P. Temple - Trial 5\nBehold the Master Baiter!";
+			vars.split[11] = "IL - P. Temple - Trial 6\nSligs, slogs, bats, rocks... paramites?!";
+			vars.split[12] = "IL - P. Temple - Nests + End\nLet's run through it very fast.";
+			vars.split[13] = "IL - P. Temple\nOversplit. Wrong splits file?";
+		} else if (vars.ILtype == 3){ // Scrabania + Temple + Nests
+			vars.split[0] = "IL - Scrabania - Get the Elum S\nThe Elum is back!";
+			vars.split[1] = "IL - Scrabania - Play with bombs\nFearless Abe! Let's go!";
+			vars.split[2] = "IL - Scrabania - End\nEnough riding. Let's go finally see some scrabs.";
+			
+			vars.split[3] = "IL - S. Temple - Entry\nScrabania, or Sligabania? Where are the scrabs?";
+			vars.split[4] = "IL - S. Temple - Trial 1\nHow to tame your Scrab... 1.0!";
+			vars.split[5] = "IL - S. Temple - Trial 2\nVery normal level.";
+			vars.split[6] = "IL - S. Temple - Trial 3\nMeet the floating bomb of death. And random softlocks.";
+			vars.split[7] = "IL - S. Temple - Trial 4\nBats I guess. Where the old Max Cas DDG was.";
+			vars.split[8] = "IL - S. Temple - Trial 5\nGoing through scrabs is fun and EASY.";
+			vars.split[9] = "IL - S. Temple - Trial 6\nElevator strat right here!";
+			vars.split[10] = "IL - S. Temple - Trial 7\nHow to tame your Scrab... 2.0!";
+			vars.split[11] = "IL - S. Temple - Trial 8\nScrab elevator trick.";
+			vars.split[12] = "IL - S. Temple - Nests + End\nLet's risk a stupid death on a 3 seconds skip :)";
+			vars.split[13] = "IL - S. Temple\nOversplit. Wrong splits file?";
+		} else if (vars.ILtype == 4){ // FFZ + Zulag 1
+			vars.split[0] = "IL - Zulag 1 - FFZ\nFree vire... zone?";
+			vars.split[1] = "IL - Zulag 1 - Mudokon Ring\nLet's catch'em or kill'em all, mudokon version.";
+			vars.split[2] = "IL - Zulag 1 - Sligs Meat Grinders\nRed rings of death and shrykulls.";
+			vars.split[3] = "IL - Zulag 1 - Tutorials 2\nI'm back, baby!";
+			vars.split[4] = "IL - Zulag 1 - End\nLet's go on a fun trip to Zulag 2!";
+			vars.split[5] = "IL - Zulag 1\nOversplit. Wrong splits file?";
+		} else if (vars.ILtype == 5){ // Zulag 2			
+			vars.split[0] = "IL - Zulag 2 - Entry\nYes, hi. I want some chips and a cheeseburger.";
+			vars.split[1] = "IL - Zulag 2 - Door 1\nMudokon dies or not?";
+			vars.split[2] = "IL - Zulag 2 - Door 2\nGrenade + Slig dying.";
+			vars.split[3] = "IL - Zulag 2 - Door 3\nDetonating sligs 4 fun!";
+			vars.split[4] = "IL - Zulag 2 - End\nLet's enter the realm of purple!";
+			vars.split[5] = "IL - Zulag 2\nOversplit. Wrong splits file?";
+		} else if (vars.ILtype == 6){ // Zulag 3
+			vars.split[0] = "IL - Zulag 3 - Entry\nExpress lever pull!";
+			vars.split[1] = "IL - Zulag 3 - Door 1\nMeet the braindead sligs!";
+			vars.split[2] = "IL - Zulag 3 - Door 2\nVery long level indeed.";
+			vars.split[3] = "IL - Zulag 3 - Door 3\nFloating bombs everywhere D:";
+			vars.split[4] = "IL - Zulag 3 - End\nLet's enter the realm of green!";
+			vars.split[5] = "IL - Zulag 3\nOversplit. Wrong splits file?";			
+		} else if (vars.ILtype == 7){ // Zulag 4 + Boardroom
+			vars.split[0] = "IL - Zulag 4 - Enter Slog Kennels\nMirky grenade strat!";
+			vars.split[1] = "IL - Zulag 4 - Leave Slog Kennels\nKilling slogs. Or maybe not...";
+			vars.split[2] = "IL - Zulag 4 - Main Section\nLet's just leave this place.";
+			vars.split[3] = "IL - Zulag 4 - End\nNo killing slogs this time.";
+			vars.split[4] = "IL - The Boardroom\nLast mudokon AAAND let's get shot!";
+			vars.split[5] = "IL - Zulag 4\nOversplit. Wrong splits file?";
 		} else { // NO SPLITS WHATSOEVER
 			vars.split[0] = "No category selected\nJust using loadless time feature. Check settings!";
 			vars.split[1] = "No category selected\nJust using loadless time feature. Check settings!";
