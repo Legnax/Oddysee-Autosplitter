@@ -1,7 +1,7 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 25-06-2020
+//	Created by LegnaX. 26-06-2020
 
-state("AbeWin", "1.3")
+state("AbeWin", "1.3.0")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3. LegnaX#7777 (Discord). 25th June 2020");
-	settings.SetToolTip("Version", "LAST CHANGES:\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels! There may be issues, so use with discretion.");
+	settings.Add("Version", true, "Version Official 1.3.0 (26th June 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -2677,7 +2677,9 @@ split
 			
 			// RuptureFarms
 				if (LEVEL_ID == 5 && C_CAM_ID == 6 && C_PATH_ID == 6 && vars.n == 3) {
-					++vars.n;
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "RuptureFarms IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}
 				
@@ -2698,7 +2700,9 @@ split
 			
 			// Stockyards
 				if (LEVEL_ID == 2 && C_CAM_ID == 14 && C_PATH_ID == 1 && vars.n == 2) {
-					++vars.n;
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Stockyards IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}				
 				
@@ -2777,8 +2781,10 @@ split
 				}
 				
 			// Paramonian Nests 
-				if (LEVEL_ID == 2 && O_PATH_ID == 9 && C_CAM_ID == 4 && C_PATH_ID == 5) { // 25 / 06 / 2020 - Last split for Paramonia Temple.
-					// vars.n = 13;
+				if (LEVEL_ID == 2 && O_PATH_ID == 9 && C_CAM_ID == 4 && C_PATH_ID == 5) { // 25 / 06 / 2020 - Last split for Paramonia Temple.								
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Paramonia IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}
 				
@@ -2864,7 +2870,10 @@ split
 				}
 			
 			// Scrabanian Nests
-				if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && O_PATH_ID == 11) { // 25 / 06 / 2020 - Last split for Scrabanian Temple.
+				if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && O_PATH_ID == 11) { // 25 / 06 / 2020 - Last split for Scrabanian Temple.									
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Scrabania IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}
 				
@@ -2901,8 +2910,10 @@ split
 				}	
 				
 			// Zulag 1
-				if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1 && vars.n == 4) {
-					++vars.n;
+				if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1) {					
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Zulag 1 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}	
 			
@@ -2944,7 +2955,10 @@ split
 					}	
 					
 				// Zulag 2
-					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13 && vars.n == 4) {
+					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13) {
+						vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+						vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+						vars.Log = "Zulag 2 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 						return true;
 					}	
 					
@@ -2986,7 +3000,10 @@ split
 				}	
 				
 			// Zulag 3
-				if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5 && vars.n == 4) {
+				if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5) {					
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Zulag 3 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}	
 			
@@ -3021,8 +3038,9 @@ split
 				
 			// Boardroom
 				if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
-					++vars.n;
-					vars.Log = "The run is over!\nTime: " + timer.CurrentTime.RealTime;	
+					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.Log = "Zulag 4 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}	
 			}
