@@ -1,7 +1,7 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
 //	Created by LegnaX. 29-06-2020
 
-state("AbeWin", "1.3.1")
+state("AbeWin", "1.3.2")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Version Official 1.3.1 (29th June 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).");
+	settings.Add("Version", true, "Version Official 1.3.2 (29th June 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -3080,7 +3080,7 @@ split
 					vars.Log = "Zulag 4 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
 					return true;
 				}	
-			}
+			
 		} else if (vars.ILtype == 8){ // Monsaic Lines			
 		// Monsaic Lines Slig part
 			if (LEVEL_ID == 2 && C_CAM_ID == 8 && C_PATH_ID == 2 && vars.n == 0) {
@@ -3263,6 +3263,7 @@ split
 			vars.Log = "The run is over!\nTime: " + timer.CurrentTime.RealTime;	
 			return true;
 		}	
+	}
 		
 	//##########################################################
 
