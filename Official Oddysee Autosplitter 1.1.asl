@@ -1,7 +1,7 @@
 //	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 30-06-2020
+//	Created by LegnaX. 02-07-2020
 
-state("AbeWin", "1.3.2")
+state("AbeWin", "1.3.3")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.2 (June 30th 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.");
+	settings.Add("Version", true, "Official Version 1.3.3 (July 2nd 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -169,7 +169,7 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "1.3.2" ;
+	version = "1.3.3" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -825,16 +825,16 @@ start
 		vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;		
 		bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 		vars.trialCheck = trialCheckk;
-		var dir = @"C:\Autosplit Backup Files\";  // folder location
+		var dir = @"C:\Autosplit Backup Files\";  // folder location 		
+		if (!Directory.Exists(dir)){  // if it doesn't exist, create
+			Directory.CreateDirectory(dir);
+		}	
 		if (vars.ILtype > -1) {			
 			vars.LoadTexts = true;
 		} else {
 			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
 			File.Delete(@"C:\Autosplit Backup Files\lang"); // Important!! 
-			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 		
-			if (!Directory.Exists(dir)){  // if it doesn't exist, create
-				Directory.CreateDirectory(dir);
-			}	
+			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!!
 		}
 		File.WriteAllText(dir + "lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
 		File.WriteAllText(dir + "lang", "" + 0); // Backup for keeping the Lang in Oddysee incase of a game crash.	
