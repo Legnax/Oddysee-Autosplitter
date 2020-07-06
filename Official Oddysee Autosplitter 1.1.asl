@@ -111,8 +111,8 @@ startup
 	settings.Add("SplitsAny%NMS", false, "Any% NMS", "UsingAutosplit");
 	settings.SetToolTip("SplitsAny%NMS", "Use the Any% NMS splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
-	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas | Max Cas NMS | 50%/50%", "UsingAutosplit");
-	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas% | Max Cas% NMS | 50%/50% splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
+	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas | Max Cas NMS | 50/50", "UsingAutosplit");
+	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas | Max Cas NMS | 50/50 splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
 	settings.Add("SplitsGoodEnding", false, "Good Ending", "UsingAutosplit");
 	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
