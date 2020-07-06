@@ -1,7 +1,7 @@
-//	An autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Loadless time.
-//	Created by LegnaX. 02-07-2020
+//	official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
+//	Created by LegnaX. 06-07-2020
 
-state("AbeWin", "1.3.3")
+state("AbeWin", "1.3.4")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.3 (July 2nd 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.");
+	settings.Add("Version", true, "Official Version 1.3.4 (July 6nd 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMS to the categories list.");
 	
 	settings.Add("NoSplitNames", true, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -111,8 +111,8 @@ startup
 	settings.Add("SplitsAny%NMS", false, "Any% NMS", "UsingAutosplit");
 	settings.SetToolTip("SplitsAny%NMS", "Use the Any% NMS splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
-	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas", "UsingAutosplit");
-	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
+	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas | Max Cas NMS | 50%/50%", "UsingAutosplit");
+	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas% | Max Cas% NMS | 50%/50% splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
 	settings.Add("SplitsGoodEnding", false, "Good Ending", "UsingAutosplit");
 	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
@@ -122,46 +122,6 @@ startup
 	
 	settings.Add("UsingIL", false, "INDIVIDUAL LEVELS - Check this to activate");
 	settings.SetToolTip("UsingIL", "Leave this option unchecked to not use.\nAutosplit will priorize autosplit category over Individual Levels, so make sure you disable AUTOSPLIT GAME CATEGORY if you want to use ILs!\nYou need the splits file for the IL splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !\nExcept for RuptureFarms, you need to use the Cheat Code in order for the autosplit to start.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> INDIVIDUAL LEVEL LIST <-\n- RuptureFarms (start a new game)\n- Stockyards\n- Monsaic Lines\n- Paramonia\n- Paramonian Temple\n- Scrabania\n- Scrabanian Temple\n- Free Fire Zone\n- Zulag 1\n- Zulag 2\n- Zulag 3\n- Zulag 4");
-		
-	// settings.Add("ILRupturefarms", false, "RuptureFarms", "UsingIL");
-	// settings.SetToolTip("ILRupturefarms", "Use the RuptureFarms IL splits file!\nAutosplitter will split according to the Rupturefarms subsplits.\nTimer should start during the loading time after you press on Start on the main menu.\n-> SPLIT LIST <-\n- Tutorials\n- Meat Grinders\n- Sligs\n- Rupture Farms");
-		
-	// settings.Add("ILStockyards", false, "Stockyards", "UsingIL");
-	// settings.SetToolTip("ILStockyards", "Use the Stockyards IL splits file!\nAutosplitter will split according to the Stockyards subsplits.\nTimer should start as soon as the loading screen appears after selecting Stockyards on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> SPLIT LIST <-\n- Scrab Part\n- Slig part\n- Stockyards");
-	
-	// settings.Add("ILMonsaic", false, "Monsaic Lines", "UsingIL");
-	// settings.SetToolTip("ILMonsaic", "Use the Monsaic Lines IL splits file!\nAutosplitter will split according to the Monsaic Lines subsplits.\nTimer should start as soon as the loading screen appears after selecting Monsaic Lines on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Natives\n- Monsaic Lines");
-	
-	// settings.Add("ILParamonia", false, "Paramonia", "UsingIL");
-	// settings.SetToolTip("ILParamonia", "Use the Paramonia IL splits file!\nAutosplitter will split according to the Paramonia subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum P\n- Honey and Sligs\n- Platforms and Bees\n- Passwords and Sligs\n- Paramonia");
-	
-	// settings.Add("ILPTemple", false, "Paramonian Temple", "UsingIL");
-	// settings.SetToolTip("ILPTemple", "Use the Paramonian Temple IL splits file!\nAutosplitter will split according to the Paramonian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia Temple on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Paramonian Nests\n- Paramonian Temple");
-	
-	
-	// settings.Add("ILParamonia", false, "Paramonia", "UsingIL");
-	// settings.SetToolTip("ILParamonia", "Use the Paramonia IL splits file!\nAutosplitter will split according to the Paramonia - Paramonian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Paramonia on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum P\n- Honey and Sligs\n- Platforms and Bees\n- Passwords and Sligs\n- Paramonia\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Paramonian Nests\n- Paramonian Temple");
-	
-	// settings.Add("ILScrabania", false, "Scrabania", "UsingIL");
-	// settings.SetToolTip("ILScrabania", "Use the Scrabania IL splits file!\nAutosplitter will split according to the Scrabania subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabania on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum S\n- Play with Mines\n- Scrabania");
-		
-	// settings.Add("ILSTemple", false, "Scrabanian Temple", "UsingIL");
-	// settings.SetToolTip("ILSTemple", "Use the Scrabanian Temple IL splits file!\nAutosplitter will split according to the Scrabanian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabanian Temple on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Trial 7\n- Trial 8\n- Scrabanian Nests\n- Scrabanian Temple");
-	
-	// settings.Add("ILScrabania", false, "Scrabania", "UsingIL");
-	// settings.SetToolTip("ILScrabania", "Use the Scrabania IL splits file!\nAutosplitter will split according to the Scrabania - Scrabanian Temple subsplits.\nTimer should start as soon as the loading screen appears after selecting Scrabania on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Get the Elum S\n- Play with Mines\n- Scrabania\n- Entry\n- Trial 1\n- Trial 2\n- Trial 3\n- Trial 4\n- Trial 5\n- Trial 6\n- Trial 7\n- Trial 8\n- Scrabanian Nests\n- Scrabanian Temple");
-		
-	// settings.Add("ILZulag1", false, "Zulag 1", "UsingIL");
-	// settings.SetToolTip("ILZulag1", "Use the Zulag 1 IL splits file!\nAutosplitter will split according to the Zulag 1 subsplits.\nWhen using Any% categories, you can decide not to do the other splits so the mudokon splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 1 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- FreeFire Zone\n- Mudokon Ring (only 100% / Max Cas)\n- Sligs Meat Grinder (only 100% / Max Cas)\n- Tutorials 2 (only 100% / Max Cas)\n- Zulag 1");
-		
-	// settings.Add("ILZulag2", false, "Zulag 2", "UsingIL");
-	// settings.SetToolTip("ILZulag2", "Use the Zulag 2 IL splits file!\nAutosplitter will split according to the Zulag 2 subsplits.\nWhen doing Any%, you can decide not to do the other splits so the NMS splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 2 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- First Door\n- Second Door\n- Third door\n- Zulag 2");
-		
-	// settings.Add("ILZulag3", false, "Zulag 3", "UsingIL");
-	// settings.SetToolTip("ILZulag3", "Use the Zulag 3 IL splits file!\nAutosplitter will split according to the Zulag 3 subsplits.\nWhen doing Any%, you can decide not to do the other splits so the NMS splits will be ignored.\nTimer should start as soon as the loading screen appears after selecting Zulag 3 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Entry\n- First Door\n- Second Door\n- Third door\n- Zulag 3");
-		
-	// settings.Add("ILZulag4", false, "Zulag 4", "UsingIL");
-	// settings.SetToolTip("ILZulag4", "Use the Zulag 4 IL splits file!\nAutosplitter will split according to the Zulag 4 subsplits.\nTimer should start as soon as the loading screen appears after selecting Zulag 4 on the cheat code.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑\n-> SPLIT LIST <-\n- Enter Slog Kennels\n- Leave Slog Kennels\n- Enter Second Part\n- Zulag 4\n- Boardroom");
 }
 
 init
@@ -169,7 +129,7 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "1.3.3" ;
+	version = "1.3.4" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -200,8 +160,6 @@ init
 	vars.GNFrame = 0;
 	vars.fps = 30.3; // FPS of the game. proven to be 30.3 doing performance checks.
 	vars.ILtype = -1; // 0 = RuptureFarms | 1 = Stockyards | 2 = Paramonia | 3 = Scrabania | 4 = Zulag 1 | 5 = Zulag 2 | 6 = Zulag 3 | 7 = Zulag 4
-	// vars.gnFrameTest = "gnFrame = " + gnFrame + " | Skipped frames = " + vars.SkippedFrames;
-	// vars.variables = "LEVEL " + LEVEL_ID + " | CAM " + C_CAM_ID + " | PATH " + C_PATH_ID + " | AbeY " + abeY; // For programming purposes c:
 	
 	if (File.Exists(@"C:\Autosplit Backup Files\n")) { // We conveniently recover the Oddysee current split 
 		vars.n = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\n"));
@@ -3270,7 +3228,7 @@ split
 
 	// Other functions not related with splits whatsoever.
 		
-		vars.variables = vars.LangDetected + "-> LEVEL " + LEVEL_ID + " | CAM " + C_CAM_ID + " | PATH " + C_PATH_ID + " | " + gnFrame; // For programming purposes c·:
+		vars.variables = vars.LangDetected + "-> LEVEL " + LEVEL_ID + " | PATH " + C_PATH_ID + " | CAM " + C_CAM_ID + " | " + vars.GNFrame; // For programming purposes c·:
 		
 	} else {
 		
