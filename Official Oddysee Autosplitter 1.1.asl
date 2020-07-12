@@ -1,5 +1,5 @@
 //	official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
-//	Created by LegnaX. 06-07-2020
+//	Created by LegnaX. 12-07-2020
 
 state("AbeWin", "1.3.5")
 {
