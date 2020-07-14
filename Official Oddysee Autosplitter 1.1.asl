@@ -1,7 +1,7 @@
 //	official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
-//	Created by LegnaX. 12-07-2020
+//	Created by LegnaX. 14-07-2020
 
-state("AbeWin", "1.3.5")
+state("AbeWin", "1.3.6")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,13 +70,13 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.5 (July 12th 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMS to the categories list.\n- Fixed an issue with the language not getting saved properly.");
+	settings.Add("Version", true, "Official Version 1.3.6 (July 14th 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMS to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
 	
-	settings.Add("RealGameTime", true, "Time displayed on the variable 'Log' is LOADLESS_TIME.");
+	settings.Add("RealGameTime", true, "Time displayed on the variable 'Log' is IGT.");
 	settings.SetToolTip("RealGameTime", "This game is the difference between frames since Abe starts on RuptureFarms and until the last split happens (or when the livesplit splits the last split).\nThis will be used on Any% for getting the actual REAL ingame time.");	
 	
 	
@@ -129,7 +129,7 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "1.3.5" ;
+	version = "1.3.6" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -802,19 +802,19 @@ start
 
 exit
 {	
-	// var dir = @"C:\Autosplit Backup Files\";  // folder location
-	// if (!Directory.Exists(dir)){  // if it doesn't exist, create
-		// Directory.CreateDirectory(dir);
-	// }		
-	// File.WriteAllText(@"C:\Autosplit Backup Files\n", "" + vars.n); // Backup for keeping the splits in Oddysee incase of a game crash.	
-	// File.WriteAllText(@"C:\Autosplit Backup Files\lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
-	// if (vars.gnBeforeMainMenu > 0) { // Did we go back to the main menu? :/
-		// File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.	
-	// } else { // If we just closed the game.
-		// File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.			
-	// }	
-	// vars.StartgnFrame = 0;
-	// vars.Log = "Game has closed.";
+	var dir = @"C:\Autosplit Backup Files\";  // folder location
+	if (!Directory.Exists(dir)){  // if it doesn't exist, create
+		Directory.CreateDirectory(dir);
+	}		
+	File.WriteAllText(@"C:\Autosplit Backup Files\n", "" + vars.n); // Backup for keeping the splits in Oddysee incase of a game crash.	
+	File.WriteAllText(@"C:\Autosplit Backup Files\lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
+	if (vars.gnBeforeMainMenu > 0) { // Did we go back to the main menu? :/
+		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.	
+	} else { // If we just closed the game.
+		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.			
+	}	
+	vars.StartgnFrame = 0;
+	vars.Log = "Game has closed.";
 }
 
 reset
@@ -2822,7 +2822,7 @@ split
 				if (LEVEL_ID == 5 && C_CAM_ID == 6 && C_PATH_ID == 6 && vars.n == 3) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "RuptureFarms IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "RuptureFarms IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
 				
@@ -2845,7 +2845,7 @@ split
 				if (LEVEL_ID == 2 && C_CAM_ID == 14 && C_PATH_ID == 1 && vars.n == 2) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Stockyards IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Stockyards IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}				
 				
@@ -2879,7 +2879,7 @@ split
 				if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 4) {											
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Paramonia IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Paramonia IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
 				
@@ -2901,7 +2901,7 @@ split
 				if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {												
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Scrabania IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Scrabania IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}			
 				
@@ -2953,7 +2953,7 @@ split
 				if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13) {
 						vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 						vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-						vars.Log = "Zulag 2 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+						vars.Log = "Zulag 2 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 						return true;
 					}	
 					
@@ -2998,7 +2998,7 @@ split
 				if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5) {					
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Zulag 3 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Zulag 3 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
 			
@@ -3035,7 +3035,7 @@ split
 				if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Zulag 4 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Zulag 4 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
 			
@@ -3054,7 +3054,7 @@ split
 			if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 2) {										
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-				vars.Log = "Monsaic Lines (Any%) IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+				vars.Log = "Monsaic Lines (Any%) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}
 			
@@ -3062,7 +3062,7 @@ split
 			if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-				vars.Log = "Monsaic Lines (NOT Any%) IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+				vars.Log = "Monsaic Lines (NOT Any%) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}					
 			
@@ -3070,7 +3070,7 @@ split
 			if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-				vars.Log = "Monsaic Lines (special) IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+				vars.Log = "Monsaic Lines (special) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}					
 		} else if (vars.ILtype == 9){ // Paramonian Temple
@@ -3120,7 +3120,7 @@ split
 				if (LEVEL_ID == 2 && C_PATH_ID == 5 && C_CAM_ID == 4) { // 30 / 06 / 2020 - Last split for Paramonia Temple. SPAM split just in case.								
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Paramonia IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Paramonia IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
 		} else if (vars.ILtype == 10){ // Scrabanian Temple			
@@ -3182,7 +3182,7 @@ split
 				if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && O_PATH_ID == 11) { // 25 / 06 / 2020 - Last split for Scrabanian Temple.									
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Scrabania Temple IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Scrabania Temple IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
 				
@@ -3209,7 +3209,7 @@ split
 				if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1) {					
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
-					vars.Log = "Zulag 1 IL is over! RTA: " + vars.REAL_TIME + " | IGT: " + vars.LOADLESS_TIME;
+					vars.Log = "Zulag 1 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
 		} else {
@@ -3730,15 +3730,15 @@ split
 		} else {	
 			if (settings["RealGameTime"]){	
 				if (settings["NoSplitNames"]){
-					vars.Log = "Loadless Time: " + vars.LOADLESS_TIME + " | Split number: " + vars.n;
+					vars.Log = "IGT: " + vars.LOADLESS_TIME + " | Split number: " + vars.n;
 				} else {
-					vars.Log = "Loadless Time: " + vars.LOADLESS_TIME + " | Zone: " + vars.split[vars.n];	
+					vars.Log = "IGT: " + vars.LOADLESS_TIME + " | Zone: " + vars.split[vars.n];	
 				}
 			} else {				
 				if (settings["NoSplitNames"]){
-					vars.Log = "Real Time: " + vars.REAL_TIME + " | Split number: " + vars.n;
+					vars.Log = "RTA: " + vars.REAL_TIME + " | Split number: " + vars.n;
 				} else {					
-					vars.Log = "Real Time: " + vars.REAL_TIME + " | Zone: " + vars.split[vars.n];
+					vars.Log = "RTA: " + vars.REAL_TIME + " | Zone: " + vars.split[vars.n];
 				}
 			}
 		}	
