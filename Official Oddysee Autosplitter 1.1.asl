@@ -1,7 +1,7 @@
-//	official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
-//	Created by LegnaX. 14-07-2020
+//	Official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
+//	Created by LegnaX. 23-08-2020
 
-state("AbeWin", "1.3.6")
+state("AbeWin", "1.3.7")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.6 (July 14th 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMS to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.");
+	settings.Add("Version", true, "Official Version 1.3.7 (August 23th 2020) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -108,11 +108,11 @@ startup
 	settings.Add("SplitsAny%", false, "Any%", "UsingAutosplit");
 	settings.SetToolTip("SplitsAny%", "Use the Any% splits file!\nAutosplitter will split accordingly those splits.");
 	
-	settings.Add("SplitsAny%NMS", false, "Any% NMS", "UsingAutosplit");
-	settings.SetToolTip("SplitsAny%NMS", "Use the Any% NMS splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
+	settings.Add("SplitsAny%NMG", false, "Any% NMG", "UsingAutosplit");
+	settings.SetToolTip("SplitsAny%NMG", "Use the Any% NMG splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
-	settings.Add("Splits100%", false, "100% | 100% NMS | Max Cas | Max Cas NMS | 50/50", "UsingAutosplit");
-	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMS | Max Cas | Max Cas NMS | 50/50 splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
+	settings.Add("Splits100%", false, "100% | 100% NMG | Max Cas | Max Cas NMG | 50/50", "UsingAutosplit");
+	settings.SetToolTip("Splits100%", "Use the 100% | 100% NMG | Max Cas | Max Cas NMG | 50/50 splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
 	
 	settings.Add("SplitsGoodEnding", false, "Good Ending", "UsingAutosplit");
 	settings.SetToolTip("SplitsGoodEnding", "Use the Good Ending splits file!\nAutosplitter will split accordingly those splits.\nBoth variants are supported: Scrabania first, or Paramonia first.");
@@ -894,6 +894,7 @@ isLoading
 			vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 			vars.GNFrame = gnFrame - vars.StartgnFrame;
 			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+			2:29.736
 			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
 			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
 				return true;
@@ -1145,7 +1146,7 @@ split
 				}
 			
 			
-			} else if (settings["SplitsAny%NMS"]){
+			} else if (settings["SplitsAny%NMG"]){
 				if (vars.n <= 3){ // RuptureFarms 0-3
 				// Tutorials
 					if (LEVEL_ID == 1 && C_CAM_ID == 1 && C_PATH_ID == 16 && vars.n == 0) {
@@ -3320,7 +3321,7 @@ split
 			vars.split[18] = "Boardroom\nGotta pull that lever and get shot 4 fun.";
 			vars.split[19] = "";
 			vars.split[20] = "";
-		} else if (settings["SplitsAny%NMS"]){
+		} else if (settings["SplitsAny%NMG"]){
 			vars.split[0] = "RuptureFarms - Tutorials\nCan I cry now, please?";
 			vars.split[1] = "RuptureFarms - Meat Grinder\nMeat doesn't kill... I HOPE.";
 			vars.split[2] = "RuptureFarms - Sligs\nI hate Sligs.";
