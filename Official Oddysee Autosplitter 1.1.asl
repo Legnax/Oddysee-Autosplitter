@@ -1,7 +1,7 @@
 //	Official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
-//	Created by LegnaX. 04-10-2020
+//	Created by LegnaX. 12-01-2021
 
-state("AbeWin", "1.3.8")
+state("AbeWin", "1.3.9")
 {
 	// ORIGINAL GoG EN BYTES
 	byte EN_LEVEL_ID : 0x107BA8;
@@ -70,8 +70,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.8 (October 4th 2020) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.");
+	settings.Add("Version", true, "Official Version 1.3.9 (January 12th 2021) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -126,10 +126,13 @@ startup
 
 init
 {	
+	vars.You_can_show_the_following_variables_on_runs = "Ahh, I see!";
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
-	version = "1.3.8" ;
+	vars.____________________________________ = "Ignore this.";
+	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 3 above ones can be used.";
+	version = "1.3.9" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -893,7 +896,7 @@ isLoading
 		if (IsGameRunning == 1){ // if the game is paused...
 			vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 			vars.GNFrame = gnFrame - vars.StartgnFrame;
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
 			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
 				return true;
@@ -903,7 +906,7 @@ isLoading
 		} else {
 			vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
 			vars.GNFrame = gnFrame - vars.StartgnFrame;
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
 			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
 				return true;
@@ -2821,7 +2824,7 @@ split
 			// RuptureFarms
 				if (LEVEL_ID == 5 && C_CAM_ID == 6 && C_PATH_ID == 6 && vars.n == 3) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "RuptureFarms IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
@@ -2844,7 +2847,7 @@ split
 			// Stockyards
 				if (LEVEL_ID == 2 && C_CAM_ID == 14 && C_PATH_ID == 1 && vars.n == 2) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Stockyards IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}				
@@ -2878,7 +2881,7 @@ split
 			// Paramonia
 				if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 4) {											
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Paramonia IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
@@ -2900,7 +2903,7 @@ split
 			// Scrabania
 				if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {												
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Scrabania IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}			
@@ -2952,7 +2955,7 @@ split
 			// Zulag 2
 				if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13) {
 						vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-						vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+						vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 						vars.Log = "Zulag 2 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 						return true;
 					}	
@@ -2997,7 +3000,7 @@ split
 			// Zulag 3
 				if (LEVEL_ID == 13 && C_PATH_ID == 14 && C_CAM_ID == 5) {					
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Zulag 3 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
@@ -3034,7 +3037,7 @@ split
 			// Boardroom
 				if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Zulag 4 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
@@ -3053,7 +3056,7 @@ split
 		// Monsaic Lines to FFZ (Any%)
 			if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 2) {										
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 				vars.Log = "Monsaic Lines (Any%) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}
@@ -3061,7 +3064,7 @@ split
 		// Monsaic Lines to Scrabania (OPTIMAL)
 			if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 				vars.Log = "Monsaic Lines (NOT Any%) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}					
@@ -3069,7 +3072,7 @@ split
 		// Monsaic Lines to Paramonia (for special people)
 			if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 2) {
 				vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+				vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 				vars.Log = "Monsaic Lines (special) IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 				return true;
 			}					
@@ -3119,7 +3122,7 @@ split
 			// Paramonian Nests 
 				if (LEVEL_ID == 2 && C_PATH_ID == 5 && C_CAM_ID == 4) { // 30 / 06 / 2020 - Last split for Paramonia Temple. SPAM split just in case.								
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Paramonia IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
@@ -3181,7 +3184,7 @@ split
 			// Scrabanian Nests
 				if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && O_PATH_ID == 11) { // 25 / 06 / 2020 - Last split for Scrabanian Temple.									
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Scrabania Temple IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}
@@ -3208,7 +3211,7 @@ split
 			// Zulag 1
 				if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1) {					
 					vars.REAL_TIME = System.Convert.ToString(timer.CurrentTime.RealTime).Replace("0000", "").Replace("00:", "");
-					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"mm\:ss\.fff");
+					vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 					vars.Log = "Zulag 1 IL is over! IGT: " + vars.LOADLESS_TIME + " | RTA: " + vars.REAL_TIME;
 					return true;
 				}	
