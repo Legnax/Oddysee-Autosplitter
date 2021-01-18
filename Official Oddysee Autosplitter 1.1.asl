@@ -1,77 +1,18 @@
-//	Official Autosplitter for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
-//	Created by LegnaX. 12-01-2021
+//	Official Autosplitter 2.0.0 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
+//	Created by LegnaX. Relive support by Paul (paulsapps.com) 
+//  DATE OF LAST EDITION-> 18-01-2021
 
-state("AbeWin", "1.3.9")
-{
-	// ORIGINAL GoG EN BYTES
-	byte EN_LEVEL_ID : 0x107BA8;
-	byte EN_PATH_ID : 0x107BAA;
-	byte EN_CAM_ID : 0x107BAC;
-	short EN_abeX : 0x107678, 0xAA;
-	short EN_abeY : 0x107678, 0xAE; // Needed for the Zulag 4 split.
-	long EN_gnFrame : 0x107670; // Ingame frame counter.
-	byte EN_IsGameRunning : 0x1080E4; // Paused game = 1
-	byte EN_IsGameBeaten : 0x1055AE; // When variable 70 is true on the Boardroom. Game beaten = 1.
-	byte EN_IsCinematicPlaying : 0x5F309C; // 1 = cinematic is playing
-
-	// SPANISH
-	byte ES_LEVEL_ID : 0x108332;
-	byte ES_PATH_ID : 0x108334;
-	byte ES_CAM_ID : 0x108336;
-	short ES_abeX : 0x107DF8, 0xAA; // NUEVO.
-	short ES_abeY : 0x107DF8, 0xAE; // NUEVO.
-	long ES_gnFrame : 0x107DF0; // Ingame frame counter.
-	byte ES_IsGameRunning : 0x108864; // Paused game = 1
-	byte ES_IsGameBeaten : 0x105D2E; // When variable 70 is true on the Boardroom. Game beaten = 1.
-
-	// FRENCH
-	byte FR_LEVEL_ID : 0x108382;
-	byte FR_PATH_ID : 0x108384;
-	byte FR_CAM_ID : 0x108386;
-	short FR_abeX : 0x107E48, 0xAA; // NUEVO.
-	short FR_abeY : 0x107E48, 0xAE; // NUEVO.
-	long FR_gnFrame : 0x107E40; // Ingame frame counter.
-	byte FR_IsGameRunning : 0x1088B4; // Paused game = 1
-	byte FR_IsGameBeaten : 0x105D7E; // When variable 70 is true on the Boardroom. Game beaten = 1.
-
-	// JAPANESE
-	byte JP_LEVEL_ID : 0x108B32;
-	byte JP_PATH_ID : 0x108B34;
-	byte JP_CAM_ID : 0x108B36;
-	short JP_abeX : 0x1085F8, 0xAA; // DIFFERENCE 548 (substract from original)
-	short JP_abeY : 0x1085F8, 0xAE; // DIFFERENCE 548 (substract from original)
-	long JP_gnFrame : 0x1085F0; // Ingame frame counter.
-	byte JP_IsGameRunning : 0x109084; // Paused game = 1 (+40 hex)
-	byte JP_IsGameBeaten : 0x10652E; // When variable 70 is true on the Boardroom. Game beaten = 1.
-
-	// GERMAN
-	byte DE_LEVEL_ID : 0x108342;
-	byte DE_PATH_ID : 0x108344;
-	byte DE_CAM_ID : 0x108346;
-	short DE_abeX : 0x107E0C, 0xAA; // DIFFERENCE 548 (substract from original)
-	short DE_abeY : 0x107E0C, 0xAE; // DIFFERENCE 548 (substract from original)
-	long DE_gnFrame : 0x107E00; // Ingame frame counter.
-	byte DE_IsGameRunning : 0x108874; // Paused game = 1
-	byte DE_IsGameBeaten : 0x105D3E; // When variable 70 is true on the Boardroom. Game beaten = 1.
-
-	// ITALIAN
-	byte IT_LEVEL_ID : 0x108222;
-	byte IT_PATH_ID : 0x108224;
-	byte IT_CAM_ID : 0x108226;
-	short IT_abeX : 0x107CE8, 0xAA; // Needed for the Zulag 4 split.
-	short IT_abeY : 0x107CE8, 0xAE; // Needed for the Zulag 4 split.
-	long IT_gnFrame : 0x107CE0; // Ingame frame counter.
-	byte IT_IsGameRunning : 0x108754; // Paused game = 1
-	byte IT_IsGameBeaten : 0x105C1E; // When variable 70 is true on the Boardroom. Game beaten = 1.
-}
-
+ // Added this so the ASL Var Viewer has at least one opcode loaded by default (even if it's unused). 
+state("AbeWin") { byte use_Variables_option_instead  : 0x1C3030; }
+state("AliveExeAO") { byte use_Variables_option_instead  : 0x1C3030; }
+state("AliveExe") { byte use_Variables_option_instead  : 0x1C3030;  }
 
 startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 1.3.9 (January 12th 2021) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly resetted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.");
+	settings.Add("Version", true, "Official Version 2.0.0 (January 18th 2021) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too.");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -126,13 +67,196 @@ startup
 
 init
 {	
+
 	vars.You_can_show_the_following_variables_on_runs = "Ahh, I see!";
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
+	
+// ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 254 ##################
+
+	print("+init");
+
+	// Detect which version/language of the game we are running, load the entire code section to an array
+	print("Reading " +  modules.First().ModuleMemorySize.ToString() + " bytes from the first module base address");
+ 	var moduleMemory = memory.ReadBytes(modules.First().BaseAddress, modules.First().ModuleMemorySize);
+	string converted = Encoding.UTF8.GetString(moduleMemory, 0, moduleMemory.Length);
+	print("Read code section as a string");
+
+	vars.version = "";
+
+	vars.SigScan = (Func<Process, int, string, IntPtr>)((proc, offset, signature) => {
+        var target = new SigScanTarget(offset, signature);
+        IntPtr result = IntPtr.Zero;
+        foreach (var page in proc.MemoryPages(true)) {
+            var scanner = new SignatureScanner(proc, page.BaseAddress, (int)page.RegionSize);
+            if ((result = scanner.Scan(target)) != IntPtr.Zero) {
+                break;
+            }
+        }
+
+        return result;
+    });
+
+	for (;;)
+	{	
+		// First check if this is relive
+		int pos = converted.IndexOf("{1D2E2B5A-19EE-4776-A0EE-98F49F781370}");
+		if (pos != -1)
+		{
+			print("Relive Buffer match: " + converted.Substring(pos, 50));
+
+			// Find the guid again via signature scanning to get the RVA offset
+			IntPtr scan = vars.SigScan(game, 0, "7B 31 44 32 45 32 42 35 41 2D 31 39 45 45 2D 34 37 37 36 2D 41 30 45 45 2D 39 38 46 34 39 46 37 38 31 33 37 30 7D 00");
+			if (scan != IntPtr.Zero)
+			{
+				print("Scan = " + scan.ToString());
+
+				// Point to data after the guid in the AEGameInfo structure
+				scan += 40;
+
+				vars.version = "Relive";
+				
+				// If this guid exists its a 64bit version of relive
+				bool is64Bit = converted.IndexOf("{069DDB51-609D-49AB-B69D-5CC6D13E73EE}") != -1;
+				int gamePointerSize = is64Bit ? 8 : 4;
+
+				print("Pointer size = " + gamePointerSize.ToString());
+
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (1*gamePointerSize)))) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (2*gamePointerSize)))) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (3*gamePointerSize)))) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(memory.ReadPointer(scan + (4*gamePointerSize)))) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(memory.ReadPointer(scan + (5*gamePointerSize)), new int[] {memory.ReadValue<int>(scan + (6*gamePointerSize))})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (7*gamePointerSize)))) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (8*gamePointerSize)))) { Name = "IsGameBeaten" },
+				};
+			}
+			break;
+		}
+
+		// Then look in the array for the quit strings which are localised to figure out which language this is (for the original game)
+		pos = converted.IndexOf("Do you really want to quit ?");
+		if (pos != -1)
+		{
+			print("English Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "English";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x107BA8)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x107BAA)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x107BAC)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x107670)) { Name = "gnFrame" }, // Ingame frame counter.
+				new MemoryWatcher<short>(new DeepPointer(0x107678, new int[] {0xAE})) { Name = "abeY" }, // Needed for the Zulag 4 split.
+				new MemoryWatcher<byte>(new DeepPointer(0x1080E4)) { Name = "IsGameRunning" }, // Paused game = 1
+				new MemoryWatcher<byte>(new DeepPointer(0x1055AE)) { Name = "IsGameBeaten" }, // When variable 70 is true on the Boardroom. Game beaten = 1.
+			};
+			break;
+		}
+
+		pos = converted.IndexOf("Seguro que quieres salir?"); // Only check the ascii chars
+		if (pos != -1) 
+		{
+			print("Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "Spanish";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x108332)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108334)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108336)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x107DF0)) { Name = "gnFrame" },
+				new MemoryWatcher<short>(new DeepPointer(0x107DF8, new int[] {0xAE})) { Name = "abeY" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108864)) { Name = "IsGameRunning" },
+				new MemoryWatcher<byte>(new DeepPointer(0x105D2E)) { Name = "IsGameBeaten" },
+			};
+			break;
+		}
+		
+		pos = converted.IndexOf("de vouloi quitter?"); // Only check the ascii chars
+		if (pos != -1) 
+		{
+			print("French Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "French";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x108382)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108384)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108386)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x107E40)) { Name = "gnFrame" },
+				new MemoryWatcher<short>(new DeepPointer(0x107E48, new int[] {0xAE})) { Name = "abeY" },
+				new MemoryWatcher<byte>(new DeepPointer(0x1088B4)) { Name = "IsGameRunning" },
+				new MemoryWatcher<byte>(new DeepPointer(0x105D7E)) { Name = "IsGameBeaten" },
+			};
+			break;
+		}
+		
+		pos = converted.IndexOf("Willst Du wirklich aufh"); // Only check the ascii chars
+		if (pos != -1)
+		{
+			print("German Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "German";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x108342)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108344)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108346)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x107E00)) { Name = "gnFrame" },
+				new MemoryWatcher<short>(new DeepPointer(0x107E0C, new int[] {0xAE})) { Name = "abeY" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108874)) { Name = "IsGameRunning" },
+				new MemoryWatcher<byte>(new DeepPointer(0x105D3E)) { Name = "IsGameBeaten" },
+			};
+			break;
+		}
+		
+		pos = converted.IndexOf("Desideri realmente uscire?");
+		if (pos != -1)
+		{
+			print("Italian Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "Italian";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x108222)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108224)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108226)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x107CE0)) { Name = "gnFrame" },
+				new MemoryWatcher<short>(new DeepPointer(0x107CE8, new int[] {0xAE})) { Name = "abeY" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108754)) { Name = "IsGameRunning" },
+				new MemoryWatcher<byte>(new DeepPointer(0x105C1E)) { Name = "IsGameBeaten" },
+			};
+			break;
+		}
+
+		pos = converted.IndexOf("Abe Agogo"); // A unique English/ascii string rather than its encoded quit message
+		if (pos != -1)
+		{
+			print("Japanese Buffer match: " + converted.Substring(pos, 50));
+			vars.version = "Japanese";
+			vars.watchers = new MemoryWatcherList
+			{
+				new MemoryWatcher<byte>(new DeepPointer(0x108B32)) { Name = "LEVEL_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108B34)) { Name = "PATH_ID" },
+				new MemoryWatcher<byte>(new DeepPointer(0x108B36)) { Name = "CAM_ID" },
+				new MemoryWatcher<int>(new DeepPointer(0x1085F0)) { Name = "gnFrame" },
+				new MemoryWatcher<short>(new DeepPointer(0x1085F8, new int[] {0xAE})) { Name = "abeY" },
+				new MemoryWatcher<byte>(new DeepPointer(0x109084)) { Name = "IsGameRunning" },
+				new MemoryWatcher<byte>(new DeepPointer(0x10652E)) { Name = "IsGameBeaten" },
+			};
+			break;
+		}
+		else
+		{
+			// Unknown
+			print("Unknown game");
+			break;
+		}
+	}
+	
+// ############ PAUL'S BLACK MAGIC ENDS HERE (STARTED AT LINE 78) ##################
+
 	vars.____________________________________ = "Ignore this.";
 	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 3 above ones can be used.";
-	version = "1.3.9" ;
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -169,20 +293,36 @@ init
 	} else {		
 		vars.n = 0;		// A counting variable that tracks progress (only resets if game loads on proper way).
 	}
-	
-	if (File.Exists(@"C:\Autosplit Backup Files\lang")) { // We conveniently recover the Oddysee current lang		
-		vars.LangDetected = File.ReadAllText(@"C:\Autosplit Backup Files\lang");
-	} else {		
-		vars.LangDetected = "Not yet";
-	}
-	
+		
 	if (File.Exists(@"C:\Autosplit Backup Files\previousTime")) { // We conveniently recover the previous time spent on the run (this resets if you start a new game)		
 		vars.PreviousTime = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\previousTime"));
 	} else {		
 		vars.PreviousTime = 0;
 	}	
+
+	print("-init");
 }
- 
+
+// MORE OF PAUL'S BLACK MAGIC
+
+update
+{
+    vars.watchers.UpdateAll(game);
+
+	/*
+	print("GnFrame = " + vars.watchers["gnFrame"].Current.ToString());
+	print("LEVEL_ID = " + vars.watchers["LEVEL_ID"].Current.ToString());
+	print("PATH_ID = " + vars.watchers["PATH_ID"].Current.ToString());
+	print("CAM_ID = " + vars.watchers["CAM_ID"].Current.ToString());
+	print("abeY = " + vars.watchers["abeY"].Current.ToString());
+	print("IsGameRunning = " + vars.watchers["IsGameRunning"].Current.ToString());
+	print("IsGameBeaten = " + vars.watchers["IsGameBeaten"].Current.ToString());
+	*/
+}
+
+// #############################
+
+// ############## THIS PART HAS BEEN ADAPTED FROM WATCHERS FROM PAUL'S NEW CODE ##############
 
 start
 {	
@@ -190,137 +330,29 @@ start
 			vars.StartgnFrame = 0;
 	// We start on RuptureFarms, normal. 0
 		// if (settings["ILRupturefarms"]){ 
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 0;	
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 0;	
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 0;	
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 0;	
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 0;	
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 0;	
 			}
-			
+
 	// We start on Stockyards, cheat code.
 		// } else if (settings["ILStockyards"]){ 
 			int l = 5;
 			int p = 6;
 			int c = 6;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 1;		
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 1;	
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 1;	
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 1;	
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 1;	
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
-				vars.ILtype = 1;	
 			}
-			
+
 	// We start on Paramonia, cheat code.
 		// } else if (settings["ILParamonia"]){ 
 			l = 3;
 			p = 1;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 2;		
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 2;	
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 2;	
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 2;	
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 2;	
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
-				vars.ILtype = 2;	
 			}
 			
 	// We start on Scrabania, cheat code.
@@ -328,45 +360,9 @@ start
 			l = 8;
 			p = 1;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 3;		
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 3;
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 3;
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 3;
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 3;
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
-				vars.ILtype = 3;
 			}
 			
 	// We start on Zulag 1, cheat code.
@@ -374,44 +370,8 @@ start
 			l = 6;
 			p = 4;
 			c = 7;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";
-				vars.ILtype = 4;		
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 4;		
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 4;		
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 4;		
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 4;		
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 4;		
 			}
 			
@@ -420,45 +380,9 @@ start
 			l = 13;
 			p = 1;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 5;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 5;	
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 5;	
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 5;	
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 5;	
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
-				vars.ILtype = 5;	
 			}
 			
 	// We start on Zulag 3, cheat code.
@@ -466,44 +390,8 @@ start
 			l = 13;
 			p = 13;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 6;		
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 6;		
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 6;		
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 6;		
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 6;		
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 6;		
 			}
 			
@@ -512,267 +400,53 @@ start
 			l = 13;
 			p = 14;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 7;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 7;			
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 7;			
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 7;			
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 7;			
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 7;			
 			}
-			
 			
 			// This is for Monsaic lines (ID 8)
 			l = 2;
 			p = 1;
 			c = 14;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 8;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 8;			
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 8;			
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 8;			
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 8;			
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 8;			
 			}
-			
 			
 			// This is for Paramonian Temple (ID 9)
 			l = 4;
 			p = 1;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 9;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 9;			
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 9;			
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 9;			
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 9;			
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 9;			
 			}
-			
 			
 			// This is for Scrabanian Temple (ID 10)
 			l = 9;
 			p = 1;
 			c = 1;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 10;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 10;			
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 10;			
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 10;			
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 10;			
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 10;			
 			}
-			
 			
 			// This is for Zulag 1 (ID 11)
 			l = 13;
 			p = 19;
 			c = 3;
-			if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == l && current.EN_PATH_ID == p && current.EN_CAM_ID == c) {
-				vars.StartgnFrame = current.EN_gnFrame;
-				vars.LangDetected = "English";	
-				vars.ILtype = 11;			
-			} else 
-			
-			// SPANISH
-			if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == l && current.ES_PATH_ID == p && current.ES_CAM_ID == c) {
-				vars.StartgnFrame = current.ES_gnFrame;
-				vars.LangDetected = "Spanish";
-				vars.ILtype = 11;			
-			} else
-			
-			// FRENCH
-			if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == l && current.FR_PATH_ID == p && current.FR_CAM_ID == c) {
-				vars.StartgnFrame = current.FR_gnFrame;
-				vars.LangDetected = "French";
-				vars.ILtype = 11;			
-			} else
-			
-			// JAPANESE
-			if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == l && current.JP_PATH_ID == p && current.JP_CAM_ID == c) {
-				vars.StartgnFrame = current.JP_gnFrame;
-				vars.LangDetected = "Japanese";
-				vars.ILtype = 11;			
-			} else
-			
-			// GERMAN
-			if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == l && current.DE_PATH_ID == p && current.DE_CAM_ID == c) {
-				vars.StartgnFrame = current.DE_gnFrame;
-				vars.LangDetected = "German";
-				vars.ILtype = 11;			
-			} else
-			
-			// ITALIAN
-			if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == l && current.IT_PATH_ID == p && current.IT_CAM_ID == c) {
-				vars.StartgnFrame = current.IT_gnFrame;
-				vars.LangDetected = "Italian";
+			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
+				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 				vars.ILtype = 11;			
 			}
+
 		// }
 	} else { // NORMAL GAME START HERE!
 		
 		// ENGLISH		
-		if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
-			vars.StartgnFrame = current.EN_gnFrame;
-			vars.LangDetected = "English";		
-		} else 
-		
-		// SPANISH
-		if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
-			vars.StartgnFrame = current.ES_gnFrame;
-			vars.LangDetected = "Spanish";
-		} else
-		
-		// FRENCH
-		if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
-			vars.StartgnFrame = current.FR_gnFrame;
-			vars.LangDetected = "French";
-		} else
-		
-		// JAPANESE
-		if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
-			vars.StartgnFrame = current.JP_gnFrame;
-			vars.LangDetected = "Japanese";
-		} else
-		
-		// GERMAN
-		if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
-			vars.StartgnFrame = current.DE_gnFrame;
-			vars.LangDetected = "German";
-		} else
-		
-		// ITALIAN
-		if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
-			vars.StartgnFrame = current.IT_gnFrame;
-			vars.LangDetected = "Italian";
+		if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 		} else {
 			vars.StartgnFrame = 0;
 		}
@@ -794,14 +468,13 @@ start
 			vars.LoadTexts = true;
 		} else {
 			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
-			File.Delete(@"C:\Autosplit Backup Files\lang"); // Important!! 
 			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!!
 		}
-		File.WriteAllText(dir + "lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
-		// File.WriteAllText(dir + "lang", "" + 0); // Backup for keeping the Lang in Oddysee incase of a game crash.	
 		return true;		
 	}	
 }
+
+// ##########################################
 
 exit
 {	
@@ -810,7 +483,6 @@ exit
 		Directory.CreateDirectory(dir);
 	}		
 	File.WriteAllText(@"C:\Autosplit Backup Files\n", "" + vars.n); // Backup for keeping the splits in Oddysee incase of a game crash.	
-	File.WriteAllText(@"C:\Autosplit Backup Files\lang", "" + vars.LangDetected); // Backup for keeping the Lang in Oddysee incase of a game crash.	
 	if (vars.gnBeforeMainMenu > 0) { // Did we go back to the main menu? :/
 		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.	
 	} else { // If we just closed the game.
@@ -851,37 +523,11 @@ isLoading
 	short IsGameRunning = 0;
 	int LEVEL_ID = -1;
 	int abeY = -1;
-	if (vars.LangDetected == "English"){
-		IsGameRunning = current.EN_IsGameRunning;
-		gnFrame = current.EN_gnFrame;
-		LEVEL_ID = current.EN_LEVEL_ID;
-		abeY = current.EN_abeY;
-	} else if (vars.LangDetected == "Spanish"){
-		IsGameRunning = current.ES_IsGameRunning;
-		gnFrame = current.ES_gnFrame;
-		LEVEL_ID = current.ES_LEVEL_ID;
-		abeY = current.ES_abeY;
-	} else if (vars.LangDetected == "French"){
-		IsGameRunning = current.FR_IsGameRunning;
-		gnFrame = current.FR_gnFrame;
-		LEVEL_ID = current.FR_LEVEL_ID;
-		abeY = current.FR_abeY;
-	} else if (vars.LangDetected == "Japanese"){
-		IsGameRunning = current.JP_IsGameRunning;
-		gnFrame = current.JP_gnFrame;
-		LEVEL_ID = current.JP_LEVEL_ID;
-		abeY = current.JP_abeY;
-	} else if (vars.LangDetected == "German"){
-		IsGameRunning = current.DE_IsGameRunning;
-		gnFrame = current.DE_gnFrame;
-		LEVEL_ID = current.DE_LEVEL_ID;
-		abeY = current.DE_abeY;
-	} else if (vars.LangDetected == "Italian"){
-		IsGameRunning = current.IT_IsGameRunning;
-		gnFrame = current.IT_gnFrame;
-		LEVEL_ID = current.IT_LEVEL_ID;
-		abeY = current.IT_abeY;
-	}
+
+	IsGameRunning = vars.watchers["IsGameRunning"].Current;
+	gnFrame = vars.watchers["gnFrame"].Current;
+	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
+	abeY = vars.watchers["abeY"].Current;
 	
 	if (LEVEL_ID == 0){ // MAIN SCREEN
 		if (vars.gnBeforeMainMenu == 0){
@@ -931,87 +577,20 @@ split
 	long gnFrame = -1;
 	int IsGameBeaten = -1;	
 	
-	if (current.EN_LEVEL_ID == 0 && old.EN_CAM_ID == 1 && (current.EN_CAM_ID == 21 || current.EN_CAM_ID == 31)){ // Reset? On English?
+	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){ // Reset? On English?
 		vars.ResetStatus = 2;
 	}
-	if (current.ES_LEVEL_ID == 0 && old.ES_CAM_ID == 1 && (current.ES_CAM_ID == 21 || current.ES_CAM_ID == 31)){ // Reset? On Spanish?
-		vars.ResetStatus = 2;
-	}
-	if (current.FR_LEVEL_ID == 0 && old.FR_CAM_ID == 1 && (current.FR_CAM_ID == 21 || current.FR_CAM_ID == 31)){ // Reset? On French?
-		vars.ResetStatus = 2;
-	}
-	if (current.JP_LEVEL_ID == 0 && old.JP_CAM_ID == 1 && (current.JP_CAM_ID == 21 || current.JP_CAM_ID == 31)){ // Reset? On Japanese?
-		vars.ResetStatus = 2;
-	}
-	if (current.DE_LEVEL_ID == 0 && old.DE_CAM_ID == 1 && (current.DE_CAM_ID == 21 || current.DE_CAM_ID == 31)){ // Reset? On German?
-		vars.ResetStatus = 2;
-	}
-	if (current.IT_LEVEL_ID == 0 && old.IT_CAM_ID == 1 && (current.IT_CAM_ID == 21 || current.IT_CAM_ID == 31)){ // Reset? On Italian?
-		vars.ResetStatus = 2;
-	}
-	
-	if (vars.LangDetected == "English"){
-		LEVEL_ID = current.EN_LEVEL_ID;
-		O_PATH_ID = old.EN_PATH_ID;
-		C_PATH_ID = current.EN_PATH_ID;
-		O_CAM_ID = old.EN_CAM_ID;
-		C_CAM_ID = current.EN_CAM_ID;
-		abeY = current.EN_abeY;
-		IsGameRunning = current.EN_IsGameRunning;
-		gnFrame = current.EN_gnFrame;
-		IsGameBeaten = current.EN_IsGameBeaten;
-	} else if (vars.LangDetected == "Spanish"){
-		LEVEL_ID = current.ES_LEVEL_ID;
-		O_PATH_ID = old.ES_PATH_ID;
-		C_PATH_ID = current.ES_PATH_ID;
-		O_CAM_ID = old.ES_CAM_ID;
-		C_CAM_ID = current.ES_CAM_ID;
-		abeY = current.ES_abeY;
-		IsGameRunning = current.ES_IsGameRunning;
-		gnFrame = current.ES_gnFrame;
-		IsGameBeaten = current.ES_IsGameBeaten;
-	} else if (vars.LangDetected == "French"){
-		LEVEL_ID = current.FR_LEVEL_ID;
-		O_PATH_ID = old.FR_PATH_ID;
-		C_PATH_ID = current.FR_PATH_ID;
-		O_CAM_ID = old.FR_CAM_ID;
-		C_CAM_ID = current.FR_CAM_ID;
-		abeY = current.FR_abeY;
-		IsGameRunning = current.FR_IsGameRunning;
-		gnFrame = current.FR_gnFrame;
-		IsGameBeaten = current.FR_IsGameBeaten;
-	} else if (vars.LangDetected == "Japanese"){
-		LEVEL_ID = current.JP_LEVEL_ID;
-		O_PATH_ID = old.JP_PATH_ID;
-		C_PATH_ID = current.JP_PATH_ID;
-		O_CAM_ID = old.JP_CAM_ID;
-		C_CAM_ID = current.JP_CAM_ID;
-		abeY = current.JP_abeY;
-		IsGameRunning = current.JP_IsGameRunning;
-		gnFrame = current.JP_gnFrame;
-		IsGameBeaten = current.JP_IsGameBeaten;
-	} else if (vars.LangDetected == "German"){
-		LEVEL_ID = current.DE_LEVEL_ID;
-		O_PATH_ID = old.DE_PATH_ID;
-		C_PATH_ID = current.DE_PATH_ID;
-		O_CAM_ID = old.DE_CAM_ID;
-		C_CAM_ID = current.DE_CAM_ID;
-		abeY = current.DE_abeY;
-		IsGameRunning = current.DE_IsGameRunning;
-		gnFrame = current.DE_gnFrame;
-		IsGameBeaten = current.DE_IsGameBeaten;
-	} else if (vars.LangDetected == "Italian"){
-		LEVEL_ID = current.IT_LEVEL_ID;
-		O_PATH_ID = old.IT_PATH_ID;
-		C_PATH_ID = current.IT_PATH_ID;
-		O_CAM_ID = old.IT_CAM_ID;
-		C_CAM_ID = current.IT_CAM_ID;
-		abeY = current.IT_abeY;
-		IsGameRunning = current.IT_IsGameRunning;
-		gnFrame = current.IT_gnFrame;
-		IsGameBeaten = current.IT_IsGameBeaten;
-	}
-	
+
+	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
+	O_PATH_ID = vars.watchers["PATH_ID"].Old;
+	C_PATH_ID = vars.watchers["PATH_ID"].Current;
+	O_CAM_ID = vars.watchers["CAM_ID"].Old;
+	C_CAM_ID = vars.watchers["CAM_ID"].Current;
+	abeY = vars.watchers["abeY"].Current;
+	IsGameRunning = vars.watchers["IsGameRunning"].Current;
+	gnFrame = vars.watchers["gnFrame"].Current;
+	IsGameBeaten = vars.watchers["IsGameBeaten"].Current;
+
 	if (gnFrame >= 0){		
 	
 		vars.gnFrameCurrent = gnFrame;
@@ -3232,68 +2811,17 @@ split
 
 	// Other functions not related with splits whatsoever.
 		
-		vars.variables = vars.LangDetected + "-> LEVEL " + LEVEL_ID + " | PATH " + C_PATH_ID + " | CAM " + C_CAM_ID + " | " + vars.GNFrame; // For programming purposes c·:
+		vars.variables = vars.version + "-> LEVEL " + LEVEL_ID + " | PATH " + C_PATH_ID + " | CAM " + C_CAM_ID + " | " + vars.GNFrame; // For programming purposes c·:
 		
 	} else {
 		
 		// ENGLISH
-		if (old.EN_LEVEL_ID == 0 && old.EN_PATH_ID == 1 && old.EN_CAM_ID == 21 && current.EN_LEVEL_ID == 1 && current.EN_PATH_ID == 15 && current.EN_CAM_ID == 1) {
+		if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
 			vars.n = 0; // First split if you press on start game
 			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.EN_gnFrame;
+			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 			vars.MillisecondsPaused = 0;
 			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "English";	
-		}
-		
-		// SPANISH
-		if (old.ES_LEVEL_ID == 0 && old.ES_PATH_ID == 1 && old.ES_CAM_ID == 21 && current.ES_LEVEL_ID == 1 && current.ES_PATH_ID == 15 && current.ES_CAM_ID == 1) {
-			vars.n = 0; // First split if you press on start game
-			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.ES_gnFrame;
-			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "Spanish";	
-		}
-		
-		// FRENCH
-		if (old.FR_LEVEL_ID == 0 && old.FR_PATH_ID == 1 && old.FR_CAM_ID == 21 && current.FR_LEVEL_ID == 1 && current.FR_PATH_ID == 15 && current.FR_CAM_ID == 1) {
-			vars.n = 0; // First split if you press on start game
-			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.FR_gnFrame;
-			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "French";	
-		}
-		
-		// JAPANESE
-		if (old.JP_LEVEL_ID == 0 && old.JP_PATH_ID == 1 && old.JP_CAM_ID == 21 && current.JP_LEVEL_ID == 1 && current.JP_PATH_ID == 15 && current.JP_CAM_ID == 1) {
-			vars.n = 0; // First split if you press on start game
-			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.JP_gnFrame;
-			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "Japanese";
-		}
-		
-		// GERMAN
-		if (old.DE_LEVEL_ID == 0 && old.DE_PATH_ID == 1 && old.DE_CAM_ID == 21 && current.DE_LEVEL_ID == 1 && current.DE_PATH_ID == 15 && current.DE_CAM_ID == 1) {
-			vars.n = 0; // First split if you press on start game
-			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.DE_gnFrame;
-			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "German";	
-		}
-		
-		// ITALIAN
-		if (old.IT_LEVEL_ID == 0 && old.IT_PATH_ID == 1 && old.IT_CAM_ID == 21 && current.IT_LEVEL_ID == 1 && current.IT_PATH_ID == 15 && current.IT_CAM_ID == 1) {
-			vars.n = 0; // First split if you press on start game
-			vars.SkippedFrames = 0;
-			vars.StartgnFrame = current.IT_gnFrame;
-			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			vars.LangDetected = "Italian";	
 		}
 	}
 	
@@ -3730,7 +3258,7 @@ split
 			vars.ResetStatus = 2;
 			vars.Log = "Main Menu [" + vars.n + "]\nReset performed." ;
 		} else if (LEVEL_ID == 0){		
-			vars.Log = "Main Menu [" + vars.n + "]\nGLOBAL AutoSplit started. Lang detected: " + vars.LangDetected + ".";
+			vars.Log = "Main Menu [" + vars.n + "]\nGLOBAL AutoSplit started. Lang detected: " + vars.version + ".";
 		} else {	
 			if (settings["RealGameTime"]){	
 				if (settings["NoSplitNames"]){
