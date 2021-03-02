@@ -1,6 +1,6 @@
 //	Official Autosplitter 2.0.1 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
 //	Created by LegnaX. Relive support by Paul (paulsapps.com) 
-//  	DATE OF LAST EDITION-> 02-03-2021
+//  DATE OF LAST EDITION-> 02-03-2021
 
  // Added this so the ASL Var Viewer has at least one opcode loaded by default (even if it's unused). 
 state("AbeWin") { byte use_Variables_option_instead  : 0x1C3030; }
@@ -117,7 +117,7 @@ init
 				scan += 40;
 
 				vars.version = "Relive";				
-				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 				
 				// If this guid exists its a 64bit version of relive
 				bool is64Bit = converted.IndexOf("{069DDB51-609D-49AB-B69D-5CC6D13E73EE}") != -1;
@@ -145,7 +145,7 @@ init
 		{
 			print("English Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "English";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x107BA8)) { Name = "LEVEL_ID" },
@@ -164,7 +164,7 @@ init
 		{
 			print("Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "Spanish";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x108332)) { Name = "LEVEL_ID" },
@@ -183,7 +183,7 @@ init
 		{
 			print("French Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "French";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x108382)) { Name = "LEVEL_ID" },
@@ -202,7 +202,7 @@ init
 		{
 			print("German Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "German";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x108342)) { Name = "LEVEL_ID" },
@@ -221,7 +221,7 @@ init
 		{
 			print("Italian Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "Italian";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x108222)) { Name = "LEVEL_ID" },
@@ -240,7 +240,7 @@ init
 		{
 			print("Japanese Buffer match: " + converted.Substring(pos, 50));
 			vars.version = "Japanese";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " & vars.version;
+			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
 			vars.watchers = new MemoryWatcherList
 			{
 				new MemoryWatcher<byte>(new DeepPointer(0x108B32)) { Name = "LEVEL_ID" },
