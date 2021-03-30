@@ -622,7 +622,7 @@ split
 			
 		}
 		
-		if (LEVEL_ID == 8 && vars.n > 8 && vars.n < 15){
+		if (LEVEL_ID == 8 && vars.n > 8 && vars.n < 15 && vars.ParamoniaFirst){
 			vars.ParamoniaFirst = false;
 			vars.LoadTexts = true;
 		}
