@@ -1,4 +1,4 @@
-//	Official Autosplitter 2.0.3 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
+//	Official Autosplitter 2.0.4 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
 //	Created by LegnaX. Relive support by Paul (paulsapps.com) 
 //  DATE OF LAST EDITION-> 30-03-2021
 
