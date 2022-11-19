@@ -1,6 +1,6 @@
-//	Official Autosplitter 2.1 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time.
+//	Official Autosplitter 3.0 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database.
 //	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift.
-//  DATE OF LAST EDITION-> 26-05-2022
+//  DATE OF LAST EDITION-> 19-11-2022
 
  // Added this so the ASL Var Viewer has at least one opcode loaded by default (even if it's unused). 
 	state("AbeWin") { byte use_Variables_option_instead  : 0x1C3030; }
@@ -12,11 +12,14 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 2.1 (May 26th 2022) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
+	settings.Add("Version", true, "Official Version 3.0 (Nov 19th 2022) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names or zones. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
+	
+	settings.Add("UseDatabase", false, "SPLIT DATABASE FEATURE (Alpha!)");
+	settings.SetToolTip("UseDatabase", "Enables this feature: stores the frames for each split on text files and tracks the best time for each split!\nThe times will be stored in C:\\Autosplit Backup Files\\Database\\Oddworld Abe's Oddysee\\<category name>\\<split ID + split name>.txt \nAccurate gold times, here we go!");
 	
 	settings.Add("RealGameTime", true, "Time displayed on the variable 'Log' is IGT.");
 	settings.SetToolTip("RealGameTime", "This game is the difference between frames since Abe starts on RuptureFarms and until the last split happens (or when the livesplit splits the last split).\nThis will be used on Any% for getting the actual REAL ingame time.");	
@@ -74,8 +77,14 @@ init
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
 	vars.REAL_TIME = "Real time will be displayed here";
 	vars.LOADLESS_TIME = "Loadless time will be displayed here";
+	vars.DB_PREVIOUS_SPLIT = "Finished split frames info will appear here.";
+	vars.DB_CURRENT_SPLIT = "Current split frames info will appear here.";
+	vars.DB_LOST_FRAMES_TOTAL = 0;
+	vars.DB_GOLD_FRAMES_TOTAL = 0;
+	vars.____________________________________ = "Ignore this.";
+	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 6 above ones can be used.";
 	
-// ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 254 ##################
+// ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 265 ##################
 
 	print("+init");
 
@@ -263,9 +272,7 @@ init
 	}
 	
 // ############ PAUL'S BLACK MAGIC ENDS HERE (STARTED AT LINE 78) ##################
-
-	vars.____________________________________ = "Ignore this.";
-	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 3 above ones can be used.";
+	
 	
 	vars.LoadTexts = false;
 	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
@@ -296,21 +303,42 @@ init
 	vars.GNFrame = 0;
 	vars.fps = 30.3; // FPS of the game. proven to be 30.3 doing performance checks.
 	vars.ILtype = -1; // 0 = RuptureFarms | 1 = Stockyards | 2 = Paramonia | 3 = Scrabania | 4 = Zulag 1 | 5 = Zulag 2 | 6 = Zulag 3 | 7 = Zulag 4
+	vars.splitName = "";
+	
+	vars.CurrentSplitBestFrame = 0;
+	vars.FramesUpToPreviousFrame = 0;
+	vars.DatabaseName = splitt; // Database names for storing splits
+	vars.DBSplit = false;
+	
+	// vars.Database_Current_Split = "";
 	
 	if (File.Exists(@"C:\Autosplit Backup Files\n")) { // We conveniently recover the Oddysee current split 
 		vars.n = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\n"));
+		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {
+			vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
+		}
 	} else {		
 		vars.n = 0;		// CHANGE LATER!! - A counting variable that tracks progress (only resets if game loads on proper way).
 	}
 		
 	if (File.Exists(@"C:\Autosplit Backup Files\previousTime")) { // We conveniently recover the previous time spent on the run (this resets if you start a new game)		
 		vars.PreviousTime = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\previousTime"));
+		if (settings["UseDatabase"]){	
+			if (File.Exists(@"C:\Autosplit Backup Files\LostFrames")){
+				vars.DB_LOST_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\LostFrames"));
+				vars.DB_GOLD_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\GoldFrames"));		
+			} else {
+				vars.DB_LOST_FRAMES_TOTAL = 0;
+				vars.DB_GOLD_FRAMES_TOTAL = 0;					
+			}
+		}
 	} else {		
 		vars.PreviousTime = 0;
 	}	
 
 	print("-init");
 }
+
 
 // MORE OF PAUL'S BLACK MAGIC
 
@@ -478,6 +506,68 @@ start
 		} else {
 			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
 			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!!
+			if (settings["UseDatabase"]){
+				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!!
+				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!!
+			}
+		}
+		
+		if (settings["UseDatabase"]){
+			// WE CREATE ALL NECESSARY DIRECTORIES!
+			
+			dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\";  // folder location
+			if (!Directory.Exists(dir)){  // if it doesn't exist, create
+				Directory.CreateDirectory(dir);
+			}	
+
+			if (settings["SplitsAny"]){
+				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any%\ID\";  // folder location
+				if (!Directory.Exists(dir)){  // if it doesn't exist, create
+					Directory.CreateDirectory(dir);
+				}					
+			}
+			
+			if (settings["SplitsAny%NMG"]){
+				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\";  // folder location
+				if (!Directory.Exists(dir)){  // if it doesn't exist, create
+					Directory.CreateDirectory(dir);
+				}	
+			
+				if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {// AÑADIR EN TODAS LAS OTRAS CATEGORÍAS
+					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
+				} else {
+					vars.CurrentSplitBestFrame = 0;
+				}				
+			}
+			
+			if (settings["Splits100%"]){
+				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\100%\ID\";  // folder location
+				if (!Directory.Exists(dir)){  // if it doesn't exist, create
+					Directory.CreateDirectory(dir);
+				}		
+			}
+			
+			if (settings["SplitsGoodEnding"]){
+				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Good Ending\ID\";  // folder location
+				if (!Directory.Exists(dir)){  // if it doesn't exist, create
+					Directory.CreateDirectory(dir);
+				}		
+			}
+			
+			if (settings["UsingIL"]){
+				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Individual Levels\ID\";  // folder location
+				if (!Directory.Exists(dir)){  // if it doesn't exist, create
+					Directory.CreateDirectory(dir);
+				}		
+			}
+			vars.FramesUpToPreviousFrame = 0;			
+			vars.DB_LOST_FRAMES_TOTAL = 0;
+			vars.DB_GOLD_FRAMES_TOTAL = 0;
+		} else {			
+			vars.DB_CURRENT_SPLIT = "SPLIT DATABASE FEATURE is off! :(";
+			vars.DB_PREVIOUS_SPLIT = "SPLIT DATABASE FEATURE is off! :'(";		
+			vars.DB_LOST_FRAMES_TOTAL = "SPLIT DATABASE FEATURE is off! :[";
+			vars.DB_GOLD_FRAMES_TOTAL = "SPLIT DATABASE FEATURE is off! :c";
 		}
 		return true;		
 	}	
@@ -499,6 +589,10 @@ exit
 	}	
 	vars.StartgnFrame = 0;
 	vars.SPLIT_INFO = "Game has closed.";
+	if (settings["UseDatabase"]){
+		File.WriteAllText(@"C:\Autosplit Backup Files\LostFrames", "" + vars.DB_LOST_FRAMES_TOTAL); // 
+		File.WriteAllText(@"C:\Autosplit Backup Files\GoldFrames", "" + vars.DB_GOLD_FRAMES_TOTAL); // 
+	}
 }
 
 reset
@@ -551,6 +645,15 @@ isLoading
 		vars.REAL_TIME = TimeSpan.Parse(System.Convert.ToString(timer.CurrentTime.RealTime)).ToString(@"h\:mm\:ss\.fff");
 		vars.GNFrame = gnFrame - vars.StartgnFrame;
 		
+		if (settings["UseDatabase"]){
+			if (vars.CurrentSplitBestFrame > 0) {
+				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / " + vars.CurrentSplitBestFrame;
+			} else {
+				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / ????";
+				// vars.DB_CURRENT_SPLIT = "No best frame found for this split yet!";
+			}
+		} 
+		
 		if (IsGameRunning == 1){ // if the game is paused...
 			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
 			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
@@ -584,6 +687,7 @@ split
 	int IsGameRunning = -1;
 	long gnFrame = -1;
 	int IsGameBeaten = -1;	
+	vars.DBSplit = false;
 	
 	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){ // Reset? On English?
 		vars.ResetStatus = 2;
@@ -606,6 +710,10 @@ split
 		if (LEVEL_ID > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) { // WE JUST RESTARTED THE GAME AND LOADED!!
 			vars.StartgnFrame = gnFrame; 
 			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 
+			if (settings["UseDatabase"]){
+				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!! 
+				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!! 
+			}
 		}		
 		
 		if (IsGameRunning == 1){ // if the game is paused...
@@ -744,68 +852,118 @@ split
 				if (vars.n <= 3){ // RuptureFarms 0-3
 				// Tutorials
 					if (LEVEL_ID == 1 && C_CAM_ID == 1 && C_PATH_ID == 16 && vars.n == 0) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[0]						
+							vars.splitName = vars.DatabaseName[0];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// Meat grinder
 					if (LEVEL_ID == 1 && C_CAM_ID == 10 && C_PATH_ID == 18 && vars.n == 1) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[1]						
+							vars.splitName = vars.DatabaseName[1];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// Sligs
 					if (LEVEL_ID == 1 && C_CAM_ID == 1 && C_PATH_ID == 19 && vars.n == 2) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[2]									
+							vars.splitName = vars.DatabaseName[2];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// RuptureFarms
 					if (LEVEL_ID == 5 && C_CAM_ID == 6 && C_PATH_ID == 6 && vars.n == 3) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[3]					
+							vars.splitName = vars.DatabaseName[3];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				}
 				
 				if (vars.n >= 4 && vars.n <= 6){ // Stockyards 4-6
 				// Scrab part
 					if (LEVEL_ID == 5 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 4) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[4]								
+							vars.splitName = vars.DatabaseName[4];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// Slig Part
 					if (LEVEL_ID == 5 && C_CAM_ID == 1 && C_PATH_ID == 4 && vars.n == 5) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[5]								
+							vars.splitName = vars.DatabaseName[5];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// Stockyards
 					if (LEVEL_ID == 2 && C_CAM_ID == 14 && C_PATH_ID == 1 && vars.n == 6) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[6]							
+							vars.splitName = vars.DatabaseName[6];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				}
 				
 				if (vars.n == 7 || vars.n == 8){ // Monsaic Lines
 				// Natives
 					if (LEVEL_ID == 2 && C_CAM_ID == 8 && C_PATH_ID == 2 && vars.n == 7) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[7]								
+							vars.splitName = vars.DatabaseName[7];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				// Monsaic Lines (to Paramonia)
 					if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 8) {
-						++vars.n;
 						vars.ParamoniaFirst = true;
 						if (!settings["NoLog"]){ 
 							vars.LoadTexts = true; // We make sure that the texts are updated to be Paramonia first.
 						}
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[8]								
+							vars.splitName = vars.DatabaseName[8];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 					
 				// Monsaic Lines (to Scrabania)
-					if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 8) {
-						++vars.n;			
+					if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 8) {								
 						vars.ParamoniaFirst = false;
 						if (!settings["NoLog"]){ 
 							vars.LoadTexts = true; // We make sure that the texts are updated to be Scrabania first.
 						}
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[9]							
+							vars.splitName = vars.DatabaseName[9];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}
 					}
 				}
 				
@@ -821,176 +979,330 @@ split
 					if (vars.n >= 9 && vars.n <= 13){ // Paramonia
 					// Get the Elum
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 9) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[10]							
+								vars.splitName = vars.DatabaseName[10];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
 						}
 						
 					// Honey and Sligs
 						if (LEVEL_ID == 3 && C_CAM_ID == 9 && C_PATH_ID == 5 && vars.n == 10) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[11]								
+								vars.splitName = vars.DatabaseName[11];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
 						}
 						
 					// Platforms and Bees
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 6 && vars.n == 11) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[12]								
+								vars.splitName = vars.DatabaseName[12];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
 						}
 						
 					// Passwords and Sligs
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 9 && vars.n == 12) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[13]								
+								vars.splitName = vars.DatabaseName[13];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
 						}
 						
 					// Paramonia
 						if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 13) {
+							if (settings["UseDatabase"]){ // vars.DatabaseName[14]								
+								vars.splitName = vars.DatabaseName[14];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
+						}	
+					
+					
+					if (LEVEL_ID == 4 && C_PATH_ID == 1 && vars.n <= 13) { // Split if the autosplitter gets stuck and the runner gets inside Paramonian temple (entry)
+						if (settings["UseDatabase"]){ // vars.DatabaseName[14]								
+							vars.splitName = vars.DatabaseName[14];
+							vars.DBSplit = true;
+						} else {
 							++vars.n;
 							return true;
 						}	
-					}
-					
-					if (LEVEL_ID == 4 && C_PATH_ID == 1 && vars.n <= 13) { // Split if the autosplitter gets stuck and the runner gets inside Paramonian temple (entry)
-						++vars.n;
-						return true;			
 					} else {
 						if (LEVEL_ID == 4 && C_PATH_ID > 1 && vars.n < 15) { // Split if the autosplitter gets stuck and the runner gets inside Paramonian temple (AFTER entry)
-							++vars.n;
-							return true;			
+							if (settings["UseDatabase"]){ // vars.DatabaseName[14]								
+								vars.splitName = vars.DatabaseName[14];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}
 						}
 					}
+				}
 					
 					if (vars.n >= 14 && vars.n <= 22){ // Paramonian Temple
 					// Entry
 						if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 8 && vars.n == 14) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[15]							
+								vars.splitName = vars.DatabaseName[15];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 1
 						if (C_PATH_ID == 8 && O_PATH_ID == 4 && O_CAM_ID == 6) { // https://i.imgur.com/CThhUM5.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[16]							
+								vars.splitName = vars.DatabaseName[16];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 2
 						if (C_PATH_ID == 8 && O_PATH_ID == 2 && O_CAM_ID == 8) { // https://i.imgur.com/C1CPF36.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[17]							
+								vars.splitName = vars.DatabaseName[17];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 3 (now it's 5)
 						if (C_PATH_ID == 8 && O_PATH_ID == 6 && O_CAM_ID == 7) { // https://i.imgur.com/A8IVuGp.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[20]							
+								vars.splitName = vars.DatabaseName[20];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 4 (now it's 6)
 						if (C_PATH_ID == 8 && O_PATH_ID == 7 && O_CAM_ID == 5) { // https://i.imgur.com/lPrWDD2.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[21]							
+								vars.splitName = vars.DatabaseName[21];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 5  (now it's 3)
 						if (C_PATH_ID == 8 && O_PATH_ID == 5 && O_CAM_ID == 2) { // https://i.imgur.com/ku9rf3g.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[18]							
+								vars.splitName = vars.DatabaseName[18];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 6 (now it's 4)
 						if (C_PATH_ID == 8 && O_PATH_ID == 3 && O_CAM_ID == 1) { // https://i.imgur.com/LtYPFNm.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[19]							
+								vars.splitName = vars.DatabaseName[19];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Paramonian Nests 
 						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 15 && vars.n <= 21) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
-							vars.n = 22;
-							return true;
-						}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[22]							
+								vars.splitName = vars.DatabaseName[22];
+								vars.DBSplit = true;
+								vars.n = 21; // The fix itself
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 						
 					// Paramonian Temple 
 						if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 22) {
-							vars.n = 23;
-							return true;
-						}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[23]							
+								vars.splitName = vars.DatabaseName[23];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					}		
 					
 					if (vars.n >= 23 && vars.n <= 25){ // Scrabania
 					// Get Elum
 						if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 23) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[24]							
+								vars.splitName = vars.DatabaseName[24];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Play with Mines
 						if (LEVEL_ID == 8 && C_CAM_ID == 5 && C_PATH_ID == 8 && vars.n == 24) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[25]							
+								vars.splitName = vars.DatabaseName[25];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Scrabania
 						if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 25) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[26]							
+								vars.splitName = vars.DatabaseName[26];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					}	
 										
 					if (vars.n >= 26 && vars.n <= 36){ // Scrabania Temple
 					// Entry
 						if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 10 && vars.n == 26) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[27]							
+								vars.splitName = vars.DatabaseName[27];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 1
 						if (O_PATH_ID == 9 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/VUTQJ5R.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[28]							
+								vars.splitName = vars.DatabaseName[28];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 2
 						if (O_PATH_ID == 2 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/mtbUcdr.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[29]							
+								vars.splitName = vars.DatabaseName[29];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 3
 						if (O_PATH_ID == 3 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/09DtCCn.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[30]							
+								vars.splitName = vars.DatabaseName[30];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 4
 						if (O_PATH_ID == 5 && C_PATH_ID == 10 && O_CAM_ID == 8) { // https://i.imgur.com/qjAxMzI.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[31]							
+								vars.splitName = vars.DatabaseName[31];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 5
 						if (O_PATH_ID == 4 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/8BxoUsw.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[33]							
+								vars.splitName = vars.DatabaseName[33];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 6
 						if (O_PATH_ID == 7 && C_PATH_ID == 10 && O_CAM_ID == 1) { // https://i.imgur.com/WHeaT7j.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[32]							
+								vars.splitName = vars.DatabaseName[32];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 7
 						if (O_PATH_ID == 6 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/NkzyNWh.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[34]							
+								vars.splitName = vars.DatabaseName[34];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Trial 8
 						if (O_PATH_ID == 8 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/lX7IQg3.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[35]							
+								vars.splitName = vars.DatabaseName[35];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Scrabanian Nests
 						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 27 && vars.n <= 35) {
-							vars.n = 36; // Security measure.
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[36]							
+								vars.splitName = vars.DatabaseName[36];
+								vars.DBSplit = true;
+								vars.n = 35; // Security Measure
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					// Scrabania Temple to FFZ
 						if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 36) { // Entry Free Fire Zone - Change
-							vars.n = 37; // Security measure.
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[37]							
+								vars.splitName = vars.DatabaseName[37];
+								vars.DBSplit = true;
+								vars.n = 36; // Security Measure
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					}		
 				
@@ -1004,254 +1316,441 @@ split
 					if (vars.n >= 9 && vars.n <= 11){ // Scrabania
 					// Get Elum
 						if (LEVEL_ID == 8 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 9) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[24]							
+								vars.splitName = vars.DatabaseName[24];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Play with Mines
 						if (LEVEL_ID == 8 && C_CAM_ID == 5 && C_PATH_ID == 8 && vars.n == 10) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[25]							
+								vars.splitName = vars.DatabaseName[25];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Scrabania
 						if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 11) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[26]							
+								vars.splitName = vars.DatabaseName[26];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					}	
 					
 					if (vars.n >= 12 && vars.n <= 22){ // Scrabania Temple
 					// Entry
 						if (LEVEL_ID == 9 && C_CAM_ID == 1 && C_PATH_ID == 10 && vars.n == 12) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[27]							
+								vars.splitName = vars.DatabaseName[27];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 1
 						if (O_PATH_ID == 9 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/VUTQJ5R.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[28]							
+								vars.splitName = vars.DatabaseName[28];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 2
 						if (O_PATH_ID == 2 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/mtbUcdr.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[29]							
+								vars.splitName = vars.DatabaseName[29];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 3
 						if (O_PATH_ID == 3 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/09DtCCn.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[30]							
+								vars.splitName = vars.DatabaseName[30];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 4
 						if (O_PATH_ID == 5 && C_PATH_ID == 10 && O_CAM_ID == 8) { // https://i.imgur.com/qjAxMzI.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[31]							
+								vars.splitName = vars.DatabaseName[31];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 	
 					// Trial 5
 						if (O_PATH_ID == 4 && C_PATH_ID == 10 && O_CAM_ID == 5) { // https://i.imgur.com/8BxoUsw.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[33]							
+								vars.splitName = vars.DatabaseName[33];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 6
 						if (O_PATH_ID == 7 && C_PATH_ID == 10 && O_CAM_ID == 1) { // https://i.imgur.com/WHeaT7j.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[32]							
+								vars.splitName = vars.DatabaseName[32];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 7
 						if (O_PATH_ID == 6 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/NkzyNWh.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[34]							
+								vars.splitName = vars.DatabaseName[34];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 8
 						if (O_PATH_ID == 8 && C_PATH_ID == 10 && O_CAM_ID == 4) { // https://i.imgur.com/lX7IQg3.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[35]							
+								vars.splitName = vars.DatabaseName[35];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Scrabanian Nests
 						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 13 && vars.n <= 21) {
-							vars.n = 22;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[36]							
+								vars.splitName = vars.DatabaseName[36];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Scrabania Temple
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 22) { // From Scrabania to Paramonia.
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[38]							
+								vars.splitName = vars.DatabaseName[38];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 					}
 					
 					if (vars.n >= 23 && vars.n <= 27){ // Paramonia
 					// Get the Elum
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 2 && vars.n == 23) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[10]							
+								vars.splitName = vars.DatabaseName[10];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Honey and Sligs
 						if (LEVEL_ID == 3 && C_CAM_ID == 9 && C_PATH_ID == 5 && vars.n == 24) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[11]							
+								vars.splitName = vars.DatabaseName[11];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Platforms and Bees
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 6 && vars.n == 25) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[12]							
+								vars.splitName = vars.DatabaseName[12];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Passwords and Sligs
 						if (LEVEL_ID == 3 && C_CAM_ID == 1 && C_PATH_ID == 9 && vars.n == 26) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[13]							
+								vars.splitName = vars.DatabaseName[13];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Paramonia
 						if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 1 && vars.n == 27) {
-							++vars.n;
-							return true;
-						}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[14]							
+								vars.splitName = vars.DatabaseName[14];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					}
 					
 					if (vars.n >= 28 && vars.n <= 36){ // Paramonian Temple
 					// Entry
 						if (LEVEL_ID == 4 && C_CAM_ID == 1 && C_PATH_ID == 8 && vars.n == 28) {
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[15]							
+								vars.splitName = vars.DatabaseName[15];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 1
 						if (C_PATH_ID == 8 && O_PATH_ID == 4 && O_CAM_ID == 6) { // https://i.imgur.com/CThhUM5.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[16]							
+								vars.splitName = vars.DatabaseName[16];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 2
 						if (C_PATH_ID == 8 && O_PATH_ID == 2 && O_CAM_ID == 8) { // https://i.imgur.com/C1CPF36.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[17]							
+								vars.splitName = vars.DatabaseName[17];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 3
 						if (C_PATH_ID == 8 && O_PATH_ID == 6 && O_CAM_ID == 7) { // https://i.imgur.com/A8IVuGp.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[20]							
+								vars.splitName = vars.DatabaseName[20];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 4
 						if (C_PATH_ID == 8 && O_PATH_ID == 7 && O_CAM_ID == 5) { // https://i.imgur.com/lPrWDD2.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[21]							
+								vars.splitName = vars.DatabaseName[21];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 5
 						if (C_PATH_ID == 8 && O_PATH_ID == 5 && O_CAM_ID == 2) { // https://i.imgur.com/ku9rf3g.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[18]							
+								vars.splitName = vars.DatabaseName[18];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Trial 6
 						if (C_PATH_ID == 8 && O_PATH_ID == 3 && O_CAM_ID == 1) { // https://i.imgur.com/LtYPFNm.jpg
-							++vars.n;
-							return true;
+							if (settings["UseDatabase"]){ // vars.DatabaseName[19]							
+								vars.splitName = vars.DatabaseName[19];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
 						}
 						
 					// Paramonian Nests 
 						if (LEVEL_ID == 2 && C_CAM_ID == 4 && C_PATH_ID == 5 && vars.n >= 29 && vars.n <= 35) { // 15 / 06 / 2020 - Fix to prevent getting stuck if a trial doesn't split
-							vars.n = 36;
-							return true;
-						}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[22]							
+								vars.splitName = vars.DatabaseName[22];
+								vars.DBSplit = true;
+								vars.n = 35;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 						
-					// Paramonian Temple 
+					// Paramonian Temple to FFZ
 						if (LEVEL_ID == 6 && C_CAM_ID == 7 && C_PATH_ID == 4 && vars.n == 36) {
-							++vars.n;
-							return true;
-						}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[39]							
+								vars.splitName = vars.DatabaseName[39];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					}
 				}
 				
 				if (vars.n == 37 || vars.n == 38){ // Zulag 1
 				 // Free Fire Zone
 					if (LEVEL_ID == 13 && C_CAM_ID == 3 && C_PATH_ID == 19 && vars.n == 37) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[40]							
+								vars.splitName = vars.DatabaseName[40];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Zulag 1
 					if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 1 && vars.n == 38) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[41]							
+								vars.splitName = vars.DatabaseName[41];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 				}
 				
 				if (vars.n >= 39 && vars.n <= 43){ // Zulag 2
 				// Entry
 					if (LEVEL_ID == 13 && C_CAM_ID == 3 && C_PATH_ID == 1 && vars.n == 39) {
-						++vars.n;
-						return true;
-					}	
+						if (settings["UseDatabase"]){ // vars.DatabaseName[42]							
+							vars.splitName = vars.DatabaseName[42];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}	
+					}
 					
-				// Door 1
+				// Door 1 (now is trial 3)
 					if (C_PATH_ID == 2 && C_CAM_ID == 4 && vars.trialCheck[0] != true){ // Door 1 check
 						vars.trialCheck[0] = true;
 					}
 					
 					if (O_PATH_ID == 2 && C_PATH_ID == 1 && vars.trialCheck[0] == true) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[45]							
+								vars.splitName = vars.DatabaseName[45];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
-				// Door 2				
+				// Door 2		
 					if (C_PATH_ID == 10 && C_CAM_ID == 5 && vars.trialCheck[1] != true){ // Door 2 check
 						vars.trialCheck[1] = true;
 					}
 					
 					if (O_PATH_ID == 10 && C_PATH_ID == 1 && vars.trialCheck[1] == true) {
-						++vars.n;
-						return true;
+						if (settings["UseDatabase"]){ // vars.DatabaseName[44]							
+							vars.splitName = vars.DatabaseName[44];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}	
 					}
 					
-				// Door 3			
+				// Door 3 (now is trial 1)		
 					if (C_PATH_ID == 3 && C_CAM_ID == 5 && vars.trialCheck[2] != true){ // Door 3 check
 						vars.trialCheck[2] = true;
 					}
 					
 					if (O_PATH_ID == 3 && C_PATH_ID == 1 && vars.trialCheck[2] == true) {
-						++vars.n;
-						return true;
-					}	
+						if (settings["UseDatabase"]){ // vars.DatabaseName[43]							
+							vars.splitName = vars.DatabaseName[43];
+							vars.DBSplit = true;
+						} else {
+							++vars.n;
+							return true;
+						}	
+					}
 					
 				// Zulag 2
 					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 13) {
-						vars.n = 44;
-						return true;
-					}	
+						if (settings["UseDatabase"]){ // vars.DatabaseName[46]							
+							vars.splitName = vars.DatabaseName[46];
+							vars.DBSplit = true;
+							vars.n = 43;
+						} else {
+							++vars.n;
+							return true;
+						}	
+					}
 				}
 				
 				if (vars.n >= 44 && vars.n <= 48){ // Zulag 3
 				// Entry
 					if (LEVEL_ID == 13 && C_CAM_ID == 4 && C_PATH_ID == 13 && vars.n == 44) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[47]							
+								vars.splitName = vars.DatabaseName[47];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Door 1
-					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 2 check
+					if (C_PATH_ID == 9 && C_CAM_ID == 2 && vars.trialCheck[3] != true){ // Door 1 check
 						vars.trialCheck[3] = true;
 					}
 					
 					if (O_PATH_ID == 12 && C_PATH_ID == 13 && vars.trialCheck[3] == true) {
-						++vars.n;
-						return true;
-					}
+							if (settings["UseDatabase"]){ // vars.DatabaseName[48]							
+								vars.splitName = vars.DatabaseName[48];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 					
 				// Door 2	
@@ -1260,9 +1759,14 @@ split
 						vars.trialCheck[4] = true;
 					}			
 					if (O_PATH_ID == 7 && C_PATH_ID == 13 && vars.trialCheck[4] == true) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[49]							
+								vars.splitName = vars.DatabaseName[49];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 					
 				// Door 3
@@ -1271,23 +1775,38 @@ split
 					}
 					
 					if (O_PATH_ID == 5 && C_PATH_ID == 13 && vars.trialCheck[5] == true) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[50]							
+								vars.splitName = vars.DatabaseName[50];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Zulag 3
 					if (LEVEL_ID == 13 && C_CAM_ID == 5 && C_PATH_ID == 14) {
-						vars.n = 49;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[51]							
+								vars.splitName = vars.DatabaseName[51];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 				}
 				
 				if (vars.n >= 49 && vars.n <= 52){ // Zulag 4
 				// Enter Slog Kennels
 					if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 8 && vars.n == 49) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[52]							
+								vars.splitName = vars.DatabaseName[52];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Leave Slog Kennels
 					if (C_PATH_ID == 8 && C_CAM_ID == 5 && vars.trialCheck[6] != true){ // Slog Kennels check
@@ -1295,21 +1814,36 @@ split
 					}
 					
 					if (LEVEL_ID == 13 && C_CAM_ID == 6 && C_PATH_ID == 4 && vars.n == 50 && vars.trialCheck[6] == true) {
-						++vars.n;
-						return true;
-					}
+							if (settings["UseDatabase"]){ // vars.DatabaseName[53]							
+								vars.splitName = vars.DatabaseName[53];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Enter Second Part
 					if (LEVEL_ID == 13 && C_CAM_ID == 1 && C_PATH_ID == 11 && vars.n == 51) {
-						++vars.n;
-						return true;
-					}	
+							if (settings["UseDatabase"]){ // vars.DatabaseName[54]							
+								vars.splitName = vars.DatabaseName[54];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}
 					
 				// Zulag 4
 					if (LEVEL_ID == 12 && C_CAM_ID == 2 && C_PATH_ID == 6 && abeY > 235 && vars.n == 52) {
-						vars.n = 53;
-						return true;
-					}			
+							if (settings["UseDatabase"]){ // vars.DatabaseName[55]							
+								vars.splitName = vars.DatabaseName[55];
+								vars.DBSplit = true;
+							} else {
+								++vars.n;
+								return true;
+							}	
+						}	
 				}
 				
 				
@@ -2389,7 +2923,7 @@ split
 						return true;
 					}						
 				}
-			} 		
+			 		
 		
 		} else if (settings["UsingIL"]){ // Individual levels?
 		
@@ -2810,13 +3344,19 @@ split
 		} else {
 			// :shrug:
 		}
-	}
+		}
 	
-	// Boardroom
-	if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
-		++vars.n;
-		vars.SPLIT_INFO = "The run is over!\nTime: " + timer.CurrentTime.RealTime;	
-		return true;
+		// Boardroom
+		if (LEVEL_ID == 12 && C_PATH_ID == 6 && C_CAM_ID == 8 && IsGameBeaten == 1) {
+			if (settings["UseDatabase"]){ // vars.DatabaseName[56]							
+				vars.splitName = vars.DatabaseName[56];
+				vars.DBSplit = true;
+			} else {
+				++vars.n;
+				vars.SPLIT_INFO = "The run is over!\nTime: " + timer.CurrentTime.RealTime;	
+				return true;
+			}			
+		}
 	}
 		
 	//##########################################################
@@ -2834,7 +3374,12 @@ split
 			vars.SkippedFrames = 0;
 			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
 			vars.MillisecondsPaused = 0;
-			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
+			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;			
+			if (settings["UseDatabase"]){
+				if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {
+					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
+				}
+			}
 		}
 	}
 	
@@ -3264,6 +3809,81 @@ split
 		} 
 	}
 
+	if (settings["UseDatabase"]){
+		
+		
+		
+		vars.DatabaseName[0] = "RuptureFarms - Tutorials" ;
+		vars.DatabaseName[1] = "RuptureFarms - Meat Grinders" ;
+		vars.DatabaseName[2] = "RuptureFarms - Sligs" ;
+		vars.DatabaseName[3] = "RuptureFarms - Exit" ;
+		
+		vars.DatabaseName[4] = "Stockyards - Scrab part" ;
+		vars.DatabaseName[5] = "Stockyards - Slig Part" ;
+		vars.DatabaseName[6] = "Stockyards - Exit" ;
+		
+		vars.DatabaseName[7] = "Monsaic Lines - Natives" ;
+		vars.DatabaseName[8] = "Monsaic Lines - Enter Paramonia" ;
+		vars.DatabaseName[9] = "Monsaic Lines - Enter Scrabania" ;
+		
+		vars.DatabaseName[10] = "Paramonia - Get the Elum" ;
+		vars.DatabaseName[11] = "Paramonia - Honey and Sligs" ;
+		vars.DatabaseName[12] = "Paramonia - Platforms and Bees" ;
+		vars.DatabaseName[13] = "Paramonia - Passwords and Sligs" ;
+		vars.DatabaseName[14] = "Paramonia - Exit" ;
+		
+		vars.DatabaseName[15] = "Paramonia Temple - Entry" ;
+		vars.DatabaseName[16] = "Paramonia Temple - Trial Down Right" ;
+		vars.DatabaseName[17] = "Paramonia Temple - Trial Down Left" ;
+		vars.DatabaseName[18] = "Paramonia Temple - Trial Middle Right" ;
+		vars.DatabaseName[19] = "Paramonia Temple - Trial Middle Right+" ;
+		vars.DatabaseName[20] = "Paramonia Temple - Trial Middle Left+" ;
+		vars.DatabaseName[21] = "Paramonia Temple - Trial Middle Left" ;
+		vars.DatabaseName[22] = "Paramonia Temple - Nests" ;
+		vars.DatabaseName[23] = "Paramonia Temple - Enter Scrabania" ;
+		vars.DatabaseName[39] = "Paramonia Temple - Enter FFZ" ;
+		
+		vars.DatabaseName[24] = "Scrabania - Get the Elum" ;	
+		vars.DatabaseName[25] = "Scrabania - Play with Mines" ;	
+		vars.DatabaseName[26] = "Scrabania - Exit" ;	
+
+		vars.DatabaseName[27] = "Scrabania Temple - Entry" ;	
+		vars.DatabaseName[28] = "Scrabania Temple - Trial Middle Left" ;	
+		vars.DatabaseName[29] = "Scrabania Temple - Trial Middle Left+" ;	
+		vars.DatabaseName[30] = "Scrabania Temple - Trial Bottom Left" ;
+		vars.DatabaseName[31] = "Scrabania Temple - Trial Top" ;
+		vars.DatabaseName[32] = "Scrabania Temple - Trial Middle Right" ;
+		vars.DatabaseName[33] = "Scrabania Temple - Trial Middle Right+" ;
+		vars.DatabaseName[34] = "Scrabania Temple - Trial Bottom Right" ;
+		vars.DatabaseName[35] = "Scrabania Temple - Trial Bottom Right+" ;
+		vars.DatabaseName[36] = "Scrabania Temple - Nests" ;
+		vars.DatabaseName[37] = "Scrabania Temple - Enter FFZ" ;	
+		vars.DatabaseName[38] = "Scrabania Temple - Enter Paramonia" ;			
+		
+		vars.DatabaseName[40] = "Zulag 1 - Free Fire Zone" ;	
+		vars.DatabaseName[41] = "Zulag 1 - Exit" ;	
+		
+		vars.DatabaseName[42] = "Zulag 2 - Entry" ;	
+		vars.DatabaseName[43] = "Zulag 2 - Trial Right" ;	
+		vars.DatabaseName[44] = "Zulag 2 - Trial Middle" ;	
+		vars.DatabaseName[45] = "Zulag 2 - Trial Left" ;	
+		vars.DatabaseName[46] = "Zulag 2 - Exit" ;	
+		
+		vars.DatabaseName[47] = "Zulag 3 - Entry" ;	
+		vars.DatabaseName[48] = "Zulag 3 - Trial Bottom" ;	
+		vars.DatabaseName[49] = "Zulag 3 - Trial Left" ;	
+		vars.DatabaseName[50] = "Zulag 3 - Trial Right" ;	
+		vars.DatabaseName[51] = "Zulag 3 - Exit" ;	
+		
+		vars.DatabaseName[52] = "Zulag 4 - Enter Slog Kennels" ;	
+		vars.DatabaseName[53] = "Zulag 4 - Leave Slog Kennels" ;	
+		vars.DatabaseName[54] = "Zulag 4 - Second Part" ;	
+		vars.DatabaseName[55] = "Zulag 4 - Exit" ;
+		
+		vars.DatabaseName[56] = "Boardroom" ;	
+		
+		
+	}
 	
 // LOG TOOL FOR DEBUG. 	
 	if (gnFrame > 1){
@@ -3289,5 +3909,40 @@ split
 		}	
 	} else {
 		vars.SPLIT_INFO = "Main Menu [" + vars.n + "]\nGLOBAL AutoSplit started. No main lang detected yet.";
+	}
+	
+	if (vars.DBSplit){ // We perform the DB actions for the previous split.
+		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n) + ".txt") && File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\[" + (vars.n) + "] " + vars.splitName + ".txt")) { // The split file exists.
+			if ((vars.GNFrame - vars.FramesUpToPreviousFrame) < vars.CurrentSplitBestFrame){ // We beaten our best time.
+				if ((vars.GNFrame - vars.FramesUpToPreviousFrame) > 150) { // More than 5 seconds in this split.
+					vars.DB_PREVIOUS_SPLIT = "## YOU BEATEN THE SPLIT BY " + (vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " FRAMES! New best: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);		
+					File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n) + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the ID text file.
+					File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\[" + (vars.n) + "] " + vars.splitName + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the split text file.	
+					vars.DB_GOLD_FRAMES_TOTAL = vars.DB_GOLD_FRAMES_TOTAL + (vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame));
+				} else {
+					vars.DB_PREVIOUS_SPLIT = "Frame amount is " + (vars.GNFrame - vars.FramesUpToPreviousFrame) + ". Error?";
+				}
+			} else if ((vars.GNFrame - vars.FramesUpToPreviousFrame) == vars.CurrentSplitBestFrame) { // We got the same time.
+				vars.DB_PREVIOUS_SPLIT = "# Same amount of frames than your best! Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);	
+			} else { // We got worse time.
+				vars.DB_PREVIOUS_SPLIT = "Lost " + -(vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " frames compared with best (" + vars.CurrentSplitBestFrame + "). Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);
+				vars.DB_LOST_FRAMES_TOTAL = 	vars.DB_LOST_FRAMES_TOTAL + (-(vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)));
+			}
+		} else { // Split file doesn't exist / we save the time.
+			vars.DB_PREVIOUS_SPLIT = "# CREATED SPLIT TIME: " + (vars.GNFrame - vars.FramesUpToPreviousFrame) + " frames.";		
+			File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n) + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the ID text file.
+			File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\[" + (vars.n) + "] " + vars.splitName + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the split text file.									
+		}							
+		vars.FramesUpToPreviousFrame = vars.GNFrame; // We store the current GNFrame as FramesUpToPreviousFrame.
+		if (IsGameBeaten == 1) {
+			vars.SPLIT_INFO = "The run is over!\nTime: " + timer.CurrentTime.RealTime;
+			vars.CurrentSplitBestFrame = 0;	
+		} else if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n + 1) + ".txt")) {
+			vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n + 1) + ".txt")); // We get the frame count for the next split.
+		} else {
+			vars.CurrentSplitBestFrame = 0;
+		}		
+		++vars.n;
+		return true;
 	}
 }
