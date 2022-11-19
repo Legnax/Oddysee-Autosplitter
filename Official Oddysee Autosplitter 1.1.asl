@@ -1,4 +1,4 @@
-//	Official Autosplitter 3.0 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database.
+//	Official Autosplitter 3.1 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database.
 //	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift.
 //  DATE OF LAST EDITION-> 19-11-2022
 
@@ -12,7 +12,7 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 3.0 (Nov 19th 2022) - LegnaX#7777 - CHANGELOG");
+	settings.Add("Version", true, "Official Version 3.1 (Nov 19th 2022) - LegnaX#7777 - CHANGELOG");
 	settings.SetToolTip("Version", "-- CHANGELOG --\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
@@ -3915,7 +3915,7 @@ split
 		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n) + ".txt") && File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\[" + (vars.n) + "] " + vars.splitName + ".txt")) { // The split file exists.
 			if ((vars.GNFrame - vars.FramesUpToPreviousFrame) < vars.CurrentSplitBestFrame){ // We beaten our best time.
 				if ((vars.GNFrame - vars.FramesUpToPreviousFrame) > 150) { // More than 5 seconds in this split.
-					vars.DB_PREVIOUS_SPLIT = "## YOU BEATEN THE SPLIT BY " + (vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " FRAMES! New best: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);		
+					vars.DB_PREVIOUS_SPLIT = "## BEATEN BY " + (vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " FRAMES! New best: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);		
 					File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + (vars.n) + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the ID text file.
 					File.WriteAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\[" + (vars.n) + "] " + vars.splitName + ".txt", "" + (vars.GNFrame - vars.FramesUpToPreviousFrame)); // We save the best on the split text file.	
 					vars.DB_GOLD_FRAMES_TOTAL = vars.DB_GOLD_FRAMES_TOTAL + (vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame));
@@ -3923,9 +3923,9 @@ split
 					vars.DB_PREVIOUS_SPLIT = "Frame amount is " + (vars.GNFrame - vars.FramesUpToPreviousFrame) + ". Error?";
 				}
 			} else if ((vars.GNFrame - vars.FramesUpToPreviousFrame) == vars.CurrentSplitBestFrame) { // We got the same time.
-				vars.DB_PREVIOUS_SPLIT = "# Same amount of frames than your best! Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);	
+				vars.DB_PREVIOUS_SPLIT = "# Same frames as your best! Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);	
 			} else { // We got worse time.
-				vars.DB_PREVIOUS_SPLIT = "Lost " + -(vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " frames compared with best (" + vars.CurrentSplitBestFrame + "). Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);
+				vars.DB_PREVIOUS_SPLIT = "Lost " + -(vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)) + " frames vs best (" + vars.CurrentSplitBestFrame + "). Frames: " + (vars.GNFrame - vars.FramesUpToPreviousFrame);
 				vars.DB_LOST_FRAMES_TOTAL = 	vars.DB_LOST_FRAMES_TOTAL + (-(vars.CurrentSplitBestFrame - (vars.GNFrame - vars.FramesUpToPreviousFrame)));
 			}
 		} else { // Split file doesn't exist / we save the time.
