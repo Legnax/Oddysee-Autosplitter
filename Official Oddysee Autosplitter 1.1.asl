@@ -12,7 +12,7 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 3.2 (Feb 04th, 2023) - LegnaX#7777 - CHANGELOG");
+	settings.Add("Version", true, "Experimental Version 4.0 (Feb 04th, 2023) - LegnaX#7777 - CHANGELOG");
 	settings.SetToolTip("Version", "-- CHANGELOG --\n- Added Any% to the split database feature.\n- Added new categories: Good Ending NMG, 50/50 Glitched, all glitched categories with DDG.\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
@@ -304,6 +304,8 @@ init
 	vars.fps = 30.3; // FPS of the game. proven to be 30.3 doing performance checks.
 	vars.ILtype = -1; // 0 = RuptureFarms | 1 = Stockyards | 2 = Paramonia | 3 = Scrabania | 4 = Zulag 1 | 5 = Zulag 2 | 6 = Zulag 3 | 7 = Zulag 4
 	vars.splitName = "";
+
+	vars.isLevelSelect = false;
 	
 	vars.CurrentSplitBestFrame = 0;
 	vars.FramesUpToPreviousFrame = 0;
@@ -363,129 +365,75 @@ update
 
 start
 {	
-	if (settings["UsingIL"]){ 		
-			vars.StartgnFrame = 0;
-	// We start on RuptureFarms, normal. 0
-		// if (settings["ILRupturefarms"]){ 
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 0;	
-			}
+	// Checking for the Level Select screen
+	if(vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Current == 31) {
+		vars.isLevelSelect = true;
+	}
+	// Once back in the Main screen
+	if(vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Current == 1) {
+		vars.isLevelSelect = false;
+	}
+	vars.StartgnFrame = 0;
 
-	// We start on Stockyards, cheat code.
-		// } else if (settings["ILStockyards"]){ 
-			int l = 5;
-			int p = 6;
-			int c = 6;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 1;		
-			}
-
-	// We start on Paramonia, cheat code.
-		// } else if (settings["ILParamonia"]){ 
-			l = 3;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 2;		
-			}
-			
-	// We start on Scrabania, cheat code.
-		// } else if (settings["ILScrabania"]){ 
-			l = 8;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 3;		
-			}
-			
-	// We start on Zulag 1, cheat code.
-		// } else if (settings["ILZulag1"]){ 
-			l = 6;
-			p = 4;
-			c = 7;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 4;		
-			}
-			
-	// We start on Zulag 2, cheat code.
-		// } else if (settings["ILZulag2"]){ 
-			l = 13;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 5;			
-			}
-			
-	// We start on Zulag 3, cheat code.
-		// } else if (settings["ILZulag3"]){ 
-			l = 13;
-			p = 13;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 6;		
-			}
-			
-	// We start on Zulag 4, cheat code.
-		// } else if (settings["ILZulag4"]){ 
-			l = 13;
-			p = 14;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 7;			
-			}
-			
-			// This is for Monsaic lines (ID 8)
-			l = 2;
-			p = 1;
-			c = 14;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 8;			
-			}
-			
-			// This is for Paramonian Temple (ID 9)
-			l = 4;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 9;			
-			}
-			
-			// This is for Scrabanian Temple (ID 10)
-			l = 9;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 10;			
-			}
-			
-			// This is for Zulag 1 (ID 11)
-			l = 13;
-			p = 19;
-			c = 3;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 11;			
-			}
-
-		// }
-	} else { // NORMAL GAME START HERE!
-		
-		// ENGLISH		
-		if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+	// On exiting the main menu level
+	if(vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["LEVEL_ID"].Current != 0) {
+		if (settings["UsingIL"] && vars.isLevelSelect){
 			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-		} else {
-			vars.StartgnFrame = 0;
+
+			// The reason we check each level individually is because:
+			// - The ILtype variable doesn't match the game level select index
+			// - A dynamic pointer offset is needed to retrieve the game level select index
+
+			// Stockyards
+			if(vars.watchers["LEVEL_ID"].Current == 5) {
+				vars.ILtype = 1;
+			}
+			// Paramonia
+			if(vars.watchers["LEVEL_ID"].Current == 3) {
+				vars.ILtype = 2;
+			}
+			// Scrabania
+			if(vars.watchers["LEVEL_ID"].Current == 8) {
+				vars.ILtype = 2;
+			}
+			// Free Fire Zone
+			if(vars.watchers["LEVEL_ID"].Current == 6) {
+				vars.ILtype = 4;
+			}
+			// Zulag 2
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 1) {
+				vars.ILtype = 5;
+			}
+			// Zulag 3
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 13) {
+				vars.ILtype = 6;
+			}
+			// Zulag 4
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 14) {
+				vars.ILtype = 7;
+			}
+			// Monsaic Lines
+			if(vars.watchers["LEVEL_ID"].Current == 2) {
+				vars.ILtype = 8;
+			}
+			// Paramonian Temple
+			if(vars.watchers["LEVEL_ID"].Current == 4) {
+				vars.ILtype = 9;
+			}
+			// Scrabanian Temple
+			if(vars.watchers["LEVEL_ID"].Current == 9) {
+				vars.ILtype = 10;
+			}
+			// Zulag 1
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 19) {
+				vars.ILtype = 11;
+			}
+		}
+
+		// RuptureFarms (for both IL and full runs)
+		if(vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
+			vars.ILtype = 0;
 		}
 	}
 	
