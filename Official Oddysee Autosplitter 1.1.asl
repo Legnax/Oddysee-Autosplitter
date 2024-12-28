@@ -334,6 +334,33 @@ update
 	print("IsGameRunning = " + vars.watchers["IsGameRunning"].Current.ToString());
 	print("IsGameBeaten = " + vars.watchers["IsGameBeaten"].Current.ToString());
 	*/
+
+	if (vars.watchers["LEVEL_ID"].Current == 0){ // MAIN SCREEN
+		if (vars.gnBeforeMainMenu == 0){
+			vars.gnBeforeMainMenu = vars.watchers["gnFrame"].Current;
+		}
+	} else {
+		vars.gnBeforeMainMenu = 0;
+	}
+
+	// WE JUST RESTARTED THE GAME AND LOADED!!
+	if (vars.watchers["LEVEL_ID"].Current > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) {
+		vars.StartgnFrame = vars.watchers["gnFrame"].Current; 
+	}
+
+	// Pause time handle
+	if (vars.watchers["IsGameRunning"].Current == 1){ // if the game is paused...
+		vars.Epoch = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
+		if (vars.PauseStartTime == -1){ // Paused for the first time.
+			vars.PauseStartTime = vars.Epoch;
+		}		
+	} else {		
+		if (vars.PauseStartTime > 0){ // Unpaused for the first time.
+			vars.MillisecondsPaused = vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime);
+			vars.PauseStartTime = -1;
+		}
+	}
+
 }
 
 // #############################
@@ -517,73 +544,43 @@ reset
 	}
 }
 
+gameTime
+{
+	TimeSpan gameTimeTimeSpan;
 
-isLoading
-{		
-	if (settings["10Rate"]){
-		refreshRate = 10;
-	} else if (settings["30Rate"]){
-		refreshRate = 30;
-	} else if (settings["50Rate"]){
-		refreshRate = 50;
-	} else if (settings["100Rate"]){
-		refreshRate = 100;
-	} else {
-		refreshRate = 40;	
-	}
-	
-	long gnFrame = 0;
-	short IsGameRunning = 0;
-	int LEVEL_ID = -1;
-	int abeY = -1;
-
-	IsGameRunning = vars.watchers["IsGameRunning"].Current;
-	gnFrame = vars.watchers["gnFrame"].Current;
-	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
-	abeY = vars.watchers["abeY"].Current;
-	
-	if (LEVEL_ID == 0){ // MAIN SCREEN
-		if (vars.gnBeforeMainMenu == 0){
-			vars.gnBeforeMainMenu = gnFrame;
-		}
-		return true;
-	} else {
-		vars.gnBeforeMainMenu = 0;
-	}
-	
-	if (gnFrame > 0) {
+	if (vars.watchers["gnFrame"].Current > 0) {
 		vars.REAL_TIME = TimeSpan.Parse(System.Convert.ToString(timer.CurrentTime.RealTime)).ToString(@"h\:mm\:ss\.fff");
-		vars.GNFrame = gnFrame - vars.StartgnFrame;
+		if (vars.StartgnFrame == 0) { // So the IGT doesn't look like it decrements upon loading a save after restarting the game
+			vars.GNFrame = 0;
+		} else if (vars.watchers["LEVEL_ID"].Current == 0){ // So the IGT doesn't increment while on main menu
+			vars.GNFrame = vars.gnBeforeMainMenu - vars.StartgnFrame;
+		} else {
+			vars.GNFrame = vars.watchers["gnFrame"].Current - vars.StartgnFrame;
+		}
 		
 		if (settings["UseDatabase"] && !settings["NoSplitNames"]){
 			if (vars.CurrentSplitBestFrame > 0) {
 				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / " + vars.CurrentSplitBestFrame;
 			} else {
 				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / ????";
-				// vars.DB_CURRENT_SPLIT = "No best frame found for this split yet!";
 			}
 		} 
 		
-		if (IsGameRunning == 1){ // if the game is paused...
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
-			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
-			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
-				return true;
-			} else {
-				return false;
-			}
+		if (vars.watchers["IsGameRunning"].Current == 1){ // if the game is paused...
+			gameTimeTimeSpan = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime);
 		} else {
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
-			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
-			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
-				return true;
-			} else {
-				return false;
-			}
+			gameTimeTimeSpan = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime);
 		}
-	} else {
-		return true; // :shrug: 
+
+		vars.LOADLESS_TIME = gameTimeTimeSpan.ToString(@"h\:mm\:ss\.fff");
+		vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
+		return gameTimeTimeSpan;
 	}
+}
+
+isLoading
+{				
+	return true;
 }
 
 split
@@ -594,7 +591,6 @@ split
 	int O_CAM_ID = -1;
 	int C_CAM_ID = -1;
 	int abeY = -1;
-	int IsGameRunning = -1;
 	long gnFrame = -1;
 	int IsGameBeaten = -1;	
 	vars.DBSplit = false;
@@ -605,33 +601,13 @@ split
 	O_CAM_ID = vars.watchers["CAM_ID"].Old;
 	C_CAM_ID = vars.watchers["CAM_ID"].Current;
 	abeY = vars.watchers["abeY"].Current;
-	IsGameRunning = vars.watchers["IsGameRunning"].Current;
 	gnFrame = vars.watchers["gnFrame"].Current;
 	IsGameBeaten = vars.watchers["IsGameBeaten"].Current;
 
 	if (gnFrame >= 0){		
 	
 		vars.gnFrameCurrent = gnFrame;
-		
-		if (LEVEL_ID > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) { // WE JUST RESTARTED THE GAME AND LOADED!!
-			vars.StartgnFrame = gnFrame; 
-		}		
-		
-		if (IsGameRunning == 1){ // if the game is paused...
-			vars.Epoch = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			if (vars.PauseStartTime == -1){ // Paused for the first time.
-				vars.PauseStartTime = vars.Epoch;
-			}		
-			
-		} else {		
-		
-			if (vars.PauseStartTime > 0){ // Unpaused for the first time.
-				vars.MillisecondsPaused = vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime);
-				vars.PauseStartTime = -1;
-			}
-			
-		}
-		
+				
 		if (LEVEL_ID == 8 && vars.n > 8 && vars.n < 15 && vars.ParamoniaFirst){
 			vars.ParamoniaFirst = false;
 			vars.LoadTexts = true;
