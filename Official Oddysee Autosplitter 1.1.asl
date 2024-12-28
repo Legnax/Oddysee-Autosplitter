@@ -67,11 +67,8 @@ startup
 	
 	settings.Add("UsingIL", false, "INDIVIDUAL LEVELS - Check this to activate");
 	settings.SetToolTip("UsingIL", "Leave this option unchecked to not use.\nAutosplit will priorize autosplit category over Individual Levels, so make sure you disable AUTOSPLIT GAME CATEGORY if you want to use ILs!\nYou need the splits file for the IL splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !\nExcept for RuptureFarms, you need to use the Cheat Code in order for the autosplit to start.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> INDIVIDUAL LEVEL LIST <-\n- RuptureFarms (start a new game)\n- Stockyards\n- Monsaic Lines\n- Paramonia\n- Paramonian Temple\n- Scrabania\n- Scrabanian Temple\n- Free Fire Zone\n- Zulag 1\n- Zulag 2\n- Zulag 3\n- Zulag 4");
-}
 
-init
-{	
-
+	// Variables initialization
 	vars.You_can_show_the_following_variables_on_runs = "Ahh, I see!";
 	vars.SPLIT_INFO = "Autosplitter started";
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
@@ -83,7 +80,14 @@ init
 	vars.DB_GOLD_FRAMES_TOTAL = 0;
 	vars.____________________________________ = "Ignore this.";
 	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 6 above ones can be used.";
-	
+
+	vars.n = 0;
+	vars.PreviousTime = 0;
+	vars.CurrentSplitBestFrame = 0;
+}
+
+init
+{		
 // ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 265 ##################
 
 	print("+init");
@@ -288,11 +292,9 @@ init
 		refreshRate = 40;	
 	}
 	vars.PrimeraVez = true; // If true, loads the level names on memory and sets itself to False.
-	string[] splitt = new string[70]; // Creates the array for the split names.
-	vars.split = splitt; // Split names.
+	vars.split = new string[70]; // Split names.
 	bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 	vars.trialCheck = trialCheckk; // Used to check the trials in order to verify if the screen with the lever that flags the level as completed was visited.
-	vars.ResetStatus = 0; // If 1, the autosplit will reset.
 	vars.StartgnFrame = 0;
 	vars.gnFrameCurrent = 0;
 	vars.gnBeforeMainMenu = 0;
@@ -307,37 +309,12 @@ init
 
 	vars.isLevelSelect = false;
 	
-	vars.CurrentSplitBestFrame = 0;
 	vars.FramesUpToPreviousFrame = 0;
-	vars.DatabaseName = splitt; // Database names for storing splits
+	vars.DatabaseName = new string[70]; // Database names for storing splits
 	vars.DBSplit = false;
 	
 	// vars.Database_Current_Split = "";
-	
-	if (File.Exists(@"C:\Autosplit Backup Files\n")) { // We conveniently recover the Oddysee current split 
-		vars.n = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\n"));
-		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {
-			vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
-		}
-	} else {		
-		vars.n = 0;		// CHANGE LATER!! - A counting variable that tracks progress (only resets if game loads on proper way).
-	}
 		
-	if (File.Exists(@"C:\Autosplit Backup Files\previousTime")) { // We conveniently recover the previous time spent on the run (this resets if you start a new game)		
-		vars.PreviousTime = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\previousTime"));
-		if (settings["UseDatabase"] && !settings["NoSplitNames"]){	
-			if (File.Exists(@"C:\Autosplit Backup Files\LostFrames")){
-				vars.DB_LOST_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\LostFrames"));
-				vars.DB_GOLD_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\GoldFrames"));		
-			} else {
-				vars.DB_LOST_FRAMES_TOTAL = 0;
-				vars.DB_GOLD_FRAMES_TOTAL = 0;					
-			}
-		}
-	} else {		
-		vars.PreviousTime = 0;
-	}	
-
 	print("-init");
 }
 
@@ -433,7 +410,9 @@ start
 		// RuptureFarms (for both IL and full runs)
 		if(vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
 			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-			vars.ILtype = 0;
+			if(settings["UsingIL"]) {
+				vars.ILtype = 0;
+			}
 		}
 	}
 	
@@ -445,25 +424,14 @@ start
 		vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;		
 		bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 		vars.trialCheck = trialCheckk;
-		var dir = @"C:\Autosplit Backup Files\";  // folder location 		
-		if (!Directory.Exists(dir)){  // if it doesn't exist, create
-			Directory.CreateDirectory(dir);
-		}
 		if (vars.ILtype > -1) {			
 			vars.LoadTexts = true;
-		} else {
-			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
-			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!!
-			if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!!
-				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!!
-			}
 		}
 		
 		if (settings["UseDatabase"] && !settings["NoSplitNames"]){
 			// WE CREATE ALL NECESSARY DIRECTORIES!
 			
-			dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\";  // folder location
+			var dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\";  // folder location
 			if (!Directory.Exists(dir)){  // if it doesn't exist, create
 				Directory.CreateDirectory(dir);
 			}	
@@ -531,33 +499,21 @@ start
 
 exit
 {	
-	var dir = @"C:\Autosplit Backup Files\";  // folder location
-	if (!Directory.Exists(dir)){  // if it doesn't exist, create
-		Directory.CreateDirectory(dir);
-	}		
-	File.WriteAllText(@"C:\Autosplit Backup Files\n", "" + vars.n); // Backup for keeping the splits in Oddysee incase of a game crash.	
 	if (vars.gnBeforeMainMenu > 0) { // Did we go back to the main menu? :/
-		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.	
+		vars.PreviousTime = ((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime; // Backup for keeping the previous time in Oddysee incase of a game crash.
 	} else { // If we just closed the game.
-		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.			
+		vars.PreviousTime = ((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime; // Backup for keeping the previous time in Oddysee incase of a game crash.
 	}	
 	vars.StartgnFrame = 0;
 	vars.SPLIT_INFO = "Game has closed.";
-	if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-		File.WriteAllText(@"C:\Autosplit Backup Files\LostFrames", "" + vars.DB_LOST_FRAMES_TOTAL); // 
-		File.WriteAllText(@"C:\Autosplit Backup Files\GoldFrames", "" + vars.DB_GOLD_FRAMES_TOTAL); // 
-	}
 }
 
 reset
 {
-	if (vars.ResetStatus == 2){ // Start on main menu
-		vars.ResetStatus = 0;
+	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){
 		vars.StartgnFrame = 0;
 		vars.PauseStartTime = -1;
-		return true;		
-	} else {
-		return false;
+		return true;
 	}
 }
 
@@ -643,10 +599,6 @@ split
 	int IsGameBeaten = -1;	
 	vars.DBSplit = false;
 	
-	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){ // Reset? On English?
-		vars.ResetStatus = 2;
-	}
-
 	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
 	O_PATH_ID = vars.watchers["PATH_ID"].Old;
 	C_PATH_ID = vars.watchers["PATH_ID"].Current;
@@ -663,11 +615,6 @@ split
 		
 		if (LEVEL_ID > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) { // WE JUST RESTARTED THE GAME AND LOADED!!
 			vars.StartgnFrame = gnFrame; 
-			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 
-			if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!! 
-				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!! 
-			}
 		}		
 		
 		if (IsGameRunning == 1){ // if the game is paused...
@@ -3979,10 +3926,7 @@ split
 	
 // LOG TOOL FOR DEBUG. 	
 	if (gnFrame > 1){
-		if (vars.ResetStatus == 1) {
-			vars.ResetStatus = 2;
-			vars.SPLIT_INFO = "Main Menu [" + vars.n + "]\nReset performed." ;
-		} else if (LEVEL_ID == 0){		
+		if (LEVEL_ID == 0){		
 			vars.SPLIT_INFO = "Main Menu [" + vars.n + "]\nGLOBAL AutoSplit started. Lang detected: " + vars.version + ".";
 		} else {	
 			if (settings["RealGameTime"]){	
