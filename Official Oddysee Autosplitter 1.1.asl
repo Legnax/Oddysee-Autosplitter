@@ -1,6 +1,6 @@
-//	Official Autosplitter 3.2 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database. DDG cats and alt glitched cats included.
-//	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift.
-//  DATE OF LAST EDITION-> 04-02-2023
+//	Official Autosplitter 4.0 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database. DDG cats and alt glitched cats included.
+//	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift. Optimized by UltraStars3000.
+//  DATE OF LAST EDITION-> 30-12-2024
 
  // Added this so the ASL Var Viewer has at least one opcode loaded by default (even if it's unused). 
 	state("AbeWin") { byte use_Variables_option_instead  : 0x1C3030; }
@@ -12,8 +12,8 @@ startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 3.2 (Feb 04th, 2023) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Added Any% to the split database feature.\n- Added new categories: Good Ending NMG, 50/50 Glitched, all glitched categories with DDG.\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
+	settings.Add("Version", true, "Official Version 4.0 (Dec 30th, 2024) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized in-game time handling, making the internal LiveSplit timer consistent with the variable one.\n- Removed the need of backup files when restarting the game during a run.\n- Added Any% to the split database feature.\n- Added new categories: Good Ending NMG, 50/50 Glitched, all glitched categories with DDG.\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names, zones or database feature. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -67,11 +67,8 @@ startup
 	
 	settings.Add("UsingIL", false, "INDIVIDUAL LEVELS - Check this to activate");
 	settings.SetToolTip("UsingIL", "Leave this option unchecked to not use.\nAutosplit will priorize autosplit category over Individual Levels, so make sure you disable AUTOSPLIT GAME CATEGORY if you want to use ILs!\nYou need the splits file for the IL splits to work correctly. \nDOWNLOAD THEM AT http://tiny.cc/Splits1 !\nExcept for RuptureFarms, you need to use the Cheat Code in order for the autosplit to start.\nCHEAT CODE: Keep pressed run button and press ↓ → ← → ← → ← ↑ on the main menu.\n-> INDIVIDUAL LEVEL LIST <-\n- RuptureFarms (start a new game)\n- Stockyards\n- Monsaic Lines\n- Paramonia\n- Paramonian Temple\n- Scrabania\n- Scrabanian Temple\n- Free Fire Zone\n- Zulag 1\n- Zulag 2\n- Zulag 3\n- Zulag 4");
-}
 
-init
-{	
-
+	// Variables initialization
 	vars.You_can_show_the_following_variables_on_runs = "Ahh, I see!";
 	vars.SPLIT_INFO = "Autosplitter started";
 	vars.REAL_TIME_AND_LOADLESS_TIME = "Both timers\nwill be displayed here";
@@ -83,7 +80,14 @@ init
 	vars.DB_GOLD_FRAMES_TOTAL = 0;
 	vars.____________________________________ = "Ignore this.";
 	vars.You_can_NOT_show_the_following_variables_on_runs = "Only the 6 above ones can be used.";
-	
+
+	vars.n = 0;
+	vars.PreviousTime = 0;
+	vars.CurrentSplitBestFrame = 0;
+}
+
+init
+{		
 // ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 265 ##################
 
 	print("+init");
@@ -288,11 +292,9 @@ init
 		refreshRate = 40;	
 	}
 	vars.PrimeraVez = true; // If true, loads the level names on memory and sets itself to False.
-	string[] splitt = new string[70]; // Creates the array for the split names.
-	vars.split = splitt; // Split names.
+	vars.split = new string[70]; // Split names.
 	bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 	vars.trialCheck = trialCheckk; // Used to check the trials in order to verify if the screen with the lever that flags the level as completed was visited.
-	vars.ResetStatus = 0; // If 1, the autosplit will reset.
 	vars.StartgnFrame = 0;
 	vars.gnFrameCurrent = 0;
 	vars.gnBeforeMainMenu = 0;
@@ -304,38 +306,15 @@ init
 	vars.fps = 30.3; // FPS of the game. proven to be 30.3 doing performance checks.
 	vars.ILtype = -1; // 0 = RuptureFarms | 1 = Stockyards | 2 = Paramonia | 3 = Scrabania | 4 = Zulag 1 | 5 = Zulag 2 | 6 = Zulag 3 | 7 = Zulag 4
 	vars.splitName = "";
+
+	vars.isLevelSelect = false;
 	
-	vars.CurrentSplitBestFrame = 0;
 	vars.FramesUpToPreviousFrame = 0;
-	vars.DatabaseName = splitt; // Database names for storing splits
+	vars.DatabaseName = new string[70]; // Database names for storing splits
 	vars.DBSplit = false;
 	
 	// vars.Database_Current_Split = "";
-	
-	if (File.Exists(@"C:\Autosplit Backup Files\n")) { // We conveniently recover the Oddysee current split 
-		vars.n = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\n"));
-		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {
-			vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
-		}
-	} else {		
-		vars.n = 0;		// CHANGE LATER!! - A counting variable that tracks progress (only resets if game loads on proper way).
-	}
 		
-	if (File.Exists(@"C:\Autosplit Backup Files\previousTime")) { // We conveniently recover the previous time spent on the run (this resets if you start a new game)		
-		vars.PreviousTime = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\previousTime"));
-		if (settings["UseDatabase"] && !settings["NoSplitNames"]){	
-			if (File.Exists(@"C:\Autosplit Backup Files\LostFrames")){
-				vars.DB_LOST_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\LostFrames"));
-				vars.DB_GOLD_FRAMES_TOTAL = double.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\GoldFrames"));		
-			} else {
-				vars.DB_LOST_FRAMES_TOTAL = 0;
-				vars.DB_GOLD_FRAMES_TOTAL = 0;					
-			}
-		}
-	} else {		
-		vars.PreviousTime = 0;
-	}	
-
 	print("-init");
 }
 
@@ -355,6 +334,33 @@ update
 	print("IsGameRunning = " + vars.watchers["IsGameRunning"].Current.ToString());
 	print("IsGameBeaten = " + vars.watchers["IsGameBeaten"].Current.ToString());
 	*/
+
+	if (vars.watchers["LEVEL_ID"].Current == 0){ // MAIN SCREEN
+		if (vars.gnBeforeMainMenu == 0){
+			vars.gnBeforeMainMenu = vars.watchers["gnFrame"].Current;
+		}
+	} else {
+		vars.gnBeforeMainMenu = 0;
+	}
+
+	// WE JUST RESTARTED THE GAME AND LOADED!!
+	if (vars.watchers["LEVEL_ID"].Current > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) {
+		vars.StartgnFrame = vars.watchers["gnFrame"].Current; 
+	}
+
+	// Pause time handle
+	if (vars.watchers["IsGameRunning"].Current == 1){ // if the game is paused...
+		vars.Epoch = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
+		if (vars.PauseStartTime == -1){ // Paused for the first time.
+			vars.PauseStartTime = vars.Epoch;
+		}		
+	} else {		
+		if (vars.PauseStartTime > 0){ // Unpaused for the first time.
+			vars.MillisecondsPaused = vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime);
+			vars.PauseStartTime = -1;
+		}
+	}
+
 }
 
 // #############################
@@ -363,129 +369,77 @@ update
 
 start
 {	
-	if (settings["UsingIL"]){ 		
-			vars.StartgnFrame = 0;
-	// We start on RuptureFarms, normal. 0
-		// if (settings["ILRupturefarms"]){ 
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 0;	
-			}
+	// Checking for the Level Select screen
+	if(vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Current == 31) {
+		vars.isLevelSelect = true;
+	}
+	// Once back in the Main screen
+	if(vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Current == 1) {
+		vars.isLevelSelect = false;
+	}
+	vars.StartgnFrame = 0;
 
-	// We start on Stockyards, cheat code.
-		// } else if (settings["ILStockyards"]){ 
-			int l = 5;
-			int p = 6;
-			int c = 6;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 1;		
-			}
-
-	// We start on Paramonia, cheat code.
-		// } else if (settings["ILParamonia"]){ 
-			l = 3;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 2;		
-			}
-			
-	// We start on Scrabania, cheat code.
-		// } else if (settings["ILScrabania"]){ 
-			l = 8;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 3;		
-			}
-			
-	// We start on Zulag 1, cheat code.
-		// } else if (settings["ILZulag1"]){ 
-			l = 6;
-			p = 4;
-			c = 7;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 4;		
-			}
-			
-	// We start on Zulag 2, cheat code.
-		// } else if (settings["ILZulag2"]){ 
-			l = 13;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 5;			
-			}
-			
-	// We start on Zulag 3, cheat code.
-		// } else if (settings["ILZulag3"]){ 
-			l = 13;
-			p = 13;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 6;		
-			}
-			
-	// We start on Zulag 4, cheat code.
-		// } else if (settings["ILZulag4"]){ 
-			l = 13;
-			p = 14;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 7;			
-			}
-			
-			// This is for Monsaic lines (ID 8)
-			l = 2;
-			p = 1;
-			c = 14;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 8;			
-			}
-			
-			// This is for Paramonian Temple (ID 9)
-			l = 4;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 9;			
-			}
-			
-			// This is for Scrabanian Temple (ID 10)
-			l = 9;
-			p = 1;
-			c = 1;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 10;			
-			}
-			
-			// This is for Zulag 1 (ID 11)
-			l = 13;
-			p = 19;
-			c = 3;
-			if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == l && vars.watchers["PATH_ID"].Current == p && vars.watchers["CAM_ID"].Current == c) {
-				vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-				vars.ILtype = 11;			
-			}
-
-		// }
-	} else { // NORMAL GAME START HERE!
-		
-		// ENGLISH		
-		if (vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["PATH_ID"].Old == 1 && vars.watchers["CAM_ID"].Old == 21 && vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+	// On exiting the main menu level
+	if(vars.watchers["LEVEL_ID"].Old == 0 && vars.watchers["LEVEL_ID"].Current != 0) {
+		if (settings["UsingIL"] && vars.isLevelSelect){
 			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
-		} else {
-			vars.StartgnFrame = 0;
+
+			// The reason we check each level individually is because:
+			// - The ILtype variable doesn't match the game level select index
+			// - A dynamic pointer offset is needed to retrieve the game level select index
+
+			// Stockyards
+			if(vars.watchers["LEVEL_ID"].Current == 5) {
+				vars.ILtype = 1;
+			}
+			// Paramonia
+			if(vars.watchers["LEVEL_ID"].Current == 3) {
+				vars.ILtype = 2;
+			}
+			// Scrabania
+			if(vars.watchers["LEVEL_ID"].Current == 8) {
+				vars.ILtype = 2;
+			}
+			// Free Fire Zone
+			if(vars.watchers["LEVEL_ID"].Current == 6) {
+				vars.ILtype = 4;
+			}
+			// Zulag 2
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 1) {
+				vars.ILtype = 5;
+			}
+			// Zulag 3
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 13) {
+				vars.ILtype = 6;
+			}
+			// Zulag 4
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 14) {
+				vars.ILtype = 7;
+			}
+			// Monsaic Lines
+			if(vars.watchers["LEVEL_ID"].Current == 2) {
+				vars.ILtype = 8;
+			}
+			// Paramonian Temple
+			if(vars.watchers["LEVEL_ID"].Current == 4) {
+				vars.ILtype = 9;
+			}
+			// Scrabanian Temple
+			if(vars.watchers["LEVEL_ID"].Current == 9) {
+				vars.ILtype = 10;
+			}
+			// Zulag 1
+			if(vars.watchers["LEVEL_ID"].Current == 13 && vars.watchers["PATH_ID"].Current == 19) {
+				vars.ILtype = 11;
+			}
+		}
+
+		// RuptureFarms (for both IL and full runs)
+		if(vars.watchers["LEVEL_ID"].Current == 1 && vars.watchers["PATH_ID"].Current == 15 && vars.watchers["CAM_ID"].Current == 1) {
+			vars.StartgnFrame = vars.watchers["gnFrame"].Current;
+			if(settings["UsingIL"]) {
+				vars.ILtype = 0;
+			}
 		}
 	}
 	
@@ -497,25 +451,14 @@ start
 		vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;		
 		bool[] trialCheckk = new bool[7]; // 0 = 2-1. 1 = 2-2. 2 = 2-3. 3 = 3-1. 4 = 3-2. 5 = 3-3. 6 = 4-1.
 		vars.trialCheck = trialCheckk;
-		var dir = @"C:\Autosplit Backup Files\";  // folder location 		
-		if (!Directory.Exists(dir)){  // if it doesn't exist, create
-			Directory.CreateDirectory(dir);
-		}
 		if (vars.ILtype > -1) {			
 			vars.LoadTexts = true;
-		} else {
-			File.Delete(@"C:\Autosplit Backup Files\n"); // Important!! 
-			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!!
-			if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!!
-				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!!
-			}
 		}
 		
 		if (settings["UseDatabase"] && !settings["NoSplitNames"]){
 			// WE CREATE ALL NECESSARY DIRECTORIES!
 			
-			dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\";  // folder location
+			var dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\";  // folder location
 			if (!Directory.Exists(dir)){  // if it doesn't exist, create
 				Directory.CreateDirectory(dir);
 			}	
@@ -583,103 +526,61 @@ start
 
 exit
 {	
-	var dir = @"C:\Autosplit Backup Files\";  // folder location
-	if (!Directory.Exists(dir)){  // if it doesn't exist, create
-		Directory.CreateDirectory(dir);
-	}		
-	File.WriteAllText(@"C:\Autosplit Backup Files\n", "" + vars.n); // Backup for keeping the splits in Oddysee incase of a game crash.	
 	if (vars.gnBeforeMainMenu > 0) { // Did we go back to the main menu? :/
-		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.	
+		vars.PreviousTime = ((vars.gnBeforeMainMenu - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime; // Backup for keeping the previous time in Oddysee incase of a game crash.
 	} else { // If we just closed the game.
-		File.WriteAllText(@"C:\Autosplit Backup Files\previousTime", "" + (((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime)); // Backup for keeping the previous time in Oddysee incase of a game crash.			
+		vars.PreviousTime = ((vars.gnFrameCurrent - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime; // Backup for keeping the previous time in Oddysee incase of a game crash.
 	}	
 	vars.StartgnFrame = 0;
 	vars.SPLIT_INFO = "Game has closed.";
-	if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-		File.WriteAllText(@"C:\Autosplit Backup Files\LostFrames", "" + vars.DB_LOST_FRAMES_TOTAL); // 
-		File.WriteAllText(@"C:\Autosplit Backup Files\GoldFrames", "" + vars.DB_GOLD_FRAMES_TOTAL); // 
-	}
 }
 
 reset
 {
-	if (vars.ResetStatus == 2){ // Start on main menu
-		vars.ResetStatus = 0;
+	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){
 		vars.StartgnFrame = 0;
 		vars.PauseStartTime = -1;
-		return true;		
-	} else {
-		return false;
+		return true;
 	}
 }
 
+gameTime
+{
+	TimeSpan gameTimeTimeSpan;
 
-isLoading
-{		
-	if (settings["10Rate"]){
-		refreshRate = 10;
-	} else if (settings["30Rate"]){
-		refreshRate = 30;
-	} else if (settings["50Rate"]){
-		refreshRate = 50;
-	} else if (settings["100Rate"]){
-		refreshRate = 100;
-	} else {
-		refreshRate = 40;	
-	}
-	
-	long gnFrame = 0;
-	short IsGameRunning = 0;
-	int LEVEL_ID = -1;
-	int abeY = -1;
-
-	IsGameRunning = vars.watchers["IsGameRunning"].Current;
-	gnFrame = vars.watchers["gnFrame"].Current;
-	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
-	abeY = vars.watchers["abeY"].Current;
-	
-	if (LEVEL_ID == 0){ // MAIN SCREEN
-		if (vars.gnBeforeMainMenu == 0){
-			vars.gnBeforeMainMenu = gnFrame;
-		}
-		return true;
-	} else {
-		vars.gnBeforeMainMenu = 0;
-	}
-	
-	if (gnFrame > 0) {
+	if (vars.watchers["gnFrame"].Current > 0) {
 		vars.REAL_TIME = TimeSpan.Parse(System.Convert.ToString(timer.CurrentTime.RealTime)).ToString(@"h\:mm\:ss\.fff");
-		vars.GNFrame = gnFrame - vars.StartgnFrame;
+		if (vars.StartgnFrame == 0) { // So the IGT doesn't look like it decrements upon loading a save after restarting the game
+			vars.GNFrame = 0;
+		} else if (vars.watchers["LEVEL_ID"].Current == 0){ // So the IGT doesn't increment while on main menu
+			vars.GNFrame = vars.gnBeforeMainMenu - vars.StartgnFrame;
+		} else {
+			vars.GNFrame = vars.watchers["gnFrame"].Current - vars.StartgnFrame;
+		}
 		
 		if (settings["UseDatabase"] && !settings["NoSplitNames"]){
 			if (vars.CurrentSplitBestFrame > 0) {
 				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / " + vars.CurrentSplitBestFrame;
 			} else {
 				vars.DB_CURRENT_SPLIT = (vars.GNFrame - vars.FramesUpToPreviousFrame) + " / ????";
-				// vars.DB_CURRENT_SPLIT = "No best frame found for this split yet!";
 			}
 		} 
 		
-		if (IsGameRunning == 1){ // if the game is paused...
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
-			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
-			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
-				return true;
-			} else {
-				return false;
-			}
+		if (vars.watchers["IsGameRunning"].Current == 1){ // if the game is paused...
+			gameTimeTimeSpan = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime) + vars.PreviousTime);
 		} else {
-			vars.LOADLESS_TIME = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).ToString(@"h\:mm\:ss\.fff");
-			vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
-			if ((TimeSpan.FromMilliseconds(((gnFrame - vars.StartgnFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime).TotalMilliseconds) < (timer.CurrentTime.GameTime.Value.TotalSeconds * 1000)){ // Is the ingame timer bigger than the gnFrame timer? We will pause it this frame.
-				return true;
-			} else {
-				return false;
-			}
+			gameTimeTimeSpan = TimeSpan.FromMilliseconds(((vars.GNFrame) * 1000 / vars.fps) + vars.MillisecondsPaused + vars.PreviousTime);
 		}
-	} else {
-		return true; // :shrug: 
+
+		vars.LOADLESS_TIME = gameTimeTimeSpan.ToString(@"h\:mm\:ss\.fff");
+		vars.REAL_TIME_AND_LOADLESS_TIME = "Real time = " + vars.REAL_TIME + " \nLoadless time = " + vars.LOADLESS_TIME;
+		return gameTimeTimeSpan;
 	}
+}
+
+isLoading
+{				
+	return true;
 }
 
 split
@@ -690,53 +591,23 @@ split
 	int O_CAM_ID = -1;
 	int C_CAM_ID = -1;
 	int abeY = -1;
-	int IsGameRunning = -1;
 	long gnFrame = -1;
 	int IsGameBeaten = -1;	
 	vars.DBSplit = false;
 	
-	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){ // Reset? On English?
-		vars.ResetStatus = 2;
-	}
-
 	LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
 	O_PATH_ID = vars.watchers["PATH_ID"].Old;
 	C_PATH_ID = vars.watchers["PATH_ID"].Current;
 	O_CAM_ID = vars.watchers["CAM_ID"].Old;
 	C_CAM_ID = vars.watchers["CAM_ID"].Current;
 	abeY = vars.watchers["abeY"].Current;
-	IsGameRunning = vars.watchers["IsGameRunning"].Current;
 	gnFrame = vars.watchers["gnFrame"].Current;
 	IsGameBeaten = vars.watchers["IsGameBeaten"].Current;
 
 	if (gnFrame >= 0){		
 	
 		vars.gnFrameCurrent = gnFrame;
-		
-		if (LEVEL_ID > 0 && vars.PreviousTime > 0 && vars.StartgnFrame == 0) { // WE JUST RESTARTED THE GAME AND LOADED!!
-			vars.StartgnFrame = gnFrame; 
-			File.Delete(@"C:\Autosplit Backup Files\previousTime"); // Important!! 
-			if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-				File.Delete(@"C:\Autosplit Backup Files\LostFrames"); // Important!! 
-				File.Delete(@"C:\Autosplit Backup Files\GoldFrames"); // Important!! 
-			}
-		}		
-		
-		if (IsGameRunning == 1){ // if the game is paused...
-			vars.Epoch = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
-			if (vars.PauseStartTime == -1){ // Paused for the first time.
-				vars.PauseStartTime = vars.Epoch;
-			}		
-			
-		} else {		
-		
-			if (vars.PauseStartTime > 0){ // Unpaused for the first time.
-				vars.MillisecondsPaused = vars.MillisecondsPaused + (vars.Epoch - vars.PauseStartTime);
-				vars.PauseStartTime = -1;
-			}
-			
-		}
-		
+				
 		if (LEVEL_ID == 8 && vars.n > 8 && vars.n < 15 && vars.ParamoniaFirst){
 			vars.ParamoniaFirst = false;
 			vars.LoadTexts = true;
@@ -4031,10 +3902,7 @@ split
 	
 // LOG TOOL FOR DEBUG. 	
 	if (gnFrame > 1){
-		if (vars.ResetStatus == 1) {
-			vars.ResetStatus = 2;
-			vars.SPLIT_INFO = "Main Menu [" + vars.n + "]\nReset performed." ;
-		} else if (LEVEL_ID == 0){		
+		if (LEVEL_ID == 0){		
 			vars.SPLIT_INFO = "Main Menu [" + vars.n + "]\nGLOBAL AutoSplit started. Lang detected: " + vars.version + ".";
 		} else {	
 			if (settings["RealGameTime"]){	
