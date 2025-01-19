@@ -398,7 +398,7 @@ start
 			}
 			// Scrabania
 			if(vars.watchers["LEVEL_ID"].Current == 8) {
-				vars.ILtype = 2;
+				vars.ILtype = 3;
 			}
 			// Free Fire Zone
 			if(vars.watchers["LEVEL_ID"].Current == 6) {
