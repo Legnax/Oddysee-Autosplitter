@@ -1,19 +1,22 @@
-//	Official Autosplitter 4.0 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database. DDG cats and alt glitched cats included.
-//	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift. Optimized by UltraStars3000.
-//  DATE OF LAST EDITION-> 30-12-2024
+//	Official Autosplitter 4.2 for Abe's Oddysee for PC. Any version. Any language. Any category. Any IL. Loadless time. Frame database. DDG cats and alt glitched cats included.
+//	Works with PS1 Abe's Oddysee on Duckstation. Currently supported versions: US 1.0, US 1.1, Europe
+//	Created by LegnaX. Relive support by Paul (paulsapps.com) and mouzedrift. Optimized by UltraStars3000. Duckstation support by NanobotZ.
+//  DATE OF LAST EDITION-> 28-04-2025
 
  // Added this so the ASL Var Viewer has at least one opcode loaded by default (even if it's unused). 
 	state("AbeWin") { byte use_Variables_option_instead  : 0x1C3030; }
 	state("AliveExeAO") { byte use_Variables_option_instead  : 0x1C3030; }
 	state("AliveExe") { byte use_Variables_option_instead  : 0x1C3030;  }
 	state("relive") { byte use_Variables_option_instead  : 0x1C3030;  }
+	state("duckstation-qt-x64-ReleaseLTCG") { byte use_Variables_option_instead  : 0x1C3030;  }
+	state("duckstation-nogui-x64-ReleaseLTCG") { byte use_Variables_option_instead  : 0x1C3030;  }
 
 startup
 {	
 	// ++++++++++ GENERAL SETTINGS ++++++++++
 	
-	settings.Add("Version", true, "Official Version 4.0 (Dec 30th, 2024) - LegnaX#7777 - CHANGELOG");
-	settings.SetToolTip("Version", "-- CHANGELOG --\n- Optimized in-game time handling, making the internal LiveSplit timer consistent with the variable one.\n- Removed the need of backup files when restarting the game during a run.\n- Added Any% to the split database feature.\n- Added new categories: Good Ending NMG, 50/50 Glitched, all glitched categories with DDG.\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
+	settings.Add("Version", true, "Official Version 4.2 (April 28th, 2025) - LegnaX#7777 - CHANGELOG");
+	settings.SetToolTip("Version", "-- CHANGELOG --\n- (4.2) Potentially fixed Duckstation memory scanning.\n(4.1) Added Duckstation support.\n- Optimized in-game time handling, making the internal LiveSplit timer consistent with the variable one.\n- Removed the need of backup files when restarting the game during a run.\n- Added Any% to the split database feature.\n- Added new categories: Good Ending NMG, 50/50 Glitched, all glitched categories with DDG.\n- Added the new option of Split Database, and the ability to track and store the best frame time for each split for each category!\n- Optimized the code in order to prevent getting stuck on the trials.\n- Added extra refresh rate options and updated tooltip descriptions.\n- Improved some split descriptions and names.\n- Added several checks for the trials on Zulag 2 and 3. Should prevent premature splits.\n- Fixed an issue with the chrono variable not being properly reseted when manually resetting the livesplit being inside the pause menu.\n- Fixed a faulty check on Zulag 3 trial 1.\n- Added individual levels!\n- Fixed a missing split on Zulag 1 (last one) for ILs.\n- Optimized how ILs work, and as soon as the last split is done, the variable Log will output your precise RTA and IGT times.\n- Added Monsaic Lines as new IL, and split Scrabania, Paramonia and Zulag 1. Now The main level and the temple are separated, and FFZ it's a separated level from Zulag 1.\n- Created new variable: GNFrame, which can be used and displayed during runs to see the amount of frames elapsed during the actual run (useful for ILs).\n- The code was broken. It has been restructured. Sorry!\n- Adjusted the last split of Paramonia Temple IL to Spam split just in case.\n- Fixed a major glitch happening with users that didn't have the autosplitter before. The 'C:/Autosplit Backup Files/' directory wasn't getting created properly, so the autosplitter was unable to start.\n- Added 50/50 and Max Cas NMG to the categories list.\n- Fixed an issue with the language not getting saved properly.\n- The entire exit sequence was commented! So nothing was being saved upon game restart. Now it does! My bad.\n- NMS is now NMG. Updated the category name.\n- Fixed an OBVIOUS game over split issue that should have NEVER happen. My god.\n- Fixed a visual glitch with the IGT.\n- Added relive support and completely revamped the language detection system for all versions (thanks to Paul, paulsapps.com). Code should be more optimal, too\n- Adjusted how the real time shows on the autosplitter (using ASL Var Viewer). Also made Log to be selectable on the list of allowed variables.\n- Fixed a problem with the splits when selecting Scrabania first on a different category than Any% NMG.\n   It should WORK on every category now (thanks to kongy654).\n- [May 26th, 2022] Added support for relive (thanks to mouzedrift).");
 	
 	settings.Add("NoSplitNames", false, "LIGHT VERSION");
 	settings.SetToolTip("NoSplitNames", "No split names, zones or database feature. Just loadless time and autosplitter. \nThis should make the code of the autosplitter way lighter, at least when starting the execution.");
@@ -84,202 +87,226 @@ startup
 	vars.n = 0;
 	vars.PreviousTime = 0;
 	vars.CurrentSplitBestFrame = 0;
+	
+	vars.duckstationProcessNames = new List<string> {
+		"duckstation-qt-x64-ReleaseLTCG",
+		"duckstation-nogui-x64-ReleaseLTCG",
+	};
+	vars.duckstation = false;
 }
 
 init
 {		
-// ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 265 ##################
+// ################## PAUL'S BLACK MAGIC STARTS HERE UNTIL LINE 305 ##################
 
 	print("+init");
+	
+	if (vars.duckstationProcessNames.Contains(game.ProcessName)) {
+		vars.duckstation = true;
+		vars.version = "DuckStation";
+		vars.baseRAMAddress = IntPtr.Zero;
+		vars.duckstationBaseRAMAddressFound = false;
+		vars.duckstationStopwatch = new Stopwatch();
+		vars.DUCKSTATION_ADDRESS_SEARCH_INTERVAL = 3000;
+	}
+	else {
+		vars.duckstation = false;
+		// Detect which version/language of the game we are running, load the entire code section to an array
+		print("Reading " +  modules.First().ModuleMemorySize.ToString() + " bytes from the first module base address");
+		var moduleMemory = memory.ReadBytes(modules.First().BaseAddress, modules.First().ModuleMemorySize);
+		string converted = Encoding.UTF8.GetString(moduleMemory, 0, moduleMemory.Length);
+		print("Read code section as a string");
 
-	// Detect which version/language of the game we are running, load the entire code section to an array
-	print("Reading " +  modules.First().ModuleMemorySize.ToString() + " bytes from the first module base address");
- 	var moduleMemory = memory.ReadBytes(modules.First().BaseAddress, modules.First().ModuleMemorySize);
-	string converted = Encoding.UTF8.GetString(moduleMemory, 0, moduleMemory.Length);
-	print("Read code section as a string");
+		vars.version = "";
 
-	vars.version = "";
+		vars.SigScan = (Func<Process, int, string, IntPtr>)((proc, offset, signature) => {
+			var target = new SigScanTarget(offset, signature);
+			IntPtr result = IntPtr.Zero;
+			foreach (var page in proc.MemoryPages(true)) {
+				var scanner = new SignatureScanner(proc, page.BaseAddress, (int)page.RegionSize);
+				if ((result = scanner.Scan(target)) != IntPtr.Zero) {
+					break;
+				}
+			}
 
-	vars.SigScan = (Func<Process, int, string, IntPtr>)((proc, offset, signature) => {
-        var target = new SigScanTarget(offset, signature);
-        IntPtr result = IntPtr.Zero;
-        foreach (var page in proc.MemoryPages(true)) {
-            var scanner = new SignatureScanner(proc, page.BaseAddress, (int)page.RegionSize);
-            if ((result = scanner.Scan(target)) != IntPtr.Zero) {
-                break;
-            }
-        }
+			return result;
+		});
 
-        return result;
-    });
-
-	for (;;)
-	{	
-		// First check if this is relive
-		int pos = converted.IndexOf("{1D2E2B5A-19EE-4776-A0EE-98F49F781370}");
-		if (pos != -1)
-		{
-			print("Relive Buffer match: " + converted.Substring(pos, 50));
-
-			// Find the guid again via signature scanning to get the RVA offset
-			IntPtr scan = vars.SigScan(game, 0, "7B 31 44 32 45 32 42 35 41 2D 31 39 45 45 2D 34 37 37 36 2D 41 30 45 45 2D 39 38 46 34 39 46 37 38 31 33 37 30 7D 00");
-			if (scan != IntPtr.Zero)
+		for (;;)
+		{	
+			if (vars.duckstation)
 			{
-				print("Scan = " + scan.ToString());
+				// Unfortunately, duckstation doesn't have a static base RAM address,
+				// so we'll have to keep track of it in the update block.
+				break;
+			}
 
-				// Point to data after the guid in the AEGameInfo structure
-				scan += 40;
+			// First check if this is relive
+			int pos = converted.IndexOf("{1D2E2B5A-19EE-4776-A0EE-98F49F781370}");
+			if (pos != -1)
+			{
+				print("Relive Buffer match: " + converted.Substring(pos, 50));
 
-				vars.version = "Relive";				
+				// Find the guid again via signature scanning to get the RVA offset
+				IntPtr scan = vars.SigScan(game, 0, "7B 31 44 32 45 32 42 35 41 2D 31 39 45 45 2D 34 37 37 36 2D 41 30 45 45 2D 39 38 46 34 39 46 37 38 31 33 37 30 7D 00");
+				if (scan != IntPtr.Zero)
+				{
+					print("Scan = " + scan.ToString());
+
+					// Point to data after the guid in the AEGameInfo structure
+					scan += 40;
+
+					vars.version = "Relive";				
+					vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+					
+					// If this guid exists its a 64bit version of relive
+					bool is64Bit = converted.IndexOf("{069DDB51-609D-49AB-B69D-5CC6D13E73EE}") != -1;
+					int gamePointerSize = is64Bit ? 8 : 4;
+
+					print("Pointer size = " + gamePointerSize.ToString());
+
+					vars.watchers = new MemoryWatcherList
+					{
+						new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (1*gamePointerSize)))) { Name = "LEVEL_ID" },
+						new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (2*gamePointerSize)))) { Name = "PATH_ID" },
+						new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (3*gamePointerSize)))) { Name = "CAM_ID" },
+						new MemoryWatcher<int>(new DeepPointer(memory.ReadPointer(scan + (4*gamePointerSize)))) { Name = "gnFrame" },
+						new MemoryWatcher<short>(new DeepPointer(memory.ReadPointer(scan + (5*gamePointerSize)), new int[] {memory.ReadValue<int>(scan + (6*gamePointerSize))})) { Name = "abeY" },
+						new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (7*gamePointerSize)))) { Name = "IsGameRunning" },
+						new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (8*gamePointerSize)))) { Name = "IsGameBeaten" },
+					};
+				}
+				break;
+			}
+
+			// Then look in the array for the quit strings which are localised to figure out which language this is (for the original game)
+			pos = converted.IndexOf("Do you really want to quit ?");
+			if (pos != -1)
+			{
+				print("English Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "English";
 				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-				
-				// If this guid exists its a 64bit version of relive
-				bool is64Bit = converted.IndexOf("{069DDB51-609D-49AB-B69D-5CC6D13E73EE}") != -1;
-				int gamePointerSize = is64Bit ? 8 : 4;
-
-				print("Pointer size = " + gamePointerSize.ToString());
-
 				vars.watchers = new MemoryWatcherList
 				{
-					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (1*gamePointerSize)))) { Name = "LEVEL_ID" },
-					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (2*gamePointerSize)))) { Name = "PATH_ID" },
-					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (3*gamePointerSize)))) { Name = "CAM_ID" },
-					new MemoryWatcher<int>(new DeepPointer(memory.ReadPointer(scan + (4*gamePointerSize)))) { Name = "gnFrame" },
-					new MemoryWatcher<short>(new DeepPointer(memory.ReadPointer(scan + (5*gamePointerSize)), new int[] {memory.ReadValue<int>(scan + (6*gamePointerSize))})) { Name = "abeY" },
-					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (7*gamePointerSize)))) { Name = "IsGameRunning" },
-					new MemoryWatcher<byte>(new DeepPointer(memory.ReadPointer(scan + (8*gamePointerSize)))) { Name = "IsGameBeaten" },
+					new MemoryWatcher<byte>(new DeepPointer(0x107BA8)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x107BAA)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x107BAC)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x107670)) { Name = "gnFrame" }, // Ingame frame counter.
+					new MemoryWatcher<short>(new DeepPointer(0x107678, new int[] {0xAE})) { Name = "abeY" }, // Needed for the Zulag 4 split.
+					new MemoryWatcher<byte>(new DeepPointer(0x1080E4)) { Name = "IsGameRunning" }, // Paused game = 1
+					new MemoryWatcher<byte>(new DeepPointer(0x1055AE)) { Name = "IsGameBeaten" }, // When variable 70 is true on the Boardroom. Game beaten = 1.
 				};
+				break;
 			}
-			break;
-		}
 
-		// Then look in the array for the quit strings which are localised to figure out which language this is (for the original game)
-		pos = converted.IndexOf("Do you really want to quit ?");
-		if (pos != -1)
-		{
-			print("English Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "English";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
+			pos = converted.IndexOf("Seguro que quieres salir?"); // Only check the ascii chars
+			if (pos != -1) 
 			{
-				new MemoryWatcher<byte>(new DeepPointer(0x107BA8)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x107BAA)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x107BAC)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x107670)) { Name = "gnFrame" }, // Ingame frame counter.
-				new MemoryWatcher<short>(new DeepPointer(0x107678, new int[] {0xAE})) { Name = "abeY" }, // Needed for the Zulag 4 split.
-				new MemoryWatcher<byte>(new DeepPointer(0x1080E4)) { Name = "IsGameRunning" }, // Paused game = 1
-				new MemoryWatcher<byte>(new DeepPointer(0x1055AE)) { Name = "IsGameBeaten" }, // When variable 70 is true on the Boardroom. Game beaten = 1.
-			};
-			break;
-		}
+				print("Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "Spanish";
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(0x108332)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108334)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108336)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x107DF0)) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(0x107DF8, new int[] {0xAE})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108864)) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(0x105D2E)) { Name = "IsGameBeaten" },
+				};
+				break;
+			}
+			
+			pos = converted.IndexOf("de vouloi quitter?"); // Only check the ascii chars
+			if (pos != -1) 
+			{
+				print("French Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "French";
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(0x108382)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108384)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108386)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x107E40)) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(0x107E48, new int[] {0xAE})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(0x1088B4)) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(0x105D7E)) { Name = "IsGameBeaten" },
+				};
+				break;
+			}
+			
+			pos = converted.IndexOf("Willst Du wirklich aufh"); // Only check the ascii chars
+			if (pos != -1)
+			{
+				print("German Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "German";
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(0x108342)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108344)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108346)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x107E00)) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(0x107E0C, new int[] {0xAE})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108874)) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(0x105D3E)) { Name = "IsGameBeaten" },
+				};
+				break;
+			}
+			
+			pos = converted.IndexOf("Desideri realmente uscire?");
+			if (pos != -1)
+			{
+				print("Italian Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "Italian";
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(0x108222)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108224)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108226)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x107CE0)) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(0x107CE8, new int[] {0xAE})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108754)) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(0x105C1E)) { Name = "IsGameBeaten" },
+				};
+				break;
+			}
 
-		pos = converted.IndexOf("Seguro que quieres salir?"); // Only check the ascii chars
-		if (pos != -1) 
-		{
-			print("Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "Spanish";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
+			pos = converted.IndexOf("Abe Agogo"); // A unique English/ascii string rather than its encoded quit message
+			if (pos != -1)
 			{
-				new MemoryWatcher<byte>(new DeepPointer(0x108332)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108334)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108336)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x107DF0)) { Name = "gnFrame" },
-				new MemoryWatcher<short>(new DeepPointer(0x107DF8, new int[] {0xAE})) { Name = "abeY" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108864)) { Name = "IsGameRunning" },
-				new MemoryWatcher<byte>(new DeepPointer(0x105D2E)) { Name = "IsGameBeaten" },
-			};
-			break;
-		}
-		
-		pos = converted.IndexOf("de vouloi quitter?"); // Only check the ascii chars
-		if (pos != -1) 
-		{
-			print("French Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "French";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
+				print("Japanese Buffer match: " + converted.Substring(pos, 50));
+				vars.version = "Japanese";
+				vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+				vars.watchers = new MemoryWatcherList
+				{
+					new MemoryWatcher<byte>(new DeepPointer(0x108B32)) { Name = "LEVEL_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108B34)) { Name = "PATH_ID" },
+					new MemoryWatcher<byte>(new DeepPointer(0x108B36)) { Name = "CAM_ID" },
+					new MemoryWatcher<int>(new DeepPointer(0x1085F0)) { Name = "gnFrame" },
+					new MemoryWatcher<short>(new DeepPointer(0x1085F8, new int[] {0xAE})) { Name = "abeY" },
+					new MemoryWatcher<byte>(new DeepPointer(0x109084)) { Name = "IsGameRunning" },
+					new MemoryWatcher<byte>(new DeepPointer(0x10652E)) { Name = "IsGameBeaten" },
+				};
+				break;
+			}
+			else
 			{
-				new MemoryWatcher<byte>(new DeepPointer(0x108382)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108384)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108386)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x107E40)) { Name = "gnFrame" },
-				new MemoryWatcher<short>(new DeepPointer(0x107E48, new int[] {0xAE})) { Name = "abeY" },
-				new MemoryWatcher<byte>(new DeepPointer(0x1088B4)) { Name = "IsGameRunning" },
-				new MemoryWatcher<byte>(new DeepPointer(0x105D7E)) { Name = "IsGameBeaten" },
-			};
-			break;
-		}
-		
-		pos = converted.IndexOf("Willst Du wirklich aufh"); // Only check the ascii chars
-		if (pos != -1)
-		{
-			print("German Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "German";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
-			{
-				new MemoryWatcher<byte>(new DeepPointer(0x108342)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108344)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108346)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x107E00)) { Name = "gnFrame" },
-				new MemoryWatcher<short>(new DeepPointer(0x107E0C, new int[] {0xAE})) { Name = "abeY" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108874)) { Name = "IsGameRunning" },
-				new MemoryWatcher<byte>(new DeepPointer(0x105D3E)) { Name = "IsGameBeaten" },
-			};
-			break;
-		}
-		
-		pos = converted.IndexOf("Desideri realmente uscire?");
-		if (pos != -1)
-		{
-			print("Italian Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "Italian";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
-			{
-				new MemoryWatcher<byte>(new DeepPointer(0x108222)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108224)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108226)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x107CE0)) { Name = "gnFrame" },
-				new MemoryWatcher<short>(new DeepPointer(0x107CE8, new int[] {0xAE})) { Name = "abeY" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108754)) { Name = "IsGameRunning" },
-				new MemoryWatcher<byte>(new DeepPointer(0x105C1E)) { Name = "IsGameBeaten" },
-			};
-			break;
-		}
-
-		pos = converted.IndexOf("Abe Agogo"); // A unique English/ascii string rather than its encoded quit message
-		if (pos != -1)
-		{
-			print("Japanese Buffer match: " + converted.Substring(pos, 50));
-			vars.version = "Japanese";
-			vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
-			vars.watchers = new MemoryWatcherList
-			{
-				new MemoryWatcher<byte>(new DeepPointer(0x108B32)) { Name = "LEVEL_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108B34)) { Name = "PATH_ID" },
-				new MemoryWatcher<byte>(new DeepPointer(0x108B36)) { Name = "CAM_ID" },
-				new MemoryWatcher<int>(new DeepPointer(0x1085F0)) { Name = "gnFrame" },
-				new MemoryWatcher<short>(new DeepPointer(0x1085F8, new int[] {0xAE})) { Name = "abeY" },
-				new MemoryWatcher<byte>(new DeepPointer(0x109084)) { Name = "IsGameRunning" },
-				new MemoryWatcher<byte>(new DeepPointer(0x10652E)) { Name = "IsGameBeaten" },
-			};
-			break;
-		}
-		else
-		{
-			// Unknown
-			print("Unknown game");
-			break;
+				// Unknown
+				print("Unknown game");
+				break;
+			}
 		}
 	}
 	
-// ############ PAUL'S BLACK MAGIC ENDS HERE (STARTED AT LINE 78) ##################
+// ############ PAUL'S BLACK MAGIC ENDS HERE (STARTED AT LINE 100) ##################
 	
 	
 	vars.LoadTexts = false;
-	vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
+	//vars.ModuleMemory = modules.First().ModuleMemorySize; // So we know the ModuleMemory of this game (UNUSED).
 	if (settings["10Rate"]){
 		refreshRate = 10;
 	} else if (settings["30Rate"]){
@@ -323,7 +350,134 @@ init
 
 update
 {
-    vars.watchers.UpdateAll(game);
+	if (vars.duckstation) {
+		// Find base RAM address in Duckstation by searching its memory pages.
+		// Do this periodically (using stopwatch to determine when to search again) 
+		// instead of every update to reduce unnecessary computation.
+		if (!vars.duckstationBaseRAMAddressFound) {
+			if (!vars.duckstationStopwatch.IsRunning || vars.duckstationStopwatch.ElapsedMilliseconds > vars.DUCKSTATION_ADDRESS_SEARCH_INTERVAL) {
+				vars.duckstationStopwatch.Start();
+				List<MemoryBasicInformation> memoryModules = new List<MemoryBasicInformation>();
+				memoryModules.AddRange(game.MemoryPages(true).Where(p => p.Type == MemPageType.MEM_MAPPED && p.RegionSize == (UIntPtr)0x800000));
+				memoryModules.AddRange(game.MemoryPages(true).Where(p => p.Type == MemPageType.MEM_MAPPED && p.RegionSize == (UIntPtr)0x200000));
+				print("Searching through DuckStation memory pages, count: " + memoryModules.Count.ToString());
+				foreach (var module in memoryModules) {
+					var moduleMemory = memory.ReadBytes(module.BaseAddress, (int)module.RegionSize);
+					string converted = Encoding.UTF8.GetString(moduleMemory, 0, moduleMemory.Length);
+					int pos = -1;
+					
+					for (;;)
+					{
+						pos = converted.IndexOf("SLUS_001.90"); // both US versions will have this
+						if (pos != -1)
+						{
+							print("SLUS_001.90");
+							pos = converted.IndexOf("S1P01C33.CAM"); // CAM only contained in the USA 1.1 version, Exoddus teaser
+							if (pos != -1)
+							{
+								print("S1P01C33.CAM");
+								vars.baseRAMAddress = module.BaseAddress;
+								vars.duckstationStopwatch.Reset();
+								vars.duckstationBaseRAMAddressFound = true;
+								vars.version = "DuckStation, AO US 1.1";
+								vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+								vars.abeYoffset = 0xA6;
+								vars.watchers = new MemoryWatcherList
+								{
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8D2F8)) { Name = "LEVEL_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8D2FA)) { Name = "PATH_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8D2FC)) { Name = "CAM_ID" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x8220C)) { Name = "gnFrame" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x82214)) { Name = "abeY" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8D774)) { Name = "IsGameRunning" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x85256)) { Name = "IsGameBeaten" },
+								};
+								break;
+							}
+							
+							pos = converted.IndexOf("S1P01C31.CAM"); // just checking if it is indeed an Abe game, both 1.0 and 1.1 have this
+							if (pos != -1)
+							{
+								print("S1P01C31.CAM");
+								vars.baseRAMAddress = module.BaseAddress;
+								vars.duckstationStopwatch.Reset();
+								vars.duckstationBaseRAMAddressFound = true;
+								vars.version = "DuckStation, AO US 1.0";
+								vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+								vars.abeYoffset = 0xA6;
+								vars.watchers = new MemoryWatcherList
+								{
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8ABB8)) { Name = "LEVEL_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8ABBA)) { Name = "PATH_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8ABBC)) { Name = "CAM_ID" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x8213C)) { Name = "gnFrame" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x82144)) { Name = "abeY" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8B10C)) { Name = "IsGameRunning" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x82B36)) { Name = "IsGameBeaten" },
+								};
+								break;
+							}
+						}
+						
+						pos = converted.IndexOf("SLES_006.64");
+						if (pos != -1)
+						{
+							print("SLES_006.64");
+							pos = converted.IndexOf("S1P01C31.CAM"); // just checking if it is indeed an Abe game
+							if (pos != -1)
+							{
+								print("S1P01C31.CAM");
+								vars.baseRAMAddress = module.BaseAddress;
+								vars.duckstationStopwatch.Reset();
+								vars.duckstationBaseRAMAddressFound = true;
+								vars.version = "DuckStation, AO EU";
+								vars.SPLIT_INFO = "Autosplitter started. Game version detected-> " + vars.version;
+								vars.abeYoffset = 0xA6;
+								vars.watchers = new MemoryWatcherList
+								{
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8AC52)) { Name = "LEVEL_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8AC54)) { Name = "PATH_ID" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8AC56)) { Name = "CAM_ID" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x821CC)) { Name = "gnFrame" },
+									new MemoryWatcher<int>(new DeepPointer(vars.baseRAMAddress + 0x821D4)) { Name = "abeY" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x8B19C)) { Name = "IsGameRunning" },
+									new MemoryWatcher<byte>(new DeepPointer(vars.baseRAMAddress + 0x82BC6)) { Name = "IsGameBeaten" },
+								};
+								break;
+							}
+						}
+						
+						break;
+					}
+					
+					if (vars.duckstationBaseRAMAddressFound)
+					{
+						print("valid module found");
+					}
+				}
+				
+				if (vars.baseRAMAddress == IntPtr.Zero) {
+					vars.duckstationStopwatch.Restart();
+					print("valid module not found");
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		
+		// Verify base RAM address is still valid on each update
+		IntPtr temp1 = vars.baseRAMAddress;
+		IntPtr temp2 = IntPtr.Zero;
+		if (!game.ReadPointer(temp1, out temp2)) {
+			vars.duckstationBaseRAMAddressFound = false;
+			vars.baseRAMAddress = IntPtr.Zero;
+			return false;
+		}
+	}
+	
+	vars.watchers.UpdateAll(game);
 
 	/*
 	print("GnFrame = " + vars.watchers["gnFrame"].Current.ToString());
@@ -361,6 +515,21 @@ update
 		}
 	}
 
+	// debug stuff
+	// vars.LEVEL_ID = vars.watchers["LEVEL_ID"].Current;
+	// vars.PATH_ID = vars.watchers["PATH_ID"].Current;
+	// vars.CAM_ID = vars.watchers["CAM_ID"].Current;
+	// if (vars.duckstation) {
+		// int abeOffset = (int)(vars.watchers["abeY"].Current - 0x80000000);
+		// int abeYoffset = abeOffset + vars.abeYoffset;
+		// IntPtr totalAbeYoffset = vars.baseRAMAddress + abeYoffset;
+		// vars.abeY = memory.ReadValue<short>(totalAbeYoffset);
+	// }
+	// else {
+		// vars.abeY = vars.watchers["abeY"].Current;
+	// }
+	// vars.IsGameRunning = vars.watchers["IsGameRunning"].Current;
+	// vars.IsGameBeaten = vars.watchers["IsGameBeaten"].Current;
 }
 
 // #############################
@@ -464,47 +633,67 @@ start
 			}	
 
 			if (settings["SplitsAny%"]){
-				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any%\ID\";  // folder location
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu Any%\ID\";  // folder location
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any%\ID\";  // folder location
+					
 				if (!Directory.Exists(dir)){  // if it doesn't exist, create
 					Directory.CreateDirectory(dir);
 				}		
 			
-				if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any%\ID\" + vars.n + ".txt")) {// AÑADIR EN TODAS LAS OTRAS CATEGORÍAS
-					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any%\ID\" + vars.n + ".txt"));
+				if (File.Exists(dir + vars.n + ".txt")) {// AÑADIR EN TODAS LAS OTRAS CATEGORÍAS
+					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(dir + vars.n + ".txt"));
 				} else {
 					vars.CurrentSplitBestFrame = 0;
 				}					
 			}
 			
 			if (settings["SplitsAny%NMG"]){
-				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\";  // folder location
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu Any% NMG\ID\";  // folder location
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\";  // folder location
+					
 				if (!Directory.Exists(dir)){  // if it doesn't exist, create
 					Directory.CreateDirectory(dir);
 				}	
 			
-				if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {// AÑADIR EN TODAS LAS OTRAS CATEGORÍAS
-					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
+				if (File.Exists(dir + vars.n + ".txt")) {// AÑADIR EN TODAS LAS OTRAS CATEGORÍAS
+					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(dir + vars.n + ".txt"));
 				} else {
 					vars.CurrentSplitBestFrame = 0;
 				}				
 			}
 			
 			if (settings["Splits100%"]){
-				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\100%\ID\";  // folder location
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu 100%\ID\";  // folder location
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\100%\ID\";  // folder location
+					
 				if (!Directory.Exists(dir)){  // if it doesn't exist, create
 					Directory.CreateDirectory(dir);
 				}		
 			}
 			
 			if (settings["SplitsGoodEnding"]){
-				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Good Ending\ID\";  // folder location
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu Good Ending\ID\";  // folder location
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Good Ending\ID\";  // folder location
+					
 				if (!Directory.Exists(dir)){  // if it doesn't exist, create
 					Directory.CreateDirectory(dir);
 				}		
 			}
 			
 			if (settings["UsingIL"]){
-				dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Individual Levels\ID\";  // folder location
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu Individual Levels\ID\";  // folder location
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Individual Levels\ID\";  // folder location
+					
 				if (!Directory.Exists(dir)){  // if it doesn't exist, create
 					Directory.CreateDirectory(dir);
 				}		
@@ -537,11 +726,11 @@ exit
 
 reset
 {
-	if (vars.watchers["LEVEL_ID"].Current == 0 && vars.watchers["CAM_ID"].Old == 1 && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){
-		vars.StartgnFrame = 0;
-		vars.PauseStartTime = -1;
-		return true;
-	}
+    if (vars.watchers["LEVEL_ID"].Current == 0 && (vars.watchers["CAM_ID"].Old == 1 || vars.watchers["CAM_ID"].Old == 8) && (vars.watchers["CAM_ID"].Current == 21 || vars.watchers["CAM_ID"].Current == 31)){
+        vars.StartgnFrame = 0;
+        vars.PauseStartTime = -1;
+        return true;
+    }
 }
 
 gameTime
@@ -600,7 +789,15 @@ split
 	C_PATH_ID = vars.watchers["PATH_ID"].Current;
 	O_CAM_ID = vars.watchers["CAM_ID"].Old;
 	C_CAM_ID = vars.watchers["CAM_ID"].Current;
-	abeY = vars.watchers["abeY"].Current;
+	if (vars.duckstation) {
+		int abeOffset = (int)(vars.watchers["abeY"].Current - 0x80000000);
+		int abeYoffset = abeOffset + vars.abeYoffset;
+		IntPtr totalAbeYoffset = vars.baseRAMAddress + abeYoffset;
+		abeY = memory.ReadValue<short>(totalAbeYoffset);
+	}
+	else {
+		abeY = vars.watchers["abeY"].Current;
+	}
 	gnFrame = vars.watchers["gnFrame"].Current;
 	IsGameBeaten = vars.watchers["IsGameBeaten"].Current;
 
@@ -3359,8 +3556,14 @@ split
 			vars.MillisecondsPaused = 0;
 			vars.StartEpochTime = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;			
 			if (settings["UseDatabase"] && !settings["NoSplitNames"]){
-				if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt")) {
-					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\" + vars.n + ".txt"));
+				string dir;
+				if (vars.duckstation)
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Emu Any% NMG\ID\";
+				else
+					dir = @"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\Any% NMG\ID\";
+					
+				if (File.Exists(dir + vars.n + ".txt")) {
+					vars.CurrentSplitBestFrame = Int32.Parse(File.ReadAllText(dir + vars.n + ".txt"));
 				}
 			}
 		}
@@ -3930,6 +4133,11 @@ split
 		} else if (settings["SplitsAny%NMG"]){
 			CatName = "Any% NMG";
 		}
+		
+		if (vars.duckstation) {
+			CatName = "Emu " + CatName; 
+		}
+		
 		// THE CAT NAME SHOULD WORK TO DETERMINE THE CATEGORY AND THEN SPECIFY THE CORRECT FOLDER
 		if (File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\" + CatName + "\\ID\\" + (vars.n) + ".txt") && File.Exists(@"C:\Autosplit Backup Files\Database\Oddworld Abe's Oddysee\\" + CatName + "\\[" + (vars.n) + "] " + vars.splitName + ".txt")) { // The split file exists.
 			if ((vars.GNFrame - vars.FramesUpToPreviousFrame) < vars.CurrentSplitBestFrame){ // We beaten our best time.
